@@ -2,18 +2,19 @@ package ca.ulaval.glo2003.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Restaurateur {
-    private final String id;
+    private final String ownerId;
     private List<Restaurant> restaurants;
 
-    public Restaurateur(String id) {
-        this.id = id;
+    public Restaurateur(String ownerId) {
+        this.ownerId = UUID.randomUUID().toString();
         this.restaurants = new ArrayList<>();
     }
 
-    public String getId() {
-        return id;
+    public String getOwnerId() {
+        return ownerId;
     }
 
     public List<Restaurant> getRestaurants() {

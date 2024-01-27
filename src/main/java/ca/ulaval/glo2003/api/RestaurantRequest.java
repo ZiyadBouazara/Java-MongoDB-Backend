@@ -1,6 +1,8 @@
 package ca.ulaval.glo2003.api;
 
 import ca.ulaval.glo2003.domain.Hours;
+import ca.ulaval.glo2003.domain.InvalidParameterException;
+import ca.ulaval.glo2003.domain.MissingParameterException;
 
 public class RestaurantRequest {
     private String name;
@@ -31,36 +33,53 @@ public class RestaurantRequest {
         this.hours = hours;
     }
 
-    public boolean hasMissingParameters() {
-        return name != null && hours != null && hours.getOpen() != null && hours.getClose() != null;
+    public void verifyMissingParameters() throws MissingParameterException {
+        verifyMissingName();
+        verifyMissingHours();
     }
 
-    public boolean hasValidParameters() {
-        return isNameValid() &&
-                isCapacityValid() &&
-                areHoursValid();
+    private void verifyMissingName() throws MissingParameterException {
+        if (name == null) {
+            throw new MissingParameterException("Missing parameter 'name'");
+        }
     }
 
-    private boolean isNameValid() {
-        return !name.trim().isEmpty();
+    private void verifyMissingHours() throws MissingParameterException {
+        if (hours == null || hours.getOpen() == null || hours.getClose() == null) {
+            throw new MissingParameterException("Missing parameter 'hours'");
+        }
     }
 
-    private boolean isCapacityValid() {
-        return capacity >= 1;
+    public void verifyValidParameters() throws InvalidParameterException {
+        verifyValidName();
+        verifyValidCapacity();
+        verifyValidHours();
     }
 
-    private boolean isUniqueIdValid() {
-        return true; //TODO
-    }
-    private boolean areHoursValid() {
-        return doesNotOpenBeforeMidnight() && closesBeforeMidnight();
-    }
-
-    private boolean doesNotOpenBeforeMidnight() {
-        return true; //TODO
+    private void verifyValidName() throws InvalidParameterException {
+        if (name.isEmpty()){
+            throw new InvalidParameterException("Invalid parameter 'name', cant be blank");
+        }
     }
 
-    private boolean closesBeforeMidnight() {
-        return true; //TODO
+    private void verifyValidCapacity() throws InvalidParameterException{
+        if (capacity <= 1){
+            throw new InvalidParameterException("Invalid parameter 'capacity', minimum capacity of 1 person");
+        }
+    }
+
+    private void verifyValidHours() throws InvalidParameterException{
+        doesNotOpenBeforeMidnight();
+        closesBeforeMidnight();
+    }
+
+    private void doesNotOpenBeforeMidnight() throws InvalidParameterException{
+        //TODO
+        throw new InvalidParameterException("Invalid parameter 'hours.open', cant open before midnight");
+    }
+
+    private void closesBeforeMidnight() throws InvalidParameterException{
+        //TODO
+        throw new InvalidParameterException("Invalid parameter 'hours.close', must close before midnight");
     }
 }
