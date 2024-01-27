@@ -21,6 +21,12 @@ public class Restaurateur {
     }
 
     public void addRestaurant(Restaurant restaurant) {
-        restaurants.add(restaurant);
+//        restaurants.add(restaurant);
+        if (!restaurants.contains(restaurant)) {
+            restaurants.add(restaurant);
+        } else {
+            //maybe validate the id before adding?
+            throw new IllegalArgumentException("Un restaurant avec le meme ID existe deja");
+        }
     }
 }

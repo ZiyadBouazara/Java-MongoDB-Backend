@@ -57,10 +57,18 @@ public class RestaurantRequest {
     }
 
     private boolean doesNotOpenBeforeMidnight() {
-        return true; //TODO
+        if (hours != null && hours.getOpen() != null){
+            String openTime = hours.getOpen();
+            return openTime.compareTo("00:00:00") >= 0;
+        }
+        return false; //TODO
     }
 
     private boolean closesBeforeMidnight() {
-        return true; //TODO
+        if (hours != null && hours.getOpen() != null){
+            String openTime = hours.getOpen();
+            return openTime.compareTo("23:59:59") <= 0;
+        }
+        return false; //TODO
     }
 }
