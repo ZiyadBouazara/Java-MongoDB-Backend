@@ -224,6 +224,7 @@ $RECYCLE.BIN/
 
 # Fichiers générés par IntelliJ IDEA
 .idea/
+*.iml
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,windows,macos,intellij,netbeans,java,maven
 
