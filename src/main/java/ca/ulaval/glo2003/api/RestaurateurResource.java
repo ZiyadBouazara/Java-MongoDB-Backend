@@ -24,15 +24,6 @@ public class RestaurateurResource {
                 restaurantRequest.getCapacity(),
                 restaurantRequest.getHours());
         return Response.ok().build();//TODO
-
-        //On valid les entrée:
-//        try {
-//            if (restaurantRequest == null || ownerId == null || !restaurantRequest.hasValidParameters()){
-//                return Response.status(Response.Status.BAD_REQUEST)
-//                        .entity(new ErrorResponse("INVALID_REQUEST", "Invalid or missing request parameters"))
-//                        .build();
-//            }
-//        }
     }
 
     private void verifyParameters(RestaurantRequest restaurantRequest) throws InvalidParameterException, MissingParameterException {

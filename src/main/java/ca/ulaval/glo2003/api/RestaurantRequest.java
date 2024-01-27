@@ -62,36 +62,26 @@ public class RestaurantRequest {
         }
     }
 
-    private boolean doesNotOpenBeforeMidnight() {
-        if (hours != null && hours.getOpen() != null){
-            String openTime = hours.getOpen();
-            return openTime.compareTo("00:00:00") >= 0;
-        }
-        return false; //TODO
     private void verifyValidCapacity() throws InvalidParameterException{
         if (capacity <= 1){
             throw new InvalidParameterException("Invalid parameter 'capacity', minimum capacity of 1 person");
         }
     }
 
-    private boolean closesBeforeMidnight() {
-        if (hours != null && hours.getOpen() != null){
-            String openTime = hours.getOpen();
-            return openTime.compareTo("23:59:59") <= 0;
-        }
-        return false; //TODO
     private void verifyValidHours() throws InvalidParameterException{
         doesNotOpenBeforeMidnight();
         closesBeforeMidnight();
     }
 
     private void doesNotOpenBeforeMidnight() throws InvalidParameterException{
-        //TODO
-        throw new InvalidParameterException("Invalid parameter 'hours.open', cant open before midnight");
+        if (hours.getOpen() != null && !hours.getOpen().equals("00:00:00") && hours.getOpen().compareTo("00:00:00") < 0) {
+            throw new InvalidParameterException("Invalid parameter 'hours.open', can't open before midnight");
+        }
     }
 
     private void closesBeforeMidnight() throws InvalidParameterException{
-        //TODO
-        throw new InvalidParameterException("Invalid parameter 'hours.close', must close before midnight");
+        if (hours.getClose() != null && !hours.getClose().equals("23:59:59") && hours.getClose().compareTo("23:59:59") > 0) {
+            throw new InvalidParameterException("Invalid parameter 'hours.close', must close before midnight");
+        }
     }
 }
