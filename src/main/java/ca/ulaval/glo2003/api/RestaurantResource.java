@@ -1,19 +1,20 @@
 package ca.ulaval.glo2003.api;
 
-import ca.ulaval.glo2003.api.RestaurantRequest;
 import ca.ulaval.glo2003.domain.InvalidParameterException;
 import ca.ulaval.glo2003.domain.MissingParameterException;
 import ca.ulaval.glo2003.domain.Restaurant;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriBuilder;
+
+import java.net.URI;
 
 @Path("restaurants")
-public class RestaurateurResource {
+public class RestaurantResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response createRestaurant(@HeaderParam("Owner") String ownerId, RestaurantRequest restaurantRequest) throws InvalidParameterException, MissingParameterException, NotFoundException {
         verifyHeader(ownerId);
         verifyParameters(restaurantRequest);
@@ -22,7 +23,8 @@ public class RestaurateurResource {
                 restaurantRequest.getName(),
                 restaurantRequest.getCapacity(),
                 restaurantRequest.getHours());
-        return Response.ok().build();//TODO
+        URI newProductURI = UriBuilder.fromResource(RestaurantResource.class).path(restaurant.getId()).build();
+        return Response.created(newProductURI).build();
     }
 
     private void verifyParameters(RestaurantRequest restaurantRequest) throws InvalidParameterException, MissingParameterException {
