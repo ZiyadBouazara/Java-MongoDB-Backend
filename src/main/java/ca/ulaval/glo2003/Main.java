@@ -1,5 +1,7 @@
 package ca.ulaval.glo2003;
 
+import ca.ulaval.glo2003.api.HealthResource;
+import ca.ulaval.glo2003.api.RestaurateurResource;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
