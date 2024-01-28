@@ -1,5 +1,10 @@
 package ca.ulaval.glo2003;
 
+import ca.ulaval.glo2003.api.HealthResource;
+import ca.ulaval.glo2003.api.RestaurantResource;
+import ca.ulaval.glo2003.api.exceptionMapping.InvalidParamExceptionMapper;
+import ca.ulaval.glo2003.api.exceptionMapping.MissingParamExceptionMapper;
+import ca.ulaval.glo2003.api.exceptionMapping.NotFoundExceptionMapper;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -11,7 +16,11 @@ public class Main {
 
     public static HttpServer startServer() {
         final ResourceConfig rc = new ResourceConfig()
-                .register(new HealthResource());
+                .register(new HealthResource())
+                .register(new RestaurantResource())
+                .register(new InvalidParamExceptionMapper())
+                .register(new MissingParamExceptionMapper())
+                .register(new NotFoundExceptionMapper());
 
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
