@@ -4,6 +4,7 @@ import ca.ulaval.glo2003.api.exceptionMapping.ErrorResponse;
 import ca.ulaval.glo2003.domain.InvalidParameterException;
 import ca.ulaval.glo2003.domain.MissingParameterException;
 import ca.ulaval.glo2003.domain.Restaurant;
+import ca.ulaval.glo2003.domain.Restaurateur;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -17,6 +18,12 @@ import static ca.ulaval.glo2003.api.exceptionMapping.ErrorCode.MISSING_PARAMETER
 @Path("restaurants")
 public class RestaurantResource {
 
+    private Restaurateur restaurateur;
+
+    public RestaurantResource() {
+        this.restaurateur = new Restaurateur();
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createRestaurant(@HeaderParam("Owner") String ownerId, RestaurantRequest restaurantRequest) throws InvalidParameterException, MissingParameterException, NotFoundException {
@@ -27,6 +34,8 @@ public class RestaurantResource {
                 restaurantRequest.getName(),
                 restaurantRequest.getCapacity(),
                 restaurantRequest.getHours());
+
+        restaurateur.addRestaurant(restaurant);
         URI newProductURI = UriBuilder.fromResource(RestaurantResource.class).path(restaurant.getId()).build();
         return Response.created(newProductURI).build();
     }
