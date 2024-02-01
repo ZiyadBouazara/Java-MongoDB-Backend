@@ -96,3 +96,22 @@ git branch -d feature_branch # always delete your feature branches when you're d
 
 ## Arbre de Commits
 -
+
+## Clean Code
+
+### Noms de variables et méthodes
+- Les noms des variables et des méthodes doivent obligatoirement être en anglais.
+- Les noms des méthodes doivent être en Pascal Case.
+    
+        Exemple: Int CalculateDonuts()
+- Les noms des variables doivent être en Camel Case.
+    
+        Exemple:  Int numberOfDonuts
+- Les noms des méthodes doivent commencer avec un verbe.
+
+### Règles générales concernant le clean code
+**Source:** [GitHub Clean Code Repo](https://gist.github.com/wojteklu/73c6914cc446146b8b533c0988cf8d29#)
+- Garder le code simple et les fonctions courtes et uniformes.
+- Nettoyer le code à chaque commit pour le laisser toujours plus propre qu'il a été trouvé.
+- Suivre la [loi de Demeter](https://www.dotnetdojo.com/loi-de-demeter/) concernant les classes.
+- Éviter les commentaires au maximum, la fonction devrait être lisible d'elle-même.

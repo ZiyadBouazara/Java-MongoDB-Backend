@@ -1,6 +1,5 @@
 package ca.ulaval.glo2003.api;
 
-import ca.ulaval.glo2003.api.exceptionMapping.ErrorResponse;
 import ca.ulaval.glo2003.domain.*;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -8,9 +7,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
 
 import java.net.URI;
-
-import static ca.ulaval.glo2003.api.exceptionMapping.ErrorCode.INVALID_PARAMETER;
-import static ca.ulaval.glo2003.api.exceptionMapping.ErrorCode.MISSING_PARAMETER;
+import java.util.List;
 
 @Path("restaurants")
 public class RestaurantResource {
@@ -18,6 +15,13 @@ public class RestaurantResource {
 
     public RestaurantResource() {
         this.resourcesHandler = new ResourcesHandler();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<RestaurantResponse> getRestaurants(@HeaderParam("Owner") String ownerId) throws MissingParameterException {
+        verifyMissingHeader(ownerId);
+        return resourcesHandler.getAllRestaurantsForOwner(ownerId);
     }
 
     @POST
@@ -38,9 +42,9 @@ public class RestaurantResource {
     }
 
     @GET
-    @Path("/{restaurantId}")
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRestaurant(@HeaderParam("Owner") String ownerID, @PathParam("restaurantId") String restaurantId)
+    public Response getRestaurant(@HeaderParam("Owner") String ownerID, @PathParam("id") String restaurantId)
             throws MissingParameterException, NotFoundException{
         verifyMissingHeader(ownerID);
         Restaurant restaurant = resourcesHandler.getRestaurant(restaurantId);
