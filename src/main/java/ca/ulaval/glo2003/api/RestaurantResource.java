@@ -76,7 +76,7 @@ public class RestaurantResource {
 
     private void verifyRestaurantOwnership(String expectedOwnerId, String actualOwnerId) throws NotFoundException {
         if (!expectedOwnerId.equals(actualOwnerId)) {
-            throw new NotFoundException(); // the restaurant is not owned by the restaurateur
+            throw new NotFoundException();
         }
     }
 }

@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ResourcesHandler {
-    private final Map<String, Restaurateur> restaurateurs; // map {ownerId : Restaurateur}, TODO: will be useful for GET/restaurateurs
-    private final Map<String, Restaurant> restaurants; // map {id : Restaurant}
+    private final Map<String, Restaurateur> restaurateurs;
+    private final Map<String, Restaurant> restaurants;
 
     public ResourcesHandler() {
         this.restaurateurs = new HashMap<>();
@@ -23,7 +23,7 @@ public class ResourcesHandler {
 
     public Restaurant getRestaurant(String restaurantId) throws NotFoundException {
         Restaurant restaurant = restaurants.get(restaurantId);
-        if (restaurant == null) throw new NotFoundException(); // the restaurant does not exist
+        if (restaurant == null) throw new NotFoundException();
         return restaurant;
     }
 

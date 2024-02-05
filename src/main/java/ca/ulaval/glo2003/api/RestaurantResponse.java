@@ -4,8 +4,6 @@ import ca.ulaval.glo2003.domain.Hours;
 import ca.ulaval.glo2003.domain.Restaurant;
 
 public class RestaurantResponse {
-    // public attributes on purpose so that
-    // we can access them and return them in RestaurantResource
     public String id;
     public String name;
     public int capacity;
