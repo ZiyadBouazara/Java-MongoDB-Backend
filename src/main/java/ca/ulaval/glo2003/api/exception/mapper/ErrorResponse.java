@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.api.exceptionMapping;
+package ca.ulaval.glo2003.api.exception.mapper;
 
 public class ErrorResponse {
     private ErrorCode errorCode;
@@ -9,11 +9,11 @@ public class ErrorResponse {
         this.description = description;
     }
 
-    public ErrorCode getError(){
+    public ErrorCode getError() {
         return errorCode;
     }
 
-    public String getDescription(){
+    public String getDescription() {
         return description;
     }
 

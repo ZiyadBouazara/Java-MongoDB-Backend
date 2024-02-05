@@ -21,7 +21,7 @@ public class ResourcesHandler {
         restaurants.put(restaurant.getId(), restaurant);
     }
 
-    public Restaurant getRestaurant(String restaurantId) throws NotFoundException{
+    public Restaurant getRestaurant(String restaurantId) throws NotFoundException {
         Restaurant restaurant = restaurants.get(restaurantId);
         if (restaurant == null) throw new NotFoundException(); // the restaurant does not exist
         return restaurant;

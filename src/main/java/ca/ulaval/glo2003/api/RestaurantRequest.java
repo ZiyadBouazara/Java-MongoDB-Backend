@@ -3,6 +3,7 @@ package ca.ulaval.glo2003.api;
 import ca.ulaval.glo2003.domain.Hours;
 import ca.ulaval.glo2003.domain.InvalidParameterException;
 import ca.ulaval.glo2003.domain.MissingParameterException;
+
 import java.time.Duration;
 import java.time.LocalTime;
 
@@ -59,18 +60,18 @@ public class RestaurantRequest {
     }
 
     private void verifyValidName() throws InvalidParameterException {
-        if (name.isEmpty()){
+        if (name.isEmpty()) {
             throw new InvalidParameterException("Invalid parameter 'name', cant be blank");
         }
     }
 
-    private void verifyValidCapacity() throws InvalidParameterException{
-        if (capacity < 1){
+    private void verifyValidCapacity() throws InvalidParameterException {
+        if (capacity < 1) {
             throw new InvalidParameterException("Invalid parameter 'capacity', minimum capacity of 1 person");
         }
     }
 
-    private void verifyValidHours() throws InvalidParameterException{
+    private void verifyValidHours() throws InvalidParameterException {
         openForMinimumDuration();
         doesNotOpenBeforeMidnight();
         closesBeforeMidnight();
@@ -87,13 +88,13 @@ public class RestaurantRequest {
         }
     }
 
-    private void doesNotOpenBeforeMidnight() throws InvalidParameterException{
+    private void doesNotOpenBeforeMidnight() throws InvalidParameterException {
         if (!hours.getOpen().equals("00:00:00") && hours.getOpen().compareTo("00:00:00") < 0) {
             throw new InvalidParameterException("Invalid parameter 'hours.open', can't open before midnight");
         }
     }
 
-    private void closesBeforeMidnight() throws InvalidParameterException{
+    private void closesBeforeMidnight() throws InvalidParameterException {
         if (!hours.getClose().equals("23:59:59") && hours.getClose().compareTo("23:59:59") > 0) {
             throw new InvalidParameterException("Invalid parameter 'hours.close', must close before midnight");
         }
