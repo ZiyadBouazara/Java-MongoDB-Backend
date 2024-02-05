@@ -1,7 +1,17 @@
 package ca.ulaval.glo2003.api;
 
-import ca.ulaval.glo2003.domain.*;
-import jakarta.ws.rs.*;
+import ca.ulaval.glo2003.domain.InvalidParameterException;
+import ca.ulaval.glo2003.domain.MissingParameterException;
+import ca.ulaval.glo2003.domain.ResourcesHandler;
+import ca.ulaval.glo2003.domain.Restaurant;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
@@ -27,14 +37,14 @@ public class RestaurantResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createRestaurant(@HeaderParam("Owner") String ownerId, RestaurantRequest restaurantRequest)
-            throws InvalidParameterException, MissingParameterException, NotFoundException {
+        throws InvalidParameterException, MissingParameterException, NotFoundException {
         verifyMissingHeader(ownerId);
         verifyParameters(restaurantRequest);
         Restaurant restaurant = new Restaurant(
-                ownerId,
-                restaurantRequest.getName(),
-                restaurantRequest.getCapacity(),
-                restaurantRequest.getHours());
+            ownerId,
+            restaurantRequest.getName(),
+            restaurantRequest.getCapacity(),
+            restaurantRequest.getHours());
 
         resourcesHandler.addRestaurant(restaurant); // store in map to access it without having to create Restaurateur object
         URI newProductURI = UriBuilder.fromResource(RestaurantResource.class).path(restaurant.getId()).build();
@@ -45,7 +55,7 @@ public class RestaurantResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRestaurant(@HeaderParam("Owner") String ownerID, @PathParam("id") String restaurantId)
-            throws MissingParameterException, NotFoundException{
+        throws MissingParameterException, NotFoundException {
         verifyMissingHeader(ownerID);
         Restaurant restaurant = resourcesHandler.getRestaurant(restaurantId);
         verifyRestaurantOwnership(restaurant.getOwnerId(), ownerID);
@@ -59,14 +69,14 @@ public class RestaurantResource {
     }
 
     private void verifyParameters(RestaurantRequest restaurantRequest)
-            throws InvalidParameterException, MissingParameterException {
+        throws InvalidParameterException, MissingParameterException {
         restaurantRequest.verifyMissingParameters();
         restaurantRequest.verifyValidParameters();
     }
 
     private void verifyRestaurantOwnership(String expectedOwnerId, String actualOwnerId) throws NotFoundException {
         if (!expectedOwnerId.equals(actualOwnerId)) {
-            throw new NotFoundException(); // the restaurant is not owned by the restaurateur
+            throw new NotFoundException();
         }
     }
 }
