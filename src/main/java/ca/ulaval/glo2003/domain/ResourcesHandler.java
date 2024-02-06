@@ -9,11 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 public class ResourcesHandler {
-    private final Map<String, Restaurateur> restaurateurs;
     private final Map<String, Restaurant> restaurants;
 
     public ResourcesHandler() {
-        this.restaurateurs = new HashMap<>();
         this.restaurants = new HashMap<>();
     }
 

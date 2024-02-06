@@ -6,10 +6,10 @@ public class Restaurant {
     private String id;
     private String ownerId;
     private String name;
-    private int capacity;
+    private Integer capacity;
     private Hours hours;
 
-    public Restaurant(String ownerId, String name, int capacity, Hours hours) {
+    public Restaurant(String ownerId, String name, Integer capacity, Hours hours) {
         this.id = UUID.randomUUID().toString();
         this.ownerId = ownerId;
         this.name = name;
@@ -29,7 +29,7 @@ public class Restaurant {
         return name;
     }
 
-    public int getCapacity() {
+    public Integer getCapacity() {
         return capacity;
     }
 

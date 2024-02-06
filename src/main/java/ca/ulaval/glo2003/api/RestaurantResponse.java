@@ -6,7 +6,7 @@ import ca.ulaval.glo2003.domain.Restaurant;
 public class RestaurantResponse {
     public String id;
     public String name;
-    public int capacity;
+    public Integer capacity;
     public Hours hours;
 
     public RestaurantResponse(Restaurant restaurant) {

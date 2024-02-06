@@ -9,7 +9,7 @@ import java.time.LocalTime;
 
 public class RestaurantRequest {
     private String name;
-    private int capacity;
+    private Integer capacity;
     private Hours hours;
 
     public String getName() {
@@ -36,9 +36,28 @@ public class RestaurantRequest {
         this.hours = hours;
     }
 
-    public void verifyMissingParameters() throws MissingParameterException {
+    public void verifyParameters()
+        throws InvalidParameterException, MissingParameterException {
+        verifyMissingParameters();
+        verifyValidParameters();
+    }
+
+    private void verifyMissingParameters() throws MissingParameterException {
+        verifyMissingCapacity();
         verifyMissingName();
         verifyMissingHours();
+    }
+
+    public void verifyValidParameters() throws InvalidParameterException {
+        verifyValidName();
+        verifyValidCapacity();
+        verifyValidHours();
+    }
+
+    private void verifyMissingCapacity() throws MissingParameterException {
+        if (capacity == null) {
+            throw new MissingParameterException("Missing parameter 'capacity'");
+        }
     }
 
     private void verifyMissingName() throws MissingParameterException {
@@ -51,12 +70,6 @@ public class RestaurantRequest {
         if (hours == null || hours.getOpen() == null || hours.getClose() == null) {
             throw new MissingParameterException("Missing parameter 'hours'");
         }
-    }
-
-    public void verifyValidParameters() throws InvalidParameterException {
-        verifyValidName();
-        verifyValidCapacity();
-        verifyValidHours();
     }
 
     private void verifyValidName() throws InvalidParameterException {

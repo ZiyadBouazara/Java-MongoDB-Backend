@@ -39,14 +39,14 @@ public class RestaurantResource {
     public Response createRestaurant(@HeaderParam("Owner") String ownerId, RestaurantRequest restaurantRequest)
         throws InvalidParameterException, MissingParameterException, NotFoundException {
         verifyMissingHeader(ownerId);
-        verifyParameters(restaurantRequest);
+        restaurantRequest.verifyParameters();
         Restaurant restaurant = new Restaurant(
             ownerId,
             restaurantRequest.getName(),
             restaurantRequest.getCapacity(),
             restaurantRequest.getHours());
 
-        resourcesHandler.addRestaurant(restaurant); // store in map to access it without having to create Restaurateur object
+        resourcesHandler.addRestaurant(restaurant);
         URI newProductURI = UriBuilder.fromResource(RestaurantResource.class).path(restaurant.getId()).build();
         return Response.created(newProductURI).build();
     }
@@ -66,12 +66,6 @@ public class RestaurantResource {
         if (ownerId == null) {
             throw new MissingParameterException("Missing 'Owner' header");
         }
-    }
-
-    private void verifyParameters(RestaurantRequest restaurantRequest)
-        throws InvalidParameterException, MissingParameterException {
-        restaurantRequest.verifyMissingParameters();
-        restaurantRequest.verifyValidParameters();
     }
 
     private void verifyRestaurantOwnership(String expectedOwnerId, String actualOwnerId) throws NotFoundException {
