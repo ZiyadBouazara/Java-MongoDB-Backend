@@ -60,7 +60,7 @@ C'est la branche à partir de laquelle `develop` est créé et fusionnée.
 
 Créez une nouvelle branche dans les situations suivantes :
 - Pour développer une nouvelle fonctionnalité. L'issue doit avoir le tag `feature`.
-- Pour corriger un bug. L'issue doit avoir le tag `bug`.
+- Pour corriger un bug. L'issue doit avoir le tag `fix`.
 
 ### 4. Quand faire une demande de changement / d'intégration (pull request / merge request) et sur quelle branche la faire?
 
@@ -78,24 +78,43 @@ git merge develop
 git branch -d feature_branch # always delete your feature branches when you're done!
 ```
 
+### 6. Branch naming convention
+
+La branche de feature doit être nommée selon la convention suivante :
+
+1. Si la branche ferme/concerne une seule issue, le nom de la branche doit être formé en utilisant le numéro de l'issue suivi du nom de l'issue, séparés par un tiret. Par exemple :
+   `<numéro_de_l'issue>-<nom_de_l'issue>`
+   Exemple :
+   `11-code-cleaning-and-refactoring`
+
+2. Si la branche ferme/concerne plusieurs issues, le nom de la branche doit décrire de manière générale les améliorations apportées par la branche. Par exemple :
+   `code-cleaning-and-refactoring-correction-and-improvements`. Dans ce cas, il sera important de tag tout les issues fermé par cette branche dans la PR.
+
+En suivant cette convention, il est plus facile de comprendre le contenu et le contexte des branches de feature, ce qui facilite la gestion et la collaboration sur le projet.
+
 ## GitHub Project
--
-
+![Local Image](../images/tp1/board.png)
 ## Milestone
--
-
+![Local Image](../images/tp1/milestone.png)
 ## Issues
-![Local Image](../images/issue-1.png)
--
--
+![Local Image](../images/tp1/issue-1.png)
+![Local Image](../images/tp1/issue-2.png)
+![Local Image](../images/tp1/issue-3.png)
+
 
 ## Pull Requests
--
--
--
+### PR1
+![Local Image](../images/tp1/PR1.png)
+![Local Image](../images/tp1/PR1.2.png)
+### PR2
+![Local Image](../images/tp1/PR2.png)
+![Local Image](../images/tp1/PR%202.1.png)
+### PR3
+![Local Image](../images/tp1/PR3.png)
+![Local Image](../images/tp1/PR3.2.png)
 
 ## Arbre de Commits
--
+![Local Image](../images/tp1/commit_tree.png)
 
 ## Clean Code
 
@@ -114,4 +133,4 @@ git branch -d feature_branch # always delete your feature branches when you're d
 - Garder le code simple et les fonctions courtes et uniformes.
 - Nettoyer le code à chaque commit pour le laisser toujours plus propre qu'il a été trouvé.
 - Suivre la [loi de Demeter](https://www.dotnetdojo.com/loi-de-demeter/) concernant les classes.
-- Éviter les commentaires au maximum, la fonction devrait être lisible d'elle-même.
+- Éviter les commentaires au maximum, le code devrait s'expliquer de lui-même et être auto-portant.
