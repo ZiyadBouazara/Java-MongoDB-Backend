@@ -29,8 +29,8 @@ incomplets pour une meilleure collaboration.
 #### Quand Commiter?
 
 1. **Commit Régulièrement :** Faire des commits réguliers pour capturer l'évolution du code au fil du temps.
-2. **À l'Atteinte d'Étapes Logiques :** Commiter lorsqu'une étape logique ou fonctionnalité est complète.
-3. **Avant de Changer de Tâche :** Commiter avant de passer à une nouvelle tâche pour isoler les changements.
+2. **À l'atteinte d'étapes logiques :** Commiter lorsqu'une étape logique ou fonctionnalité est completée.
+3. **Avant de changer de tâche :** Commiter avant de passer à une nouvelle tâche pour isoler les changements.
 
 
 ---
@@ -78,7 +78,7 @@ git merge develop
 git branch -d feature_branch # always delete your feature branches when you're done!
 ```
 
-### 6. Branch naming convention
+### 6. Convention de nomenclature des branches
 
 La branche de feature doit être nommée selon la convention suivante :
 
@@ -88,7 +88,7 @@ La branche de feature doit être nommée selon la convention suivante :
    `11-code-cleaning-and-refactoring`
 
 2. Si la branche ferme/concerne plusieurs issues, le nom de la branche doit décrire de manière générale les améliorations apportées par la branche. Par exemple :
-   `code-cleaning-and-refactoring-correction-and-improvements`. Dans ce cas, il sera important de tag tout les issues fermé par cette branche dans la PR.
+   `code-cleaning-and-refactoring-correction-and-improvements`. Dans ce cas, il sera important de tag toutes les issues fermées par cette branche dans la PR.
 
 En suivant cette convention, il est plus facile de comprendre le contenu et le contexte des branches de feature, ce qui facilite la gestion et la collaboration sur le projet.
 
@@ -118,15 +118,15 @@ En suivant cette convention, il est plus facile de comprendre le contenu et le c
 
 ## Clean Code
 
-### Noms de variables et méthodes
-- Les noms des variables et des méthodes doivent obligatoirement être en anglais.
-- Les noms des méthodes doivent être en Pascal Case.
+### Noms de variables et de méthodes
+- Les noms de variables et de méthodes doivent obligatoirement être en anglais.
+- Les noms de méthodes doivent être en Pascal Case.
     
         Exemple: Int CalculateDonuts()
-- Les noms des variables doivent être en Camel Case.
+- Les noms de variables doivent être en Camel Case.
     
         Exemple:  Int numberOfDonuts
-- Les noms des méthodes doivent commencer avec un verbe.
+- Les noms de méthodes doivent commencer avec un verbe.
 
 ### Règles générales concernant le clean code
 **Source:** [GitHub Clean Code Repo](https://gist.github.com/wojteklu/73c6914cc446146b8b533c0988cf8d29#)
