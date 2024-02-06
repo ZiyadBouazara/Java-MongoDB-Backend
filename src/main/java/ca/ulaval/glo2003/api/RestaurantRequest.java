@@ -6,11 +6,16 @@ import ca.ulaval.glo2003.domain.MissingParameterException;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RestaurantRequest {
     private String name;
     private Integer capacity;
     private Hours hours;
+    private static final String TIME_FORMAT_REGEX = "^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$";
+    private static final Pattern TIME_PATTERN = Pattern.compile(TIME_FORMAT_REGEX);
+
 
     public String getName() {
         return name;
@@ -85,9 +90,18 @@ public class RestaurantRequest {
     }
 
     private void verifyValidHours() throws InvalidParameterException {
+        isValidTimeFormat(hours.getOpen());
+        isValidTimeFormat(hours.getClose());
         openForMinimumDuration();
         doesNotOpenBeforeMidnight();
         closesBeforeMidnight();
+    }
+
+    private void isValidTimeFormat(String time) throws InvalidParameterException {
+        Matcher matcher = TIME_PATTERN.matcher(time);
+        if (!matcher.matches()) {
+            throw new InvalidParameterException("Invalid time format: " + time + ". Use the 'HH:MM:SS' format");
+        }
     }
 
     private void openForMinimumDuration() throws InvalidParameterException {
