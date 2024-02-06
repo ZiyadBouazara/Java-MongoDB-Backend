@@ -118,15 +118,18 @@ En suivant cette convention, il est plus facile de comprendre le contenu et le c
 
 ## Clean Code
 
-### Noms de variables et de méthodes
+### Noms de variables, de méthodes et de classes.
 - Les noms de variables et de méthodes doivent obligatoirement être en anglais.
-- Les noms de méthodes doivent être en Pascal Case.
+- Les noms de méthodes doivent être en Camel Case.
     
-        Exemple: Int CalculateDonuts()
+        Exemple: Int calculateDonuts()
+- Les noms de méthodes doivent commencer avec un verbe.
 - Les noms de variables doivent être en Camel Case.
     
         Exemple:  Int numberOfDonuts
-- Les noms de méthodes doivent commencer avec un verbe.
+- Les noms de classes doivent être en Pascal Case.
+    
+        Exemple:  class Donut()
 
 ### Règles générales concernant le clean code
 **Source:** [GitHub Clean Code Repo](https://gist.github.com/wojteklu/73c6914cc446146b8b533c0988cf8d29#)
