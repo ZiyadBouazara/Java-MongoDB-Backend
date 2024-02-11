@@ -1,48 +1,43 @@
-name: CI Pipeline
+name: Java CI with Maven
 
 on:
   push:
-    branches:
-      - 'develop'
-      - 'master'
+    branches: [ main, develop ]
   pull_request:
-    branches:
-      - '*'
+    branches: [ main, develop ]
 
 jobs:
   build:
+
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 3
+    continue-on-error: false
 
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        java: [21]
-
-    timeout-minutes: 5
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Java
+      - name: Setup JDK 21
         uses: actions/setup-java@v2
         with:
+          java-version: 'corretto-21'
           distribution: 'adopt'
-          java-version: ${{ matrix.java }}
 
-      - name: Cache Maven dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+      - name: Validate
+        run: mvn validate
 
-      - name: Verify Formatting
-        run: mvn verify --checkstyle.skip --errors --batch-mode
+      - name: Compile
+        run: mvn compile
 
-      - name: Compilation
-        run: mvn compile --batch-mode
+      - name: Test
+        run: mvn test
 
-      - name: Tests
-        run: mvn test --batch-mode
+      - name: Build
+        run: mvn -B package --file pom.xml
+
+      - name: Verify
+        run: mvn verify
