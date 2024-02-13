@@ -1,9 +1,11 @@
-package ca.ulaval.glo2003.api;
+package ca.ulaval.glo2003.controllers;
 
 import ca.ulaval.glo2003.domain.InvalidParameterException;
 import ca.ulaval.glo2003.domain.MissingParameterException;
 import ca.ulaval.glo2003.domain.ResourcesHandler;
 import ca.ulaval.glo2003.domain.Restaurant;
+import ca.ulaval.glo2003.models.RestaurantRequest;
+import ca.ulaval.glo2003.models.RestaurantResponse;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
