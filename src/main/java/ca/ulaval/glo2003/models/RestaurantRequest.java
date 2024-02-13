@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.api;
+package ca.ulaval.glo2003.models;
 
 import ca.ulaval.glo2003.domain.Hours;
 import ca.ulaval.glo2003.domain.InvalidParameterException;

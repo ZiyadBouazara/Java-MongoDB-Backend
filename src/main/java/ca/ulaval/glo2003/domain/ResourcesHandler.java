@@ -1,6 +1,6 @@
 package ca.ulaval.glo2003.domain;
 
-import ca.ulaval.glo2003.api.RestaurantResponse;
+import ca.ulaval.glo2003.models.RestaurantResponse;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.ArrayList;
