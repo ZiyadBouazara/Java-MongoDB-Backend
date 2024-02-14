@@ -86,7 +86,6 @@ public class RestaurantResource {
         return Response.created(newReservationURI).build();
     }
 
-
     private void verifyMissingHeader(String ownerId) throws MissingParameterException {
         if (ownerId == null) {
             throw new MissingParameterException("Missing 'Owner' header");
