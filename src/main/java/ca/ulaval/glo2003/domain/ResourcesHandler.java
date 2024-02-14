@@ -35,4 +35,11 @@ public class ResourcesHandler {
         return ownerRestaurants;
     }
 
+    public void addReservation(Reservation reservation) throws NotFoundException {
+        String restaurantId = reservation.getRestaurantId();
+        Restaurant restaurant = restaurants.get(restaurantId);
+
+        restaurant.addReservation(reservation);
+    }
+
 }
