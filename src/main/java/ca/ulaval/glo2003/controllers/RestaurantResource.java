@@ -1,9 +1,14 @@
-package ca.ulaval.glo2003.api;
+package ca.ulaval.glo2003.controllers;
 
+import ca.ulaval.glo2003.Main;
+import ca.ulaval.glo2003.domain.Reservation;
+import ca.ulaval.glo2003.domain.Restaurant;
 import ca.ulaval.glo2003.domain.InvalidParameterException;
 import ca.ulaval.glo2003.domain.MissingParameterException;
 import ca.ulaval.glo2003.domain.ResourcesHandler;
-import ca.ulaval.glo2003.domain.Restaurant;
+import ca.ulaval.glo2003.models.ReservationRequest;
+import ca.ulaval.glo2003.models.RestaurantRequest;
+import ca.ulaval.glo2003.models.RestaurantResponse;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
@@ -61,6 +66,26 @@ public class RestaurantResource {
         verifyRestaurantOwnership(restaurant.getOwnerId(), ownerID);
         return Response.ok(new RestaurantResponse(restaurant)).build();
     }
+
+    @POST
+    @Path("/{id}/reservations")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest) {
+        Reservation reservation = new Reservation(
+                restaurantId,
+                reservationRequest.getDate(),
+                reservationRequest.getStartTime(),
+                reservationRequest.getGroupSize(),
+                reservationRequest.getCustomer());
+
+        resourcesHandler.addReservation(reservation);
+        URI newReservationURI = UriBuilder.fromPath(Main.BASE_URI)
+                .path("reservations")
+                .path(reservation.getId())
+                .build();
+        return Response.created(newReservationURI).build();
+    }
+
 
     private void verifyMissingHeader(String ownerId) throws MissingParameterException {
         if (ownerId == null) {

@@ -1,5 +1,7 @@
 package ca.ulaval.glo2003.domain;
 
+import java.util.Map;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class Restaurant {
@@ -8,6 +10,7 @@ public class Restaurant {
     private String name;
     private Integer capacity;
     private Hours hours;
+    private Map<String, Reservation> reservationsById = new HashMap<>();
 
     public Restaurant(String ownerId, String name, Integer capacity, Hours hours) {
         this.id = UUID.randomUUID().toString();
@@ -20,7 +23,6 @@ public class Restaurant {
     public String getId() {
         return id;
     }
-
     public String getOwnerId() {
         return ownerId;
     }
@@ -35,5 +37,11 @@ public class Restaurant {
 
     public Hours getHours() {
         return hours;
+    }
+    public Map<String, Reservation> getReservationsById() {
+        return this.reservationsById;
+    }
+    public void addReservation(Reservation reservation) {
+        reservationsById.put(reservation.getId(), reservation);
     }
 }
