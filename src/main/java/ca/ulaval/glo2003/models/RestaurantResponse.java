@@ -1,8 +1,8 @@
 package ca.ulaval.glo2003.models;
 
-import ca.ulaval.glo2003.domain.Hours;
-import ca.ulaval.glo2003.domain.ReservationConfiguration;
-import ca.ulaval.glo2003.domain.Restaurant;
+import ca.ulaval.glo2003.domain.utils.Hours;
+import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
+import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 
 public class RestaurantResponse {
     public String id;

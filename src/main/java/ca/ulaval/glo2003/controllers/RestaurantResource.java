@@ -1,11 +1,11 @@
 package ca.ulaval.glo2003.controllers;
 
 import ca.ulaval.glo2003.Main;
-import ca.ulaval.glo2003.domain.Reservation;
-import ca.ulaval.glo2003.domain.Restaurant;
-import ca.ulaval.glo2003.domain.InvalidParameterException;
-import ca.ulaval.glo2003.domain.MissingParameterException;
-import ca.ulaval.glo2003.domain.ResourcesHandler;
+import ca.ulaval.glo2003.domain.reservation.Reservation;
+import ca.ulaval.glo2003.domain.restaurant.Restaurant;
+import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
+import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
+import ca.ulaval.glo2003.domain.utils.ResourcesHandler;
 import ca.ulaval.glo2003.domain.factories.RestaurantFactory;
 import ca.ulaval.glo2003.models.ReservationRequest;
 import ca.ulaval.glo2003.models.RestaurantRequest;

@@ -1,9 +1,9 @@
 package ca.ulaval.glo2003.models;
 
-import ca.ulaval.glo2003.domain.Hours;
-import ca.ulaval.glo2003.domain.InvalidParameterException;
-import ca.ulaval.glo2003.domain.MissingParameterException;
-import ca.ulaval.glo2003.domain.ReservationConfiguration;
+import ca.ulaval.glo2003.domain.utils.Hours;
+import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
+import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
+import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
 
 import java.time.Duration;
 import java.time.LocalTime;

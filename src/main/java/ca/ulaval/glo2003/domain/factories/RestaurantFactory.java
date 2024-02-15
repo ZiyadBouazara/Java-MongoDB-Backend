@@ -1,6 +1,6 @@
 package ca.ulaval.glo2003.domain.factories;
 
-import ca.ulaval.glo2003.domain.Restaurant;
+import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.models.RestaurantRequest;
 
 public class RestaurantFactory {
