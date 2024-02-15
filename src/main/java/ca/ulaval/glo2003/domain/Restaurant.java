@@ -10,7 +10,7 @@ public class Restaurant {
     private String name;
     private Integer capacity;
     private Hours hours;
-    private RestaurantConfiguration restaurantConfiguration;
+    private ReservationConfiguration reservationConfiguration;
     private Map<String, Reservation> reservationsById = new HashMap<>();
 
     public Restaurant(String ownerId, String name, Integer capacity, Hours hours) {
@@ -19,16 +19,16 @@ public class Restaurant {
         this.name = name;
         this.capacity = capacity;
         this.hours = hours;
-        this.restaurantConfiguration = new RestaurantConfiguration();
+        this.reservationConfiguration = new ReservationConfiguration();
     }
 
-    public Restaurant(String ownerId, String name, Integer capacity, Hours hours, RestaurantConfiguration restaurantConfiguration) {
+    public Restaurant(String ownerId, String name, Integer capacity, Hours hours, ReservationConfiguration reservationConfiguration) {
         this.id = UUID.randomUUID().toString();
         this.ownerId = ownerId;
         this.name = name;
         this.capacity = capacity;
         this.hours = hours;
-        this.restaurantConfiguration = restaurantConfiguration;
+        this.reservationConfiguration = reservationConfiguration;
     }
 
     public String getId() {
@@ -51,8 +51,8 @@ public class Restaurant {
         return hours;
     }
 
-    public RestaurantConfiguration getRestaurantConfiguration() {
-        return restaurantConfiguration;
+    public ReservationConfiguration getRestaurantConfiguration() {
+        return reservationConfiguration;
     }
 
     public Map<String, Reservation> getReservationsById() {

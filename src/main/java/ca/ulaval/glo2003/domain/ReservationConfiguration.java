@@ -1,14 +1,14 @@
 package ca.ulaval.glo2003.domain;
 
-public class RestaurantConfiguration {
+public class ReservationConfiguration {
     private static final Integer DEFAULT_RESERVATION_DURATION = 60;
     private Integer duration;
 
-    public RestaurantConfiguration() {
+    public ReservationConfiguration() {
         this.duration = DEFAULT_RESERVATION_DURATION;
     }
 
-    public RestaurantConfiguration(Integer duration) {
+    public ReservationConfiguration(Integer duration) {
         this.duration = duration;
     }
 
