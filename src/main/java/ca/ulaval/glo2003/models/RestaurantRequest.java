@@ -3,6 +3,7 @@ package ca.ulaval.glo2003.models;
 import ca.ulaval.glo2003.domain.Hours;
 import ca.ulaval.glo2003.domain.InvalidParameterException;
 import ca.ulaval.glo2003.domain.MissingParameterException;
+import ca.ulaval.glo2003.domain.RestaurantConfiguration;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -13,6 +14,8 @@ public class RestaurantRequest {
     private String name;
     private Integer capacity;
     private Hours hours;
+    private RestaurantConfiguration reservations;
+        // Do not change this variable name, the createRestaurant Body uses the name for assignation
     private static final String TIME_FORMAT_REGEX = "^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$";
     private static final Pattern TIME_PATTERN = Pattern.compile(TIME_FORMAT_REGEX);
 
@@ -39,6 +42,14 @@ public class RestaurantRequest {
 
     public void setHours(Hours hours) {
         this.hours = hours;
+    }
+
+    public RestaurantConfiguration getRestaurantConfiguration() {
+        return reservations;
+    }
+
+    public void setReservations(RestaurantConfiguration reservations) {
+        this.reservations = reservations;
     }
 
     public void verifyParameters()
