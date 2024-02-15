@@ -25,6 +25,8 @@ import jakarta.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.List;
 
+import static ca.ulaval.glo2003.models.RestaurantRequest.verifyRestaurantOwnership;
+
 @Path("restaurants")
 public class RestaurantResource {
     private ResourcesHandler resourcesHandler;
@@ -89,13 +91,6 @@ public class RestaurantResource {
     private void verifyMissingHeader(String ownerId) throws MissingParameterException {
         if (ownerId == null) {
             throw new MissingParameterException("Missing 'Owner' header");
-        }
-    }
-
-    //TODO : Move this method in RestaurantRequest
-    private void verifyRestaurantOwnership(String expectedOwnerId, String actualOwnerId) throws NotFoundException {
-        if (!expectedOwnerId.equals(actualOwnerId)) {
-            throw new NotFoundException();
         }
     }
 }
