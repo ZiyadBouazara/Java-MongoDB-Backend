@@ -1,6 +1,6 @@
 package ca.ulaval.glo2003.models;
 
-import ca.ulaval.glo2003.domain.Customer;
+import ca.ulaval.glo2003.domain.customer.Customer;
 
 public class ReservationRequest {
     private String restaurantId;

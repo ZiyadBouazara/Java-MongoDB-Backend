@@ -1,8 +1,10 @@
 package ca.ulaval.glo2003.models;
 
-import ca.ulaval.glo2003.domain.Hours;
-import ca.ulaval.glo2003.domain.InvalidParameterException;
-import ca.ulaval.glo2003.domain.MissingParameterException;
+import ca.ulaval.glo2003.domain.utils.Hours;
+import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
+import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
+import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
+import jakarta.ws.rs.NotFoundException;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -13,9 +15,10 @@ public class RestaurantRequest {
     private String name;
     private Integer capacity;
     private Hours hours;
+    private ReservationConfiguration reservations;
+    // Do not change this variable's name, the createRestaurant Body uses the name for assignation
     private static final String TIME_FORMAT_REGEX = "^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$";
     private static final Pattern TIME_PATTERN = Pattern.compile(TIME_FORMAT_REGEX);
-
 
     public String getName() {
         return name;
@@ -41,6 +44,20 @@ public class RestaurantRequest {
         this.hours = hours;
     }
 
+    public ReservationConfiguration getRestaurantConfiguration() {
+        return reservations;
+    }
+
+    public void setReservations(ReservationConfiguration reservations) {
+        this.reservations = reservations;
+    }
+
+    public static void verifyRestaurantOwnership(String expectedOwnerId, String actualOwnerId) throws NotFoundException {
+        if (!expectedOwnerId.equals(actualOwnerId)) {
+            throw new NotFoundException();
+        }
+    }
+
     public void verifyParameters()
         throws InvalidParameterException, MissingParameterException {
         verifyMissingParameters();
@@ -53,7 +70,7 @@ public class RestaurantRequest {
         verifyMissingHours();
     }
 
-    public void verifyValidParameters() throws InvalidParameterException {
+    private void verifyValidParameters() throws InvalidParameterException {
         verifyValidName();
         verifyValidCapacity();
         verifyValidHours();

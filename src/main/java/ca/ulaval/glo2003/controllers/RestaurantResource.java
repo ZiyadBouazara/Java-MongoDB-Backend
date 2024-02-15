@@ -1,11 +1,12 @@
 package ca.ulaval.glo2003.controllers;
 
 import ca.ulaval.glo2003.Main;
-import ca.ulaval.glo2003.domain.Reservation;
-import ca.ulaval.glo2003.domain.Restaurant;
-import ca.ulaval.glo2003.domain.InvalidParameterException;
-import ca.ulaval.glo2003.domain.MissingParameterException;
-import ca.ulaval.glo2003.domain.ResourcesHandler;
+import ca.ulaval.glo2003.domain.reservation.Reservation;
+import ca.ulaval.glo2003.domain.restaurant.Restaurant;
+import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
+import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
+import ca.ulaval.glo2003.domain.utils.ResourcesHandler;
+import ca.ulaval.glo2003.domain.factories.RestaurantFactory;
 import ca.ulaval.glo2003.models.ReservationRequest;
 import ca.ulaval.glo2003.models.RestaurantRequest;
 import ca.ulaval.glo2003.models.RestaurantResponse;
@@ -24,12 +25,16 @@ import jakarta.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.List;
 
+import static ca.ulaval.glo2003.models.RestaurantRequest.verifyRestaurantOwnership;
+
 @Path("restaurants")
 public class RestaurantResource {
     private ResourcesHandler resourcesHandler;
+    private RestaurantFactory restaurantFactory;
 
     public RestaurantResource() {
         this.resourcesHandler = new ResourcesHandler();
+        this.restaurantFactory = new RestaurantFactory();
     }
 
     @GET
@@ -45,13 +50,10 @@ public class RestaurantResource {
         throws InvalidParameterException, MissingParameterException, NotFoundException {
         verifyMissingHeader(ownerId);
         restaurantRequest.verifyParameters();
-        Restaurant restaurant = new Restaurant(
-            ownerId,
-            restaurantRequest.getName(),
-            restaurantRequest.getCapacity(),
-            restaurantRequest.getHours());
 
+        Restaurant restaurant = restaurantFactory.buildRestaurant(ownerId, restaurantRequest);
         resourcesHandler.addRestaurant(restaurant);
+
         URI newProductURI = UriBuilder.fromResource(RestaurantResource.class).path(restaurant.getId()).build();
         return Response.created(newProductURI).build();
     }
@@ -72,29 +74,23 @@ public class RestaurantResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest) {
         Reservation reservation = new Reservation(
-                restaurantId,
-                reservationRequest.getDate(),
-                reservationRequest.getStartTime(),
-                reservationRequest.getGroupSize(),
-                reservationRequest.getCustomer());
+            restaurantId,
+            reservationRequest.getDate(),
+            reservationRequest.getStartTime(),
+            reservationRequest.getGroupSize(),
+            reservationRequest.getCustomer());
 
         resourcesHandler.addReservation(reservation);
         URI newReservationURI = UriBuilder.fromPath(Main.BASE_URI)
-                .path("reservations")
-                .path(reservation.getId())
-                .build();
+            .path("reservations")
+            .path(reservation.getId())
+            .build();
         return Response.created(newReservationURI).build();
     }
 
     private void verifyMissingHeader(String ownerId) throws MissingParameterException {
         if (ownerId == null) {
             throw new MissingParameterException("Missing 'Owner' header");
-        }
-    }
-
-    private void verifyRestaurantOwnership(String expectedOwnerId, String actualOwnerId) throws NotFoundException {
-        if (!expectedOwnerId.equals(actualOwnerId)) {
-            throw new NotFoundException();
         }
     }
 }
