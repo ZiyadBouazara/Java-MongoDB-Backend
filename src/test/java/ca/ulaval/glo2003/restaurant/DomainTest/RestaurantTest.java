@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.restaurant.domainTest;
+package ca.ulaval.glo2003.restaurant.DomainTest;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.utils.Hours;
 import org.junit.Before;
@@ -15,7 +15,7 @@ public class RestaurantTest {
     private Restaurant restaurant;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         String ownerId = UUID.randomUUID().toString();
         String name = "Test Restaurant";
         Integer capacity = 50;

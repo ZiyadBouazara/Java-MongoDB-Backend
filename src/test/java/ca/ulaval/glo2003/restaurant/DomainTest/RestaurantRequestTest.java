@@ -1,12 +1,9 @@
-package ca.ulaval.glo2003.restaurant.domainTest;
+package ca.ulaval.glo2003.restaurant.DomainTest;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.domain.utils.Hours;
 import ca.ulaval.glo2003.models.RestaurantRequest;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 public class RestaurantRequestTest {
