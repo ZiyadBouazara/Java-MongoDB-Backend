@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.restaurant.DomainTest;
+package ca.ulaval.glo2003.DomainTest;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.domain.utils.Hours;
@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RestaurantRequestTest {
 
     @Test
-    void verify_withValidParam_ShouldNotThrowException(){
+    void verify_withValidParam_ShouldNotThrowException() {
         RestaurantRequest restauRequest = new RestaurantRequest();
         Hours hours = new Hours();
         hours.setOpen("10:00:00");
@@ -23,7 +23,7 @@ public class RestaurantRequestTest {
     }
 
     @Test
-    void verify_withInValidName_ShouldThrowException(){
+    void verify_withInValidName_ShouldThrowException() {
         RestaurantRequest restauRequest = new RestaurantRequest();
         Hours hours = new Hours();
         hours.setOpen("10:00:00");
@@ -37,7 +37,7 @@ public class RestaurantRequestTest {
     }
 
     @Test
-    void verify_withInValidCapacity_ShouldThrowException(){
+    void verify_withInValidCapacity_ShouldThrowException() {
         RestaurantRequest restauRequest = new RestaurantRequest();
         Hours hours = new Hours();
         hours.setOpen("10:00:00");
@@ -51,7 +51,7 @@ public class RestaurantRequestTest {
     }
 
     @Test
-    void verify_withInValid_WritingFormat_Hours_ShouldThrowException(){
+    void verify_withInValid_WritingFormat_Hours_ShouldThrowException() {
         RestaurantRequest restauRequest = new RestaurantRequest();
         Hours hours = new Hours();
         hours.setOpen("10,00:00");
@@ -65,7 +65,7 @@ public class RestaurantRequestTest {
     }
 
     @Test
-    void verify_withInValid_Format_Hours_ShouldThrowException(){
+    void verify_withInValid_Format_Hours_ShouldThrowException() {
         RestaurantRequest restauRequest = new RestaurantRequest();
         Hours hours = new Hours();
         hours.setOpen("10:00");
@@ -79,7 +79,7 @@ public class RestaurantRequestTest {
     }
 
     @Test
-    void verify_openForMinDuration_ShouldThrowException(){
+    void verify_openForMinDuration_ShouldThrowException() {
         RestaurantRequest restauRequest = new RestaurantRequest();
         Hours hours = new Hours();
         hours.setOpen("10:00:00");
@@ -93,7 +93,7 @@ public class RestaurantRequestTest {
     }
 
     @Test
-    void verify_openBeforeMidnight_ShouldThrowException(){
+    void verify_openBeforeMidnight_ShouldThrowException() {
         RestaurantRequest restauRequest = new RestaurantRequest();
         Hours hours = new Hours();
         hours.setOpen("23:59:59");
@@ -107,7 +107,7 @@ public class RestaurantRequestTest {
     }
 
     @Test
-    void verify_closesBeforeMidnight_ShouldThrowException(){
+    void verify_closesBeforeMidnight_ShouldThrowException() {
         RestaurantRequest restauRequest = new RestaurantRequest();
         Hours hours = new Hours();
         hours.setOpen("10:00:00");
@@ -121,7 +121,7 @@ public class RestaurantRequestTest {
     }
 
     @Test
-    void verify_withMissingName_ShouldThrowException(){
+    void verify_withMissingName_ShouldThrowException() {
         RestaurantRequest restauRequest = new RestaurantRequest();
         Hours hours = new Hours();
         hours.setOpen("10:00:00");
@@ -135,7 +135,7 @@ public class RestaurantRequestTest {
 
 
     @Test
-    void verify_withMissingCapacity_ShouldThrowException(){
+    void verify_withMissingCapacity_ShouldThrowException() {
         RestaurantRequest restauRequest = new RestaurantRequest();
         Hours hours = new Hours();
         hours.setOpen("10:00:00");
@@ -148,7 +148,7 @@ public class RestaurantRequestTest {
     }
 
     @Test
-    void verify_withMissingHours_ShouldThrowException(){
+    void verify_withMissingHours_ShouldThrowException() {
         RestaurantRequest restauRequest = new RestaurantRequest();
 
         restauRequest.setName("restauTest");

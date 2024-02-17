@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.restaurant.DomainTest;
+package ca.ulaval.glo2003.DomainTest;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
@@ -7,7 +7,7 @@ import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
 public class ReservationConfigurationTest {
 
     @Test
-    public void testDefaultConstructor(){
+    public void testDefaultConstructor() {
         ReservationConfiguration reservationConfig = new ReservationConfiguration();
 
         Integer duration = reservationConfig.getDuration();
