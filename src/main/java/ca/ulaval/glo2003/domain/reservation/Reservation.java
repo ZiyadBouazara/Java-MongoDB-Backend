@@ -1,4 +1,6 @@
-package ca.ulaval.glo2003.domain;
+package ca.ulaval.glo2003.domain.reservation;
+
+import ca.ulaval.glo2003.domain.customer.Customer;
 
 import java.util.UUID;
 

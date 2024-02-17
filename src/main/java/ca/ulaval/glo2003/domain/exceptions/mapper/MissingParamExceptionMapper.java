@@ -1,6 +1,6 @@
-package ca.ulaval.glo2003.domain.exception.mapper;
+package ca.ulaval.glo2003.domain.exceptions.mapper;
 
-import ca.ulaval.glo2003.domain.MissingParameterException;
+import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 

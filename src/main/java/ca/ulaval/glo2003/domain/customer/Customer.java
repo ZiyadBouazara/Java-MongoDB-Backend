@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.domain;
+package ca.ulaval.glo2003.domain.customer;
 
 public class Customer {
     private String name;
