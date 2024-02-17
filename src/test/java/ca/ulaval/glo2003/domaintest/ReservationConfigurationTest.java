@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.DomainTest;
+package ca.ulaval.glo2003.domaintest;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;

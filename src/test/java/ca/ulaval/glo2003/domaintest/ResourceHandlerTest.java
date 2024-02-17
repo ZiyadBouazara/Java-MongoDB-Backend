@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.DomainTest;
+package ca.ulaval.glo2003.domaintest;
 
 import jakarta.ws.rs.NotFoundException;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;

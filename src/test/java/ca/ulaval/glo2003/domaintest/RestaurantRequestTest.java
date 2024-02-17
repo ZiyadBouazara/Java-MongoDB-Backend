@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.DomainTest;
+package ca.ulaval.glo2003.domaintest;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.domain.utils.Hours;
