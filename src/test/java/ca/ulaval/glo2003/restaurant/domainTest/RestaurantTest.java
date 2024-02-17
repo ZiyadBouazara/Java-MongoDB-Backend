@@ -4,9 +4,11 @@ import ca.ulaval.glo2003.domain.utils.Hours;
 import org.junit.Before;
 import org.junit.Test;
 
+
 import java.util.UUID;
 
-import static com.google.common.truth.Truth.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 
 public class RestaurantTest {
 

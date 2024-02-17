@@ -1,10 +1,8 @@
 package ca.ulaval.glo2003.restaurant.domainTest;
-import static com.google.common.truth.Truth.assertThat;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
-import org.junit.Before;
-import org.junit.Test;
+
 
 public class ReservationConfigurationTest {
 

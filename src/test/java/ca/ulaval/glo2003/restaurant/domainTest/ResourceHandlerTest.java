@@ -18,7 +18,7 @@ public class ResourceHandlerTest {
     private Restaurant restaurantTest;
 
     @BeforeEach
-    void setUp () {
+    void setUp() {
 
         Hours hours = new Hours();
         hours.setOpen("10:00:00");
