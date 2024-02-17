@@ -72,7 +72,10 @@ public class RestaurantResource {
     @POST
     @Path("/{id}/reservations")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest) {
+    public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest)
+        throws NotFoundException, InvalidParameterException, MissingParameterException {
+        verifyValidRestaurantIdPath(restaurantId);
+        reservationRequest.verifyParameters();
         Reservation reservation = new Reservation(
             restaurantId,
             reservationRequest.getDate(),
@@ -88,6 +91,11 @@ public class RestaurantResource {
         return Response.created(newReservationURI).build();
     }
 
+    private void verifyValidRestaurantIdPath(String restaurantId) {
+        if (resourcesHandler.getRestaurant(restaurantId) == null) {
+            throw new NotFoundException("Restaurant not found with ID: " + restaurantId);
+        }
+    }
     private void verifyMissingHeader(String ownerId) throws MissingParameterException {
         if (ownerId == null) {
             throw new MissingParameterException("Missing 'Owner' header");
