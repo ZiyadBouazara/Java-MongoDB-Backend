@@ -2,14 +2,11 @@ package ca.ulaval.glo2003.model;
 
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
-import ca.ulaval.glo2003.domain.utils.Hours;
 import ca.ulaval.glo2003.models.RestaurantRequest;
 import jakarta.ws.rs.NotFoundException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
 
 public class RestaurantRequestTest {
     private static final String EMPTY_NAME = "";

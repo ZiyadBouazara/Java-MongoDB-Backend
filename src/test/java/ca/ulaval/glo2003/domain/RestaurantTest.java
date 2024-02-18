@@ -30,13 +30,13 @@ public class RestaurantTest {
     }
 
     @Test
-    public void addingReservation_shouldIncrementReservationsMapSizeByOne() {
+    public void whenAddingReservation_shouldIncrementReservationsMapSizeByOne() {
         restaurant.addReservation(mockReservation);
         assertEquals(1, restaurant.getReservationsById().size());
     }
 
     @Test
-    public void addingReservation_shouldAddCorrectReservationToMap() {
+    public void whenAddingReservation_shouldAddCorrectReservationToMap() {
         String reservationId = UUID.randomUUID().toString();
         when(mockReservation.getId()).thenReturn(reservationId);
 
