@@ -58,8 +58,7 @@ public class RestaurantRequest {
         }
     }
 
-    public void verifyParameters()
-        throws InvalidParameterException, MissingParameterException {
+    public void verifyParameters() throws InvalidParameterException, MissingParameterException {
         verifyMissingParameters();
         verifyValidParameters();
     }
@@ -107,40 +106,40 @@ public class RestaurantRequest {
     }
 
     private void verifyValidHours() throws InvalidParameterException {
-        isValidTimeFormat(hours.getOpen());
-        isValidTimeFormat(hours.getClose());
-        openForMinimumDuration();
-        doesNotOpenBeforeMidnight();
-        closesBeforeMidnight();
+        verifyValidTimeFormat(hours.getOpen());
+        verifyValidTimeFormat(hours.getClose());
+        verifyOpeningAndClosingCriteria();
     }
 
-    private void isValidTimeFormat(String time) throws InvalidParameterException {
+    private void verifyValidTimeFormat(String time) throws InvalidParameterException {
         Matcher matcher = TIME_PATTERN.matcher(time);
         if (!matcher.matches()) {
             throw new InvalidParameterException("Invalid time format: " + time + ". Use the 'HH:MM:SS' format");
         }
     }
 
-    private void openForMinimumDuration() throws InvalidParameterException {
+    private void verifyOpeningAndClosingCriteria() throws InvalidParameterException {
+        Duration duration = calculateDuration();
+        verifyNonNegativeDuration(duration);
+        verifyMinimumOpeningDuration(duration);
+    }
+
+    private Duration calculateDuration() {
         LocalTime openingTime = LocalTime.parse(hours.getOpen());
         LocalTime closingTime = LocalTime.parse(hours.getClose());
+        return Duration.between(openingTime, closingTime);
+    }
 
-        Duration duration = Duration.between(openingTime, closingTime);
+    private void verifyNonNegativeDuration(Duration duration) throws InvalidParameterException {
+        if (duration.isNegative()) {
+            throw new InvalidParameterException("Invalid parameter 'hours', closing time is before opening time");
+        }
+    }
 
-        if (duration.toMinutes() < 60) {
+    private void verifyMinimumOpeningDuration(Duration duration) throws InvalidParameterException {
+        long minutes = duration.toMinutes();
+        if (minutes < 60) {
             throw new InvalidParameterException("Invalid parameter 'hours', must be open for at least 1 hour");
-        }
-    }
-
-    private void doesNotOpenBeforeMidnight() throws InvalidParameterException {
-        if (!hours.getOpen().equals("00:00:00") && hours.getOpen().compareTo("00:00:00") < 0) {
-            throw new InvalidParameterException("Invalid parameter 'hours.open', can't open before midnight");
-        }
-    }
-
-    private void closesBeforeMidnight() throws InvalidParameterException {
-        if (!hours.getClose().equals("23:59:59") && hours.getClose().compareTo("23:59:59") > 0) {
-            throw new InvalidParameterException("Invalid parameter 'hours.close', must close before midnight");
         }
     }
 }
