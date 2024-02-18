@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.domaintest;
+package ca.ulaval.glo2003.domain;
 
 import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
@@ -16,13 +16,10 @@ import static org.mockito.Mockito.*;
 
 public class RestaurantTest {
     private Restaurant restaurant;
-
     @Mock
     private ReservationConfiguration mockReservationConfiguration;
-
     @Mock
     private Reservation mockReservation;
-
     @Mock
     private Hours mockHours;
 
@@ -33,13 +30,13 @@ public class RestaurantTest {
     }
 
     @Test
-    public void addingReservation_ShouldIncrementReservationsMapSizeByOne() {
+    public void addingReservation_shouldIncrementReservationsMapSizeByOne() {
         restaurant.addReservation(mockReservation);
         assertEquals(1, restaurant.getReservationsById().size());
     }
 
     @Test
-    public void addingReservation_ShouldAddCorrectReservationToMap() {
+    public void addingReservation_shouldAddCorrectReservationToMap() {
         String reservationId = UUID.randomUUID().toString();
         when(mockReservation.getId()).thenReturn(reservationId);
 
