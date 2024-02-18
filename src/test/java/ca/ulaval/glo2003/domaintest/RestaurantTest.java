@@ -1,54 +1,51 @@
 package ca.ulaval.glo2003.domaintest;
-import ca.ulaval.glo2003.domain.restaurant.Restaurant;
-import ca.ulaval.glo2003.domain.utils.Hours;
-import org.junit.Before;
-import org.junit.Test;
 
+import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
+import ca.ulaval.glo2003.domain.restaurant.Restaurant;
+import ca.ulaval.glo2003.domain.reservation.Reservation;
+import ca.ulaval.glo2003.domain.utils.Hours;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class RestaurantTest {
-
     private Restaurant restaurant;
 
-    @Before
+    @Mock
+    private ReservationConfiguration mockReservationConfiguration;
+
+    @Mock
+    private Reservation mockReservation;
+
+    @Mock
+    private Hours mockHours;
+
+    @BeforeEach
     public void setUp() {
-        String ownerId = UUID.randomUUID().toString();
-        String name = "Test Restaurant";
-        Integer capacity = 50;
-        Hours hours = new Hours();
-        restaurant = new Restaurant(ownerId, name, capacity, hours);
+        MockitoAnnotations.openMocks(this);
+        restaurant = new Restaurant("ownerId", "Restaurant Name", 100, mockHours, mockReservationConfiguration);
     }
 
     @Test
-    public void testRestaurantInitialization() {
-        assertThat(restaurant.getId()).isNotNull();
-        assertThat(restaurant.getOwnerId()).isNotNull();
-        assertThat(restaurant.getName()).isEqualTo("Test Restaurant");
-        assertThat(restaurant.getCapacity()).isEqualTo(50);
+    public void addingReservation_ShouldIncrementReservationsMapSizeByOne() {
+        restaurant.addReservation(mockReservation);
+        assertEquals(1, restaurant.getReservationsById().size());
     }
 
     @Test
-    public void testRestaurantIDisNotNull() {
-        assertThat(restaurant.getId()).isNotNull();
-    }
+    public void addingReservation_ShouldAddCorrectReservationToMap() {
+        String reservationId = UUID.randomUUID().toString();
+        when(mockReservation.getId()).thenReturn(reservationId);
 
-    @Test
-    public void testRestaurantOwnerIDisNotNull() {
-        assertThat(restaurant.getOwnerId()).isNotNull();
-    }
+        restaurant.addReservation(mockReservation);
+        Reservation actualReservation = restaurant.getReservationsById().get(reservationId);
 
-    @Test
-    public void testRestaurantName() {
-        assertThat(restaurant.getName()).isEqualTo("Test Restaurant");
+        assertEquals(mockReservation, actualReservation);
     }
-
-    @Test
-    public void testCapacityValid() {
-        assertThat(restaurant.getCapacity()).isEqualTo(50);
-    }
-
 }
