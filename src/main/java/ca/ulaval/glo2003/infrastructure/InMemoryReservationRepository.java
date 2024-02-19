@@ -1,8 +1,9 @@
-package ca.ulaval.glo2003.domain.utils;
+package ca.ulaval.glo2003.infrastructure;
 
-import ca.ulaval.glo2003.domain.reservation.Reservation;
-import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.controllers.models.RestaurantResponse;
+import ca.ulaval.glo2003.domain.reservation.Reservation;
+import ca.ulaval.glo2003.domain.reservation.ReservationRepository;
+import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.ArrayList;
@@ -10,14 +11,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ResourcesHandler {
-    private final Map<String, Restaurant> restaurants;
-
-    public ResourcesHandler() {
+public class InMemoryReservationRepository implements ReservationRepository {
+    private Map<String, Restaurant> restaurants;
+    public InMemoryReservationRepository() {
         this.restaurants = new HashMap<>();
     }
 
-    public void addRestaurant(Restaurant restaurant) throws NotFoundException {
+    @Override
+    public void saveReservation(Reservation reservation) {
+        String restaurantId = reservation.getRestaurantId();
+        Restaurant restaurant = restaurants.get(restaurantId);
+
+        restaurant.addReservation(reservation);
+    }
+
+    public void saveRestaurant(Restaurant restaurant) throws NotFoundException {
         restaurants.put(restaurant.getId(), restaurant);
     }
 
@@ -36,12 +44,4 @@ public class ResourcesHandler {
         }
         return ownerRestaurants;
     }
-
-    public void addReservation(Reservation reservation) throws NotFoundException {
-        String restaurantId = reservation.getRestaurantId();
-        Restaurant restaurant = restaurants.get(restaurantId);
-
-        restaurant.addReservation(reservation);
-    }
-
 }

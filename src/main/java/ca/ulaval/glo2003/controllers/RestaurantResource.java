@@ -7,9 +7,10 @@ import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.domain.utils.ResourcesHandler;
 import ca.ulaval.glo2003.domain.factories.RestaurantFactory;
-import ca.ulaval.glo2003.models.ReservationRequest;
-import ca.ulaval.glo2003.models.RestaurantRequest;
-import ca.ulaval.glo2003.models.RestaurantResponse;
+import ca.ulaval.glo2003.controllers.models.ReservationRequest;
+import ca.ulaval.glo2003.controllers.models.RestaurantRequest;
+import ca.ulaval.glo2003.controllers.models.RestaurantResponse;
+import ca.ulaval.glo2003.service.ReservationService;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
@@ -25,14 +26,15 @@ import jakarta.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.List;
 
-import static ca.ulaval.glo2003.models.RestaurantRequest.verifyRestaurantOwnership;
+import static ca.ulaval.glo2003.controllers.models.RestaurantRequest.verifyRestaurantOwnership;
 
 @Path("restaurants")
 public class RestaurantResource {
     private ResourcesHandler resourcesHandler;
     private RestaurantFactory restaurantFactory;
+    private ReservationService reservationService;
 
-    public RestaurantResource() {
+    public RestaurantResource(ReservationService reservationService) {
         this.resourcesHandler = new ResourcesHandler();
         this.restaurantFactory = new RestaurantFactory();
     }
@@ -73,17 +75,18 @@ public class RestaurantResource {
     @Path("/{id}/reservations")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest) {
-        Reservation reservation = new Reservation(
-            restaurantId,
-            reservationRequest.getDate(),
-            reservationRequest.getStartTime(),
-            reservationRequest.getGroupSize(),
-            reservationRequest.getCustomer());
 
-        resourcesHandler.addReservation(reservation);
+        String createdReservationId = reservationService.createReservation(
+                reservationRequest.getRestaurantId(),
+                reservationRequest.getDate(),
+                reservationRequest.getStartTime(),
+                reservationRequest.getGroupSize(),
+                reservationRequest.getCustomer());
+
+
         URI newReservationURI = UriBuilder.fromPath(Main.BASE_URI)
             .path("reservations")
-            .path(reservation.getId())
+            .path(createdReservationId)
             .build();
         return Response.created(newReservationURI).build();
     }
