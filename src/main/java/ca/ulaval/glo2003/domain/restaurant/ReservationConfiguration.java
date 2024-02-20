@@ -11,7 +11,7 @@ public class ReservationConfiguration {
     }
 
     public ReservationConfiguration(Integer duration) {
-        this.duration = Objects.requireNonNullElse(duration, DEFAULT_RESERVATION_DURATION);
+        this.duration = duration;
     }
 
     public Integer getDuration() {

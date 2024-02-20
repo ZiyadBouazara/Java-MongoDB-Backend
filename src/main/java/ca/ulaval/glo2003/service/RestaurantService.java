@@ -22,9 +22,19 @@ public class RestaurantService {
                                  HoursDTO hoursDTO,
                                  ReservationConfigurationDTO reservationsDTO) {
         Hours hours = new Hours(hoursDTO.open(), hoursDTO.close());
-        ReservationConfiguration reservations = new ReservationConfiguration(reservationsDTO.duration());
-        Restaurant restaurant = restaurantFactory.buildRestaurant(ownerId, name, capacity, hours, reservations);
+        ReservationConfiguration reservations = constructRestaurantBasedOnReservationConfiguration(reservationsDTO);
+        Restaurant restaurant = new Restaurant(ownerId, name, capacity, hours, reservations);
         restaurantRepository.saveRestaurant(restaurant);
         return restaurant.getId();
+    }
+
+    private ReservationConfiguration constructRestaurantBasedOnReservationConfiguration(ReservationConfigurationDTO reservationsDTO) {
+        ReservationConfiguration reservations;
+        if (reservationsDTO != null && reservationsDTO.duration() != null) {
+            reservations = new ReservationConfiguration(reservationsDTO.duration());
+        } else {
+            reservations = new ReservationConfiguration();
+        }
+        return reservations;
     }
 }
