@@ -16,21 +16,9 @@ public class CreateRestaurantValidator {
     private static final Pattern TIME_PATTERN = Pattern.compile(TIME_FORMAT_REGEX);
 
     public void validate(String ownerId, RestaurantRequest restaurantRequest) throws MissingParameterException, InvalidParameterException {
-        verifyMissingHeader(ownerId);
         verifyParameters(restaurantRequest);
     }
 
-    private void verifyMissingHeader(String ownerId) throws MissingParameterException {
-        if (ownerId == null) {
-            throw new MissingParameterException("Missing 'Owner' header");
-        }
-    }
-
-    public static void verifyRestaurantOwnership(String expectedOwnerId, String actualOwnerId) throws NotFoundException {
-        if (!expectedOwnerId.equals(actualOwnerId)) {
-            throw new NotFoundException();
-        }
-    }
     public void verifyParameters(RestaurantRequest restaurantRequest)
             throws InvalidParameterException, MissingParameterException {
 

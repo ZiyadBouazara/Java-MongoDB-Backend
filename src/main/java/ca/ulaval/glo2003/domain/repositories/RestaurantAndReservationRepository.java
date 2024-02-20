@@ -9,4 +9,5 @@ public interface RestaurantAndReservationRepository {
     public void saveRestaurant(Restaurant restaurant);
     public void saveReservation(Reservation reservation);
     public List<Restaurant> findRestaurantsByOwnerId(String ownerId);
+    public Restaurant findRestaurantByRestaurantId(String restaurantId);
 }

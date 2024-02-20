@@ -7,6 +7,7 @@ import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.utils.Hours;
+import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +35,14 @@ public class RestaurantService {
         return ownerRestaurants.stream()
                 .map(RestaurantResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    public RestaurantResponse getRestaurant(String restaurantId) {
+        Restaurant restaurant = restaurantAndReservationRepository.findRestaurantByRestaurantId(restaurantId);
+        if (restaurant == null) {
+            throw new NotFoundException("Restaurant with ID " + restaurantId + " not found");
+        }
+        return new RestaurantResponse(restaurant);
     }
 
     private ReservationConfiguration constructRestaurantBasedOnReservationConfiguration(ReservationConfigurationDTO reservationsDTO) {

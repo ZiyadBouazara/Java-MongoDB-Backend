@@ -35,6 +35,11 @@ public class InMemoryRestaurantAndReservationRepository implements RestaurantAnd
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Restaurant findRestaurantByRestaurantId(String restaurantId) {
+        return restaurants.get(restaurantId);
+    }
+
 }
 //    public Restaurant getRestaurant(String restaurantId) throws NotFoundException {
 //        Restaurant restaurant = restaurants.get(restaurantId);

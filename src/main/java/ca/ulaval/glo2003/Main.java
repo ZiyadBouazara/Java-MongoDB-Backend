@@ -2,9 +2,7 @@ package ca.ulaval.glo2003;
 
 import ca.ulaval.glo2003.controllers.HealthResource;
 import ca.ulaval.glo2003.controllers.RestaurantResource;
-import ca.ulaval.glo2003.controllers.validators.CreateReservationValidator;
-import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
-import ca.ulaval.glo2003.controllers.validators.GetRestaurantsValidator;
+import ca.ulaval.glo2003.controllers.validators.*;
 import ca.ulaval.glo2003.domain.exceptions.mapper.InvalidParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.MissingParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.NotFoundExceptionMapper;
@@ -25,12 +23,14 @@ public class Main {
         RestaurantAndReservationRepository restaurantAndReservationRepository = new InMemoryRestaurantAndReservationRepository();
         RestaurantService restaurantService = new RestaurantService(restaurantAndReservationRepository);
         ReservationService reservationService = new ReservationService(restaurantAndReservationRepository);
+        HeaderValidator headerValidator = new HeaderValidator();
         CreateReservationValidator createReservationValidator = new CreateReservationValidator();
         CreateRestaurantValidator createRestaurantValidator = new CreateRestaurantValidator();
-        GetRestaurantsValidator getRestaurantsValidator = new GetRestaurantsValidator();
+        GetAllRestaurantsValidator getAllRestaurantsValidator = new GetAllRestaurantsValidator();
+        GetRestaurantValidator getRestaurantValidator = new GetRestaurantValidator();
         final ResourceConfig rc = new ResourceConfig()
             .register(new HealthResource())
-            .register(new RestaurantResource(restaurantService, reservationService, createRestaurantValidator, createReservationValidator, getRestaurantsValidator))
+            .register(new RestaurantResource(restaurantService, reservationService, headerValidator, createRestaurantValidator, createReservationValidator, getAllRestaurantsValidator, getRestaurantValidator))
             .register(new InvalidParamExceptionMapper())
             .register(new MissingParamExceptionMapper())
             .register(new NotFoundExceptionMapper());
