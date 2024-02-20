@@ -4,6 +4,11 @@ public class Hours {
     private String open;
     private String close;
 
+    public Hours(String open, String close) {
+        this.open = open;
+        this.close = close;
+    }
+
     public String getOpen() {
         return open;
     }

@@ -25,23 +25,20 @@ public class InMemoryReservationRepository implements ReservationRepository {
         restaurant.addReservation(reservation);
     }
 
-    public void saveRestaurant(Restaurant restaurant) throws NotFoundException {
-        restaurants.put(restaurant.getId(), restaurant);
-    }
 
-    public Restaurant getRestaurant(String restaurantId) throws NotFoundException {
-        Restaurant restaurant = restaurants.get(restaurantId);
-        if (restaurant == null) throw new NotFoundException();
-        return restaurant;
-    }
-
-    public List<RestaurantResponse> getAllRestaurantsForOwner(String ownerId) {
-        List<RestaurantResponse> ownerRestaurants = new ArrayList<>();
-        for (Restaurant restaurant : restaurants.values()) {
-            if (restaurant.getOwnerId().equals(ownerId)) {
-                ownerRestaurants.add(new RestaurantResponse(restaurant));
-            }
-        }
-        return ownerRestaurants;
-    }
+//    public Restaurant getRestaurant(String restaurantId) throws NotFoundException {
+//        Restaurant restaurant = restaurants.get(restaurantId);
+//        if (restaurant == null) throw new NotFoundException();
+//        return restaurant;
+//    }
+//
+//    public List<RestaurantResponse> getAllRestaurantsForOwner(String ownerId) {
+//        List<RestaurantResponse> ownerRestaurants = new ArrayList<>();
+//        for (Restaurant restaurant : restaurants.values()) {
+//            if (restaurant.getOwnerId().equals(ownerId)) {
+//                ownerRestaurants.add(new RestaurantResponse(restaurant));
+//            }
+//        }
+//        return ownerRestaurants;
+//    }
 }

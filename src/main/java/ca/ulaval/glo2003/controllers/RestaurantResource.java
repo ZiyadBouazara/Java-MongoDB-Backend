@@ -2,6 +2,7 @@ package ca.ulaval.glo2003.controllers;
 
 import ca.ulaval.glo2003.Main;
 import ca.ulaval.glo2003.controllers.validators.CreateReservationValidator;
+import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
@@ -11,6 +12,7 @@ import ca.ulaval.glo2003.controllers.models.ReservationRequest;
 import ca.ulaval.glo2003.controllers.models.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.models.RestaurantResponse;
 import ca.ulaval.glo2003.service.ReservationService;
+import ca.ulaval.glo2003.service.RestaurantService;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
@@ -32,10 +34,16 @@ import static ca.ulaval.glo2003.controllers.models.RestaurantRequest.verifyResta
 public class RestaurantResource {
     private ResourcesHandler resourcesHandler;
     private RestaurantFactory restaurantFactory;
+    private RestaurantService restaurantService;
     private ReservationService reservationService;
+    private CreateRestaurantValidator createRestaurantValidator;
     private CreateReservationValidator createReservationValidator;
 
-    public RestaurantResource(ReservationService reservationService, CreateReservationValidator createReservationValidator) {
+    public RestaurantResource(RestaurantService restaurantService,
+                              ReservationService reservationService,
+                              CreateRestaurantValidator createRestaurantValidator,
+                              CreateReservationValidator createReservationValidator) {
+
         this.resourcesHandler = new ResourcesHandler();
         this.restaurantFactory = new RestaurantFactory();
     }
@@ -51,13 +59,16 @@ public class RestaurantResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createRestaurant(@HeaderParam("Owner") String ownerId, RestaurantRequest restaurantRequest)
         throws InvalidParameterException, MissingParameterException, NotFoundException {
-        verifyMissingHeader(ownerId);
-        restaurantRequest.verifyParameters();
+        createRestaurantValidator.validate(ownerId, restaurantRequest);
 
-        Restaurant restaurant = restaurantFactory.buildRestaurant(ownerId, restaurantRequest);
-        resourcesHandler.addRestaurant(restaurant);
+        String restaurantId = restaurantService.createRestaurant(
+                ownerId,
+                restaurantRequest.name(),
+                restaurantRequest.capacity(),
+                restaurantRequest.hours(),
+                restaurantRequest.reservations());
 
-        URI newProductURI = UriBuilder.fromResource(RestaurantResource.class).path(restaurant.getId()).build();
+        URI newProductURI = UriBuilder.fromResource(RestaurantResource.class).path(restaurantId).build();
         return Response.created(newProductURI).build();
     }
 
@@ -85,7 +96,6 @@ public class RestaurantResource {
                 reservationRequest.groupSize(),
                 reservationRequest.customer());
 
-
         URI newReservationURI = UriBuilder.fromPath(Main.BASE_URI)
             .path("reservations")
             .path(createdReservationId)
@@ -93,9 +103,5 @@ public class RestaurantResource {
         return Response.created(newReservationURI).build();
     }
 
-    private void verifyMissingHeader(String ownerId) throws MissingParameterException {
-        if (ownerId == null) {
-            throw new MissingParameterException("Missing 'Owner' header");
-        }
-    }
+
 }

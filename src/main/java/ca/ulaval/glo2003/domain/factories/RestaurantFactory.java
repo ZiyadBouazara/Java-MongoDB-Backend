@@ -1,37 +1,53 @@
 package ca.ulaval.glo2003.domain.factories;
 
+import ca.ulaval.glo2003.domain.utils.Hours;
+import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
-import ca.ulaval.glo2003.controllers.models.RestaurantRequest;
 
 public class RestaurantFactory {
 
-    public Restaurant buildRestaurant(String ownerId, RestaurantRequest restaurantRequest) {
-        if (hasReservationConfiguration(restaurantRequest)) {
-            return buildRestaurantWithReservationConfiguration(ownerId, restaurantRequest);
+    public Restaurant buildRestaurant(String ownerId,
+                                      String name,
+                                      Integer capacity,
+                                      Hours hours,
+                                      ReservationConfiguration reservations) {
+        if (hasReservationConfiguration(reservations)) {
+            return buildRestaurantWithReservationConfiguration(
+                    ownerId,
+                    name,
+                    capacity,
+                    hours,
+                    reservations);
         } else {
-            return buildRestaurantWithoutReservationConfiguration(ownerId, restaurantRequest);
+            return buildRestaurantWithoutReservationConfiguration(ownerId,
+                    name,
+                    capacity,
+                    hours);
         }
     }
 
-    private boolean hasReservationConfiguration(RestaurantRequest restaurantRequest) {
-        return restaurantRequest.getRestaurantConfiguration() != null;
+    private boolean hasReservationConfiguration(ReservationConfiguration reservations) {
+        return reservations != null;
     }
 
-    private Restaurant buildRestaurantWithReservationConfiguration(String ownerId, RestaurantRequest restaurantRequest) {
+    private Restaurant buildRestaurantWithReservationConfiguration(
+            String ownerId, String name, Integer capacity, Hours hours, ReservationConfiguration reservations) {
+
         return new Restaurant(
             ownerId,
-            restaurantRequest.getName(),
-            restaurantRequest.getCapacity(),
-            restaurantRequest.getHours(),
-            restaurantRequest.getRestaurantConfiguration());
+            name,
+            capacity,
+            hours,
+            reservations);
     }
 
-    private Restaurant buildRestaurantWithoutReservationConfiguration(String ownerId, RestaurantRequest restaurantRequest) {
+    private Restaurant buildRestaurantWithoutReservationConfiguration(
+            String ownerId, String name, Integer capacity, Hours hours) {
         return new Restaurant(
             ownerId,
-            restaurantRequest.getName(),
-            restaurantRequest.getCapacity(),
-            restaurantRequest.getHours());
+            name,
+            capacity,
+            hours);
     }
 }
 

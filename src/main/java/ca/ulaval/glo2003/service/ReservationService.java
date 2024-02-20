@@ -4,8 +4,7 @@ import ca.ulaval.glo2003.controllers.models.CustomerDTO;
 import ca.ulaval.glo2003.domain.customer.Customer;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.reservation.ReservationRepository;
-import ca.ulaval.glo2003.domain.utils.ResourcesHandler;
-import ca.ulaval.glo2003.infrastructure.InMemoryReservationRepository;
+
 
 public class ReservationService {
     private final ReservationRepository reservationRepository;

@@ -1,5 +1,7 @@
 package ca.ulaval.glo2003.domain.restaurant;
 
+import java.util.Objects;
+
 public class ReservationConfiguration {
     private static final Integer DEFAULT_RESERVATION_DURATION = 60;
     private Integer duration;
@@ -9,7 +11,7 @@ public class ReservationConfiguration {
     }
 
     public ReservationConfiguration(Integer duration) {
-        this.duration = duration;
+        this.duration = Objects.requireNonNullElse(duration, DEFAULT_RESERVATION_DURATION);
     }
 
     public Integer getDuration() {
