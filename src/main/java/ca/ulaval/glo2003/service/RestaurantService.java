@@ -10,10 +10,8 @@ import ca.ulaval.glo2003.domain.utils.Hours;
 
 public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
-    private final RestaurantFactory restaurantFactory;
     public RestaurantService(RestaurantRepository restaurantRepository, RestaurantFactory factory){
         this.restaurantRepository = restaurantRepository;
-        this.restaurantFactory = factory;
     }
 
     public String createRestaurant(String ownerId,
