@@ -23,6 +23,8 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
 
 import java.net.URI;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static ca.ulaval.glo2003.models.RestaurantRequest.verifyRestaurantOwnership;
@@ -72,7 +74,11 @@ public class RestaurantResource {
     @POST
     @Path("/{id}/reservations")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest) {
+    public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest)
+        throws NotFoundException, InvalidParameterException, MissingParameterException {
+        verifyValidRestaurantIdPath(restaurantId);
+        reservationRequest.verifyParameters();
+        reservationRequest.adjustReservationStartTime();
         Reservation reservation = new Reservation(
             restaurantId,
             reservationRequest.getDate(),
@@ -88,9 +94,17 @@ public class RestaurantResource {
         return Response.created(newReservationURI).build();
     }
 
+    private void verifyValidRestaurantIdPath(String restaurantId) {
+        if (resourcesHandler.getRestaurant(restaurantId) == null) {
+            throw new NotFoundException("Restaurant not found with ID: " + restaurantId);
+        }
+    }
     private void verifyMissingHeader(String ownerId) throws MissingParameterException {
         if (ownerId == null) {
             throw new MissingParameterException("Missing 'Owner' header");
         }
     }
+
+
+
 }
