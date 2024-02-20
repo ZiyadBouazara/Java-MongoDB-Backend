@@ -1,7 +1,7 @@
 package ca.ulaval.glo2003.controllers;
 
 import ca.ulaval.glo2003.Main;
-import ca.ulaval.glo2003.domain.reservation.Reservation;
+import ca.ulaval.glo2003.controllers.validators.CreateReservationValidator;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
@@ -33,8 +33,9 @@ public class RestaurantResource {
     private ResourcesHandler resourcesHandler;
     private RestaurantFactory restaurantFactory;
     private ReservationService reservationService;
+    private CreateReservationValidator createReservationValidator;
 
-    public RestaurantResource(ReservationService reservationService) {
+    public RestaurantResource(ReservationService reservationService, CreateReservationValidator createReservationValidator) {
         this.resourcesHandler = new ResourcesHandler();
         this.restaurantFactory = new RestaurantFactory();
     }
@@ -74,14 +75,15 @@ public class RestaurantResource {
     @POST
     @Path("/{id}/reservations")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest) {
-
+    public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest)
+            throws InvalidParameterException, MissingParameterException {
+        createReservationValidator.validateReservationRequest(reservationRequest);
         String createdReservationId = reservationService.createReservation(
-                reservationRequest.getRestaurantId(),
-                reservationRequest.getDate(),
-                reservationRequest.getStartTime(),
-                reservationRequest.getGroupSize(),
-                reservationRequest.getCustomer());
+                reservationRequest.restaurantId(),
+                reservationRequest.date(),
+                reservationRequest.startTime(),
+                reservationRequest.groupSize(),
+                reservationRequest.customer());
 
 
         URI newReservationURI = UriBuilder.fromPath(Main.BASE_URI)

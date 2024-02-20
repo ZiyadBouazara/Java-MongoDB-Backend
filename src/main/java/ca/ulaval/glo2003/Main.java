@@ -2,6 +2,7 @@ package ca.ulaval.glo2003;
 
 import ca.ulaval.glo2003.controllers.HealthResource;
 import ca.ulaval.glo2003.controllers.RestaurantResource;
+import ca.ulaval.glo2003.controllers.validators.CreateReservationValidator;
 import ca.ulaval.glo2003.domain.exceptions.mapper.InvalidParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.MissingParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.NotFoundExceptionMapper;
@@ -20,9 +21,10 @@ public class Main {
     public static HttpServer startServer() {
         ReservationRepository reservationRepository = new InMemoryReservationRepository();
         ReservationService reservationService = new ReservationService(reservationRepository);
+        CreateReservationValidator createReservationValidator = new CreateReservationValidator();
         final ResourceConfig rc = new ResourceConfig()
             .register(new HealthResource())
-            .register(new RestaurantResource(reservationService))
+            .register(new RestaurantResource(reservationService, createReservationValidator))
             .register(new InvalidParamExceptionMapper())
             .register(new MissingParamExceptionMapper())
             .register(new NotFoundExceptionMapper());
