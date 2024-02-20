@@ -8,8 +8,6 @@ import ca.ulaval.glo2003.domain.exceptions.mapper.InvalidParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.MissingParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.NotFoundExceptionMapper;
 import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
-import ca.ulaval.glo2003.domain.reservation.ReservationRepository;
-import ca.ulaval.glo2003.domain.restaurant.RestaurantRepository;
 import ca.ulaval.glo2003.infrastructure.InMemoryRestaurantAndReservationRepository;
 import ca.ulaval.glo2003.service.ReservationService;
 import ca.ulaval.glo2003.service.RestaurantService;

@@ -4,7 +4,6 @@ import ca.ulaval.glo2003.controllers.models.CustomerDTO;
 import ca.ulaval.glo2003.domain.customer.Customer;
 import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
-import ca.ulaval.glo2003.domain.reservation.ReservationRepository;
 
 
 public class ReservationService {

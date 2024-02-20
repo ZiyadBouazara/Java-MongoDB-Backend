@@ -2,7 +2,6 @@ package ca.ulaval.glo2003.infrastructure;
 
 import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
-import ca.ulaval.glo2003.domain.reservation.ReservationRepository;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import jakarta.ws.rs.NotFoundException;
 

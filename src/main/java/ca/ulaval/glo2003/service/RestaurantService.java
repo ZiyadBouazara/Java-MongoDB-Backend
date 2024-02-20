@@ -5,8 +5,6 @@ import ca.ulaval.glo2003.controllers.models.ReservationConfigurationDTO;
 import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
-import ca.ulaval.glo2003.domain.restaurant.RestaurantRepository;
-import ca.ulaval.glo2003.domain.factories.RestaurantFactory;
 import ca.ulaval.glo2003.domain.utils.Hours;
 
 public class RestaurantService {
