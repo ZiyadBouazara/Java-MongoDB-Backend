@@ -25,7 +25,7 @@ public class Main {
     public static HttpServer startServer() {
         RestaurantRepository restaurantRepository = new InMemoryRestaurantRepository();
         ReservationRepository reservationRepository = new InMemoryReservationRepository();
-        RestaurantService restaurantService = new RestaurantService(restaurantRepository, factory);
+        RestaurantService restaurantService = new RestaurantService(restaurantRepository);
         ReservationService reservationService = new ReservationService(reservationRepository);
         CreateReservationValidator createReservationValidator = new CreateReservationValidator();
         CreateRestaurantValidator createRestaurantValidator = new CreateRestaurantValidator();
