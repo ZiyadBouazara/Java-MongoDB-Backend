@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class RestaurantService {
     private final RestaurantAndReservationRepository restaurantAndReservationRepository;
-    public RestaurantService(RestaurantAndReservationRepository restaurantAndReservationRepository){
+    public RestaurantService(RestaurantAndReservationRepository restaurantAndReservationRepository) {
         this.restaurantAndReservationRepository = restaurantAndReservationRepository;
     }
 

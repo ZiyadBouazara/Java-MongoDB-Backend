@@ -27,7 +27,8 @@ public class CreateReservationValidator {
 
     private static final Pattern TIME_PATTERN = Pattern.compile("^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$");
 
-    public void validateReservationRequest(ReservationRequest reservationRequest) throws InvalidParameterException, MissingParameterException {
+    public void validateReservationRequest(ReservationRequest reservationRequest)
+            throws InvalidParameterException, MissingParameterException {
         verifyMissingParameters(reservationRequest);
         verifyValidParameters(reservationRequest);
     }

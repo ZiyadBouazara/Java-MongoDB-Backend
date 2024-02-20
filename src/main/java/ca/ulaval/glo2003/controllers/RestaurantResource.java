@@ -1,12 +1,14 @@
 package ca.ulaval.glo2003.controllers;
 
 import ca.ulaval.glo2003.Main;
-import ca.ulaval.glo2003.controllers.validators.*;
-import ca.ulaval.glo2003.domain.restaurant.Restaurant;
+import ca.ulaval.glo2003.controllers.validators.CreateReservationValidator;
+import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
+import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
+import ca.ulaval.glo2003.controllers.validators.GetAllRestaurantsValidator;
+import ca.ulaval.glo2003.controllers.validators.HeaderValidator;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.domain.utils.ResourcesHandler;
-import ca.ulaval.glo2003.domain.factories.RestaurantFactory;
 import ca.ulaval.glo2003.controllers.models.ReservationRequest;
 import ca.ulaval.glo2003.controllers.models.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.models.RestaurantResponse;

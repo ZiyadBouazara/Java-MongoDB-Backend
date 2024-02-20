@@ -4,8 +4,6 @@ import ca.ulaval.glo2003.controllers.models.HoursDTO;
 import ca.ulaval.glo2003.controllers.models.RestaurantRequest;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
-import jakarta.ws.rs.NotFoundException;
-
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.regex.Matcher;
@@ -15,7 +13,8 @@ public class CreateRestaurantValidator {
     private static final String TIME_FORMAT_REGEX = "^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$";
     private static final Pattern TIME_PATTERN = Pattern.compile(TIME_FORMAT_REGEX);
 
-    public void validate(String ownerId, RestaurantRequest restaurantRequest) throws MissingParameterException, InvalidParameterException {
+    public void validate(String ownerId, RestaurantRequest restaurantRequest)
+            throws MissingParameterException, InvalidParameterException {
         verifyParameters(restaurantRequest);
     }
 

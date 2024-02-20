@@ -2,7 +2,11 @@ package ca.ulaval.glo2003;
 
 import ca.ulaval.glo2003.controllers.HealthResource;
 import ca.ulaval.glo2003.controllers.RestaurantResource;
-import ca.ulaval.glo2003.controllers.validators.*;
+import ca.ulaval.glo2003.controllers.validators.HeaderValidator;
+import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
+import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
+import ca.ulaval.glo2003.controllers.validators.GetAllRestaurantsValidator;
+import ca.ulaval.glo2003.controllers.validators.CreateReservationValidator;
 import ca.ulaval.glo2003.domain.exceptions.mapper.InvalidParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.MissingParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.NotFoundExceptionMapper;
@@ -30,7 +34,14 @@ public class Main {
         GetRestaurantValidator getRestaurantValidator = new GetRestaurantValidator();
         final ResourceConfig rc = new ResourceConfig()
             .register(new HealthResource())
-            .register(new RestaurantResource(restaurantService, reservationService, headerValidator, createRestaurantValidator, createReservationValidator, getAllRestaurantsValidator, getRestaurantValidator))
+            .register(new RestaurantResource(
+                    restaurantService,
+                    reservationService,
+                    headerValidator,
+                    createRestaurantValidator,
+                    createReservationValidator,
+                    getAllRestaurantsValidator,
+                    getRestaurantValidator))
             .register(new InvalidParamExceptionMapper())
             .register(new MissingParamExceptionMapper())
             .register(new NotFoundExceptionMapper());

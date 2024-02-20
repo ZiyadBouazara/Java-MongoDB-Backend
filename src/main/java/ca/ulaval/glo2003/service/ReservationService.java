@@ -8,7 +8,7 @@ import ca.ulaval.glo2003.domain.reservation.Reservation;
 
 public class ReservationService {
     private final RestaurantAndReservationRepository restaurantAndReservationRepository;
-    public ReservationService(RestaurantAndReservationRepository restaurantAndReservationRepository){
+    public ReservationService(RestaurantAndReservationRepository restaurantAndReservationRepository) {
         this.restaurantAndReservationRepository = restaurantAndReservationRepository;
     }
     public String createReservation(String restaurantId, String date, String startTime, Integer groupSize, CustomerDTO customerDTO) {
