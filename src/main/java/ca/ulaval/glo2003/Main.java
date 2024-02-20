@@ -7,10 +7,10 @@ import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.domain.exceptions.mapper.InvalidParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.MissingParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.NotFoundExceptionMapper;
+import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.ReservationRepository;
 import ca.ulaval.glo2003.domain.restaurant.RestaurantRepository;
-import ca.ulaval.glo2003.infrastructure.InMemoryReservationRepository;
-import ca.ulaval.glo2003.infrastructure.InMemoryRestaurantRepository;
+import ca.ulaval.glo2003.infrastructure.InMemoryRestaurantAndReservationRepository;
 import ca.ulaval.glo2003.service.ReservationService;
 import ca.ulaval.glo2003.service.RestaurantService;
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -23,10 +23,9 @@ public class Main {
     public static final String BASE_URI = "http://0.0.0.0:8080/";
 
     public static HttpServer startServer() {
-        RestaurantRepository restaurantRepository = new InMemoryRestaurantRepository();
-        ReservationRepository reservationRepository = new InMemoryReservationRepository();
-        RestaurantService restaurantService = new RestaurantService(restaurantRepository);
-        ReservationService reservationService = new ReservationService(reservationRepository);
+        RestaurantAndReservationRepository restaurantAndReservationRepository = new InMemoryRestaurantAndReservationRepository();
+        RestaurantService restaurantService = new RestaurantService(restaurantAndReservationRepository);
+        ReservationService reservationService = new ReservationService(restaurantAndReservationRepository);
         CreateReservationValidator createReservationValidator = new CreateReservationValidator();
         CreateRestaurantValidator createRestaurantValidator = new CreateRestaurantValidator();
         final ResourceConfig rc = new ResourceConfig()

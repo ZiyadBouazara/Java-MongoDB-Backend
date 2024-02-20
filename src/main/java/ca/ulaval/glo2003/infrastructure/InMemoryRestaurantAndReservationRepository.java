@@ -1,19 +1,17 @@
 package ca.ulaval.glo2003.infrastructure;
 
-import ca.ulaval.glo2003.controllers.models.RestaurantResponse;
+import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.reservation.ReservationRepository;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import jakarta.ws.rs.NotFoundException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class InMemoryReservationRepository implements ReservationRepository {
+public class InMemoryRestaurantAndReservationRepository implements RestaurantAndReservationRepository {
     private Map<String, Restaurant> restaurants;
-    public InMemoryReservationRepository() {
+    public InMemoryRestaurantAndReservationRepository() {
         this.restaurants = new HashMap<>();
     }
 
@@ -23,6 +21,10 @@ public class InMemoryReservationRepository implements ReservationRepository {
         Restaurant restaurant = restaurants.get(restaurantId);
 
         restaurant.addReservation(reservation);
+    }
+    @Override
+    public void saveRestaurant(Restaurant restaurant) throws NotFoundException {
+        restaurants.put(restaurant.getId(), restaurant);
     }
 
 

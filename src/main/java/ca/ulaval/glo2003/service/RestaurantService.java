@@ -2,6 +2,7 @@ package ca.ulaval.glo2003.service;
 
 import ca.ulaval.glo2003.controllers.models.HoursDTO;
 import ca.ulaval.glo2003.controllers.models.ReservationConfigurationDTO;
+import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.restaurant.RestaurantRepository;
@@ -9,9 +10,9 @@ import ca.ulaval.glo2003.domain.factories.RestaurantFactory;
 import ca.ulaval.glo2003.domain.utils.Hours;
 
 public class RestaurantService {
-    private final RestaurantRepository restaurantRepository;
-    public RestaurantService(RestaurantRepository restaurantRepository){
-        this.restaurantRepository = restaurantRepository;
+    private final RestaurantAndReservationRepository restaurantAndReservationRepository;
+    public RestaurantService(RestaurantAndReservationRepository restaurantAndReservationRepository){
+        this.restaurantAndReservationRepository = restaurantAndReservationRepository;
     }
 
     public String createRestaurant(String ownerId,
@@ -22,7 +23,7 @@ public class RestaurantService {
         Hours hours = new Hours(hoursDTO.open(), hoursDTO.close());
         ReservationConfiguration reservations = constructRestaurantBasedOnReservationConfiguration(reservationsDTO);
         Restaurant restaurant = new Restaurant(ownerId, name, capacity, hours, reservations);
-        restaurantRepository.saveRestaurant(restaurant);
+        restaurantAndReservationRepository.saveRestaurant(restaurant);
         return restaurant.getId();
     }
 
