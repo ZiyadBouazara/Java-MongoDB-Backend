@@ -9,5 +9,12 @@ public record RestaurantResponse (String id,
                                   Integer capacity,
                                   Hours hours,
                                   ReservationConfiguration reservations) {
+    public RestaurantResponse(Restaurant restaurant) {
+        this(restaurant.getId(),
+                restaurant.getName(),
+                restaurant.getCapacity(),
+                restaurant.getHours(),
+                restaurant.getRestaurantConfiguration());
+    }
 
 }

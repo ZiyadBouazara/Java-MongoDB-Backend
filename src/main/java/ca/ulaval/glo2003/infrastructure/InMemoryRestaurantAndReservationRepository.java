@@ -6,7 +6,9 @@ import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class InMemoryRestaurantAndReservationRepository implements RestaurantAndReservationRepository {
     private Map<String, Restaurant> restaurants;
@@ -26,7 +28,14 @@ public class InMemoryRestaurantAndReservationRepository implements RestaurantAnd
         restaurants.put(restaurant.getId(), restaurant);
     }
 
+    @Override
+    public List<Restaurant> findRestaurantsByOwnerId(String ownerId) {
+        return restaurants.values().stream()
+                .filter(restaurant -> restaurant.getOwnerId().equals(ownerId))
+                .collect(Collectors.toList());
+    }
 
+}
 //    public Restaurant getRestaurant(String restaurantId) throws NotFoundException {
 //        Restaurant restaurant = restaurants.get(restaurantId);
 //        if (restaurant == null) throw new NotFoundException();
@@ -42,4 +51,3 @@ public class InMemoryRestaurantAndReservationRepository implements RestaurantAnd
 //        }
 //        return ownerRestaurants;
 //    }
-}

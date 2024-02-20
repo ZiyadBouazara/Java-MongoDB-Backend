@@ -3,6 +3,7 @@ package ca.ulaval.glo2003.controllers;
 import ca.ulaval.glo2003.Main;
 import ca.ulaval.glo2003.controllers.validators.CreateReservationValidator;
 import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
+import ca.ulaval.glo2003.controllers.validators.GetRestaurantsValidator;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
@@ -38,11 +39,13 @@ public class RestaurantResource {
     private ReservationService reservationService;
     private CreateRestaurantValidator createRestaurantValidator;
     private CreateReservationValidator createReservationValidator;
+    private GetRestaurantsValidator getRestaurantsValidator;
 
     public RestaurantResource(RestaurantService restaurantService,
                               ReservationService reservationService,
                               CreateRestaurantValidator createRestaurantValidator,
-                              CreateReservationValidator createReservationValidator) {
+                              CreateReservationValidator createReservationValidator,
+                              GetRestaurantsValidator getRestaurantsValidator) {
 
         this.resourcesHandler = new ResourcesHandler();
         this.restaurantFactory = new RestaurantFactory();
@@ -51,8 +54,8 @@ public class RestaurantResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<RestaurantResponse> getRestaurants(@HeaderParam("Owner") String ownerId) throws MissingParameterException {
-        verifyMissingHeader(ownerId);
-        return resourcesHandler.getAllRestaurantsForOwner(ownerId);
+        getRestaurantsValidator.verifyMissingHeader(ownerId);
+        return restaurantService.getRestaurantsForOwnerId(ownerId);
     }
 
     @POST
