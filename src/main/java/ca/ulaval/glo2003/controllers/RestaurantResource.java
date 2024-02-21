@@ -2,6 +2,7 @@ package ca.ulaval.glo2003.controllers;
 
 import ca.ulaval.glo2003.Main;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
+import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
@@ -23,6 +24,8 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
 
 import java.net.URI;
+import java.time.LocalTime;
+import java.time.Duration;
 import java.util.List;
 
 import static ca.ulaval.glo2003.models.RestaurantRequest.verifyRestaurantOwnership;
@@ -76,6 +79,7 @@ public class RestaurantResource {
         throws NotFoundException, InvalidParameterException, MissingParameterException {
         verifyValidRestaurantIdPath(restaurantId);
         reservationRequest.verifyParameters();
+        verifyValidReservationEndTime(reservationRequest, restaurantId);
         Reservation reservation = new Reservation(
             restaurantId,
             reservationRequest.getDate(),
@@ -96,9 +100,35 @@ public class RestaurantResource {
             throw new NotFoundException("Restaurant not found with ID: " + restaurantId);
         }
     }
+
     private void verifyMissingHeader(String ownerId) throws MissingParameterException {
         if (ownerId == null) {
             throw new MissingParameterException("Missing 'Owner' header");
+        }
+    }
+
+    private void verifyValidReservationEndTime(ReservationRequest reservationRequest, String restaurantId)
+            throws InvalidParameterException {
+        Restaurant restaurant = resourcesHandler.getRestaurant(restaurantId);
+        ReservationConfiguration reservationConfiguration = restaurant.getRestaurantConfiguration();
+        LocalTime reservationEndTime = calculateReservationEndTime(reservationRequest, reservationConfiguration);
+        LocalTime closingTime = LocalTime.parse(restaurant.getHours().getClose());
+        LocalTime openingTime = LocalTime.parse(restaurant.getHours().getOpen());
+        verifyReservationWithinOperatingHours(reservationEndTime, closingTime, openingTime);
+    }
+
+    private LocalTime calculateReservationEndTime(
+            ReservationRequest reservationRequest, ReservationConfiguration reservationConfiguration) {
+        LocalTime reservationStartTime = LocalTime.parse(reservationRequest.getStartTime());
+        Duration reservationDuration = Duration.ofMinutes(reservationConfiguration.getDuration());
+        return reservationStartTime.plus(reservationDuration);
+    }
+
+    private void verifyReservationWithinOperatingHours(
+            LocalTime reservationEndTime, LocalTime closingTime, LocalTime openingTime) throws InvalidParameterException {
+        if (reservationEndTime.isAfter(closingTime) || reservationEndTime.isBefore(openingTime)) {
+            throw new InvalidParameterException(
+                    "Invalid reservation start time, the reservation exceeds the restaurant's closing time");
         }
     }
 }
