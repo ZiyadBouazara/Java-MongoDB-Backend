@@ -99,7 +99,10 @@ public class RestaurantResource {
                 reservationRequest.date(),
                 reservationRequest.startTime(),
                 reservationRequest.groupSize(),
-                reservationRequest.customer());
+                reservationRequest.customer().name(),
+                reservationRequest.customer().email(),
+                reservationRequest.customer().phoneNumber()
+                );
 
         URI newReservationURI = UriBuilder.fromPath(Main.BASE_URI)
             .path("reservations")
