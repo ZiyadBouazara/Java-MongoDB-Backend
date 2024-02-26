@@ -103,7 +103,7 @@ public class RestaurantResource {
             throws InvalidParameterException, MissingParameterException {
         createReservationValidator.validateReservationRequest(reservationRequest);
         String createdReservationId = reservationService.createReservation(
-                reservationRequest.restaurantId(),
+                restaurantId,
                 reservationRequest.date(),
                 reservationRequest.startTime(),
                 reservationRequest.groupSize(),
