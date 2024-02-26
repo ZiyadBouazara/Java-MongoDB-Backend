@@ -92,7 +92,7 @@ public class RestaurantResource {
         throws MissingParameterException, NotFoundException {
         headerValidator.verifyMissingHeader(ownerId);
         RestaurantResponse response = restaurantService.getRestaurant(restaurantId);
-        getRestaurantValidator.validateRestaurantOwnership(ownerId, response.id());
+        getRestaurantValidator.validateRestaurantOwnership(ownerId, response.ownerId());
         return Response.ok(response).build();
     }
 
