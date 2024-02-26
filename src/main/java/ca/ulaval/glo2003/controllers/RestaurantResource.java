@@ -27,7 +27,7 @@ import jakarta.ws.rs.core.UriBuilder;
 
 import java.net.URI;
 import java.util.List;
-
+import java.util.Optional;
 
 
 @Path("restaurants")
@@ -69,13 +69,16 @@ public class RestaurantResource {
         headerValidator.verifyMissingHeader(ownerId);
         createRestaurantValidator.validate(ownerId, restaurantRequest);
 
+        Optional<Integer> reservationsDuration = restaurantRequest.reservations() != null ?
+                Optional.of(restaurantRequest.reservations().duration()) : Optional.empty();
+
         String restaurantId = restaurantService.createRestaurant(
                 ownerId,
                 restaurantRequest.name(),
                 restaurantRequest.capacity(),
                 restaurantRequest.hours().open(),
                 restaurantRequest.hours().close(),
-                restaurantRequest.reservations().duration());
+                reservationsDuration);
 
         URI newProductURI = UriBuilder.fromResource(RestaurantResource.class).path(restaurantId).build();
         return Response.created(newProductURI).build();

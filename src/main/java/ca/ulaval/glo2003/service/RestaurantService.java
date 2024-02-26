@@ -11,6 +11,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class RestaurantService {
@@ -22,11 +23,11 @@ public class RestaurantService {
     }
 
     public String createRestaurant(String ownerId,
-                                 String name,
-                                 Integer capacity,
-                                 String openTime,
-                                 String closeTime,
-                                 Integer reservationsDuration) {
+                                   String name,
+                                   Integer capacity,
+                                   String openTime,
+                                   String closeTime,
+                                   Optional<Integer> reservationsDuration) {
         Hours hours = new Hours(openTime, closeTime);
         ReservationConfiguration reservations = constructRestaurantBasedOnReservationConfiguration(reservationsDuration);
         Restaurant restaurant = new Restaurant(ownerId, name, capacity, hours, reservations);
@@ -49,13 +50,9 @@ public class RestaurantService {
         return new RestaurantResponse(restaurant);
     }
 
-    private ReservationConfiguration constructRestaurantBasedOnReservationConfiguration(Integer reservationsDuration) {
+    private ReservationConfiguration constructRestaurantBasedOnReservationConfiguration(Optional<Integer> reservationsDuration) {
         ReservationConfiguration reservations;
-        if (reservationsDuration != null) {
-            reservations = new ReservationConfiguration(reservationsDuration);
-        } else {
-            reservations = new ReservationConfiguration();
-        }
+        reservations = reservationsDuration.map(ReservationConfiguration::new).orElseGet(ReservationConfiguration::new);
         return reservations;
     }
 }
