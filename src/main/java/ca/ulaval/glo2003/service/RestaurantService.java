@@ -1,7 +1,5 @@
 package ca.ulaval.glo2003.service;
 
-import ca.ulaval.glo2003.controllers.models.HoursDTO;
-import ca.ulaval.glo2003.controllers.models.ReservationConfigurationDTO;
 import ca.ulaval.glo2003.controllers.models.RestaurantResponse;
 import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
