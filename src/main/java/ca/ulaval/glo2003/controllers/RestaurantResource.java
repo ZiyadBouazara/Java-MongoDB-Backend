@@ -8,12 +8,12 @@ import ca.ulaval.glo2003.controllers.validators.GetAllRestaurantsValidator;
 import ca.ulaval.glo2003.controllers.validators.HeaderValidator;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
-import ca.ulaval.glo2003.domain.utils.ResourcesHandler;
 import ca.ulaval.glo2003.controllers.models.ReservationRequest;
 import ca.ulaval.glo2003.controllers.models.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.models.RestaurantResponse;
 import ca.ulaval.glo2003.service.ReservationService;
 import ca.ulaval.glo2003.service.RestaurantService;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
@@ -33,15 +33,15 @@ import java.util.List;
 
 @Path("restaurants")
 public class RestaurantResource {
-    private ResourcesHandler resourcesHandler;
-    private RestaurantService restaurantService;
-    private ReservationService reservationService;
-    private CreateRestaurantValidator createRestaurantValidator;
-    private CreateReservationValidator createReservationValidator;
-    private GetAllRestaurantsValidator getAllRestaurantsValidator;
-    private GetRestaurantValidator getRestaurantValidator;
-    private HeaderValidator headerValidator;
+    private final RestaurantService restaurantService;
+    private final ReservationService reservationService;
+    private final CreateRestaurantValidator createRestaurantValidator;
+    private final CreateReservationValidator createReservationValidator;
+    private final GetAllRestaurantsValidator getAllRestaurantsValidator;
+    private final GetRestaurantValidator getRestaurantValidator;
+    private final HeaderValidator headerValidator;
 
+    @Inject
     public RestaurantResource(RestaurantService restaurantService,
                               ReservationService reservationService,
                               HeaderValidator headerValidator,
@@ -50,6 +50,14 @@ public class RestaurantResource {
                               GetAllRestaurantsValidator getAllRestaurantsValidator,
                               GetRestaurantValidator getRestaurantValidator) {
 
+        this.restaurantService = restaurantService;
+        this.reservationService = reservationService;
+        this.headerValidator = headerValidator;
+        this.createRestaurantValidator = createRestaurantValidator;
+        this.createReservationValidator = createReservationValidator;
+        this.getAllRestaurantsValidator = getAllRestaurantsValidator;
+        this.getRestaurantValidator = getRestaurantValidator;
+        System.out.println("InMemoryRestaurantAndReservationRepository instance created");
     }
 
     @GET

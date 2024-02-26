@@ -3,10 +3,12 @@ package ca.ulaval.glo2003.service;
 import ca.ulaval.glo2003.domain.customer.Customer;
 import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
+import jakarta.inject.Inject;
 
 
 public class ReservationService {
     private final RestaurantAndReservationRepository restaurantAndReservationRepository;
+    @Inject
     public ReservationService(RestaurantAndReservationRepository restaurantAndReservationRepository) {
         this.restaurantAndReservationRepository = restaurantAndReservationRepository;
     }

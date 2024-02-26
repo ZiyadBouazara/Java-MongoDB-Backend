@@ -7,6 +7,7 @@ import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.utils.Hours;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
@@ -14,6 +15,8 @@ import java.util.stream.Collectors;
 
 public class RestaurantService {
     private final RestaurantAndReservationRepository restaurantAndReservationRepository;
+
+    @Inject
     public RestaurantService(RestaurantAndReservationRepository restaurantAndReservationRepository) {
         this.restaurantAndReservationRepository = restaurantAndReservationRepository;
     }
