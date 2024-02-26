@@ -18,7 +18,7 @@ public class Main {
     public static HttpServer startServer() {
         final ResourceConfig rc = new ResourceConfig()
             .register(new ApplicationBinder())
-            .register(new HealthResource())
+            .register(HealthResource.class)
             .register(RestaurantResource.class)
             .register(InvalidParamExceptionMapper.class)
             .register(MissingParamExceptionMapper.class)

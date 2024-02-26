@@ -4,7 +4,6 @@ import ca.ulaval.glo2003.Main;
 import ca.ulaval.glo2003.controllers.validators.CreateReservationValidator;
 import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
-import ca.ulaval.glo2003.controllers.validators.GetAllRestaurantsValidator;
 import ca.ulaval.glo2003.controllers.validators.HeaderValidator;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
@@ -37,7 +36,6 @@ public class RestaurantResource {
     private final ReservationService reservationService;
     private final CreateRestaurantValidator createRestaurantValidator;
     private final CreateReservationValidator createReservationValidator;
-    private final GetAllRestaurantsValidator getAllRestaurantsValidator;
     private final GetRestaurantValidator getRestaurantValidator;
     private final HeaderValidator headerValidator;
 
@@ -47,7 +45,6 @@ public class RestaurantResource {
                               HeaderValidator headerValidator,
                               CreateRestaurantValidator createRestaurantValidator,
                               CreateReservationValidator createReservationValidator,
-                              GetAllRestaurantsValidator getAllRestaurantsValidator,
                               GetRestaurantValidator getRestaurantValidator) {
 
         this.restaurantService = restaurantService;
@@ -55,9 +52,7 @@ public class RestaurantResource {
         this.headerValidator = headerValidator;
         this.createRestaurantValidator = createRestaurantValidator;
         this.createReservationValidator = createReservationValidator;
-        this.getAllRestaurantsValidator = getAllRestaurantsValidator;
         this.getRestaurantValidator = getRestaurantValidator;
-        System.out.println("InMemoryRestaurantAndReservationRepository instance created");
     }
 
     @GET
