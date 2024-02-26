@@ -26,9 +26,9 @@ public class RestaurantService {
                                  Integer capacity,
                                  String openTime,
                                  String closeTime,
-                                 ReservationConfigurationDTO reservationsDTO) {
+                                 Integer reservationsDuration) {
         Hours hours = new Hours(openTime, closeTime);
-        ReservationConfiguration reservations = constructRestaurantBasedOnReservationConfiguration(reservationsDTO);
+        ReservationConfiguration reservations = constructRestaurantBasedOnReservationConfiguration(reservationsDuration);
         Restaurant restaurant = new Restaurant(ownerId, name, capacity, hours, reservations);
         restaurantAndReservationRepository.saveRestaurant(restaurant);
         return restaurant.getId();
@@ -49,10 +49,10 @@ public class RestaurantService {
         return new RestaurantResponse(restaurant);
     }
 
-    private ReservationConfiguration constructRestaurantBasedOnReservationConfiguration(ReservationConfigurationDTO reservationsDTO) {
+    private ReservationConfiguration constructRestaurantBasedOnReservationConfiguration(Integer reservationsDuration) {
         ReservationConfiguration reservations;
-        if (reservationsDTO != null && reservationsDTO.duration() != null) {
-            reservations = new ReservationConfiguration(reservationsDTO.duration());
+        if (reservationsDuration != null) {
+            reservations = new ReservationConfiguration(reservationsDuration);
         } else {
             reservations = new ReservationConfiguration();
         }

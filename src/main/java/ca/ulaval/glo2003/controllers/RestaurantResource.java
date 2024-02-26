@@ -80,7 +80,7 @@ public class RestaurantResource {
                 restaurantRequest.capacity(),
                 restaurantRequest.hours().open(),
                 restaurantRequest.hours().close(),
-                restaurantRequest.reservations());
+                restaurantRequest.reservations().duration());
 
         URI newProductURI = UriBuilder.fromResource(RestaurantResource.class).path(restaurantId).build();
         return Response.created(newProductURI).build();
