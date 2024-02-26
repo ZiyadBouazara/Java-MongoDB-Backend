@@ -24,9 +24,10 @@ public class RestaurantService {
     public String createRestaurant(String ownerId,
                                  String name,
                                  Integer capacity,
-                                 HoursDTO hoursDTO,
+                                 String openTime,
+                                 String closeTime,
                                  ReservationConfigurationDTO reservationsDTO) {
-        Hours hours = new Hours(hoursDTO.open(), hoursDTO.close());
+        Hours hours = new Hours(openTime, closeTime);
         ReservationConfiguration reservations = constructRestaurantBasedOnReservationConfiguration(reservationsDTO);
         Restaurant restaurant = new Restaurant(ownerId, name, capacity, hours, reservations);
         restaurantAndReservationRepository.saveRestaurant(restaurant);
