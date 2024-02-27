@@ -1,6 +1,7 @@
 package ca.ulaval.glo2003.controllers;
 
 import ca.ulaval.glo2003.Main;
+import ca.ulaval.glo2003.controllers.models.RestaurantDetails;
 import ca.ulaval.glo2003.controllers.validators.CreateReservationValidator;
 import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
@@ -57,7 +58,7 @@ public class RestaurantResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<RestaurantResponse> getRestaurants(@HeaderParam("Owner") String ownerId) throws MissingParameterException {
+    public List<RestaurantDetails> getRestaurants(@HeaderParam("Owner") String ownerId) throws MissingParameterException {
         headerValidator.verifyMissingHeader(ownerId);
         return restaurantService.getRestaurantsForOwnerId(ownerId);
     }
@@ -90,7 +91,7 @@ public class RestaurantResource {
     public Response getRestaurant(@HeaderParam("Owner") String ownerId, @PathParam("id") String restaurantId)
         throws MissingParameterException, NotFoundException {
         headerValidator.verifyMissingHeader(ownerId);
-        RestaurantResponse response = restaurantService.getRestaurant(restaurantId);
+        RestaurantDetails response = restaurantService.getRestaurant(restaurantId);
         getRestaurantValidator.validateRestaurantOwnership(ownerId, response.ownerId());
         return Response.ok(response).build();
     }

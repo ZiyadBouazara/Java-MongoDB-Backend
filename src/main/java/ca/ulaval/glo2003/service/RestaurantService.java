@@ -1,5 +1,8 @@
 package ca.ulaval.glo2003.service;
 
+import ca.ulaval.glo2003.controllers.models.HoursDTO;
+import ca.ulaval.glo2003.controllers.models.ReservationConfigurationDTO;
+import ca.ulaval.glo2003.controllers.models.RestaurantDetails;
 import ca.ulaval.glo2003.controllers.models.RestaurantResponse;
 import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
@@ -33,14 +36,14 @@ public class RestaurantService {
         return restaurant.getId();
     }
 
-    public List<RestaurantResponse> getRestaurantsForOwnerId(String ownerId) {
+    public List<RestaurantDetails> getRestaurantsForOwnerId(String ownerId) {
         List<Restaurant> ownerRestaurants = restaurantAndReservationRepository.findRestaurantsByOwnerId(ownerId);
         return ownerRestaurants.stream()
                 .map(RestaurantResponse::new)
                 .collect(Collectors.toList());
     }
 
-    public RestaurantResponse getRestaurant(String restaurantId) {
+    public RestaurantDetails getRestaurant(String restaurantId) {
         Restaurant restaurant = restaurantAndReservationRepository.findRestaurantByRestaurantId(restaurantId);
         if (restaurant == null) {
             throw new NotFoundException("Restaurant with ID " + restaurantId + " not found");

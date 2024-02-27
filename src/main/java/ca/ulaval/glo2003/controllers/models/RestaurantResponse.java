@@ -9,7 +9,7 @@ public record RestaurantResponse(String id,
                                   String name,
                                   Integer capacity,
                                   Hours hours,
-                                  ReservationConfiguration reservations) {
+                                  ReservationConfiguration reservations) implements RestaurantDetails{
     public RestaurantResponse(Restaurant restaurant) {
         this(
                 restaurant.getId(),
