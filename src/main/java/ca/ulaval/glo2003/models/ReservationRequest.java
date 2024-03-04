@@ -3,15 +3,11 @@ package ca.ulaval.glo2003.models;
 import ca.ulaval.glo2003.domain.customer.Customer;
 
 public class ReservationRequest {
-    private String restaurantId;
-    private String date;
-    private String startTime;
-    private int groupSize;
-    private Customer customer;
+    public String date;
+    public String startTime;
+    public int groupSize;
+    public Customer customer;
 
-    public String getRestaurantId() {
-        return this.restaurantId;
-    }
     public String getDate() {
         return this.date;
     }
