@@ -1,6 +1,7 @@
 package ca.ulaval.glo2003.controllers;
 
 import ca.ulaval.glo2003.Main;
+import ca.ulaval.glo2003.domain.utils.FuzzySearch;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
@@ -8,6 +9,7 @@ import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.domain.utils.ResourcesHandler;
 import ca.ulaval.glo2003.domain.factories.RestaurantFactory;
+import ca.ulaval.glo2003.models.FuzzySearchResponse;
 import ca.ulaval.glo2003.models.ReservationRequest;
 import ca.ulaval.glo2003.models.ReservationResponse;
 import ca.ulaval.glo2003.models.RestaurantRequest;
@@ -84,26 +86,27 @@ public class RestaurantResource {
         reservationRequest.verifyParameters();
         reservationRequest.adjustReservationStartTime();
         verifyValidReservationEndTime(reservationRequest, restaurantId);
-        Reservation reservation = new Reservation(
-            restaurantId,
-            reservationRequest.getDate(),
-            reservationRequest.getStartTime(),
-            reservationRequest.getGroupSize(),
-            reservationRequest.getCustomer());
+        Reservation reservation = new Reservation(restaurantId, reservationRequest.getDate(), reservationRequest.getStartTime(),
+            reservationRequest.getGroupSize(), reservationRequest.getCustomer());
 
         resourcesHandler.addReservation(reservation);
-        URI newReservationURI = UriBuilder.fromPath(Main.BASE_URI)
-            .path("reservations")
-            .path(reservation.getId())
-            .build();
+        URI newReservationURI = UriBuilder.fromPath(Main.BASE_URI).path("reservations").path(reservation.getId()).build();
         return Response.created(newReservationURI).build();
+    }
+
+    @POST
+    @Path("/search/restaurants")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<FuzzySearchResponse> searchRestaurants(FuzzySearch search) throws InvalidParameterException {
+        RestaurantRequest.verifyFuzzySearchValidParameters(search);
+        return resourcesHandler.getAllRestaurantsForSearch(search);
     }
 
     @GET
     @Path("reservations/{number}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getReservation(@PathParam("number") String reservationId)
-        throws NotFoundException {
+    public Response getReservation(@PathParam("number") String reservationId) throws NotFoundException {
         Reservation reservation = resourcesHandler.getReservation(reservationId);
         return Response.ok(new ReservationResponse(reservation, resourcesHandler)).build();
     }
@@ -130,15 +133,15 @@ public class RestaurantResource {
         verifyReservationWithinOperatingHours(reservationEndTime, closingTime, openingTime);
     }
 
-    private LocalTime calculateReservationEndTime(
-        ReservationRequest reservationRequest, ReservationConfiguration reservationConfiguration) {
+    private LocalTime calculateReservationEndTime(ReservationRequest reservationRequest,
+                                                  ReservationConfiguration reservationConfiguration) {
         LocalTime reservationStartTime = LocalTime.parse(reservationRequest.getStartTime());
         Duration reservationDuration = Duration.ofMinutes(reservationConfiguration.getDuration());
         return reservationStartTime.plus(reservationDuration);
     }
 
-    private void verifyReservationWithinOperatingHours(
-        LocalTime reservationEndTime, LocalTime closingTime, LocalTime openingTime) throws InvalidParameterException {
+    private void verifyReservationWithinOperatingHours(LocalTime reservationEndTime, LocalTime closingTime, LocalTime openingTime)
+        throws InvalidParameterException {
         if (reservationEndTime.isAfter(closingTime) || reservationEndTime.isBefore(openingTime)) {
             throw new InvalidParameterException(
                 "Invalid reservation start time, the reservation exceeds the restaurant's closing time");
