@@ -56,6 +56,7 @@ public class ResourcesHandler {
         }
         throw new NotFoundException();
     }
+
     public List<FuzzySearchResponse> getAllRestaurantsForSearch(FuzzySearch search) {
         List<FuzzySearchResponse> searchedRestaurants = new ArrayList<>();
 
@@ -71,7 +72,8 @@ public class ResourcesHandler {
             }
 
             if (search.getHours() != null) {
-                isMatchRestaurantOpenHour = FuzzySearch.isFromTimeMatching(search.getHours().getFrom(), restaurant.getHours().getOpen());
+                isMatchRestaurantOpenHour =
+                    FuzzySearch.isFromTimeMatching(search.getHours().getFrom(), restaurant.getHours().getOpen());
                 isMatchRestaurantCloseHour = FuzzySearch.isToTimeMatching(search.getHours().getTo(), restaurant.getHours().getClose());
             } else {
                 isMatchRestaurantOpenHour = true;

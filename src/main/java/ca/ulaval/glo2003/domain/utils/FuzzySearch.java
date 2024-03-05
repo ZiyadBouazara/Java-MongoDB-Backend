@@ -8,24 +8,32 @@ import java.time.format.DateTimeFormatter;
 public class FuzzySearch {
     private String name;
     private VisitTime hours;
+
     public FuzzySearch() {
         this.hours = new VisitTime();
     }
+
     @JsonProperty("name")
     public String getName() {
         return (name != null) ? name : null;
     }
+
     @JsonProperty("name")
     public void setName(String restaurantName) {
         this.name = restaurantName;
     }
-    @JsonProperty("hours")
-    public VisitTime getHours(){return this.hours;}
 
-    public void setHours(VisitTime visitTime){this.hours = visitTime;}
+    @JsonProperty("hours")
+    public VisitTime getHours() {
+        return this.hours;
+    }
+
+    public void setHours(VisitTime visitTime) {
+        this.hours = visitTime;
+    }
 
     public static boolean isFuzzySearchOnNameSuccessful(String searchingElement, String comparedElement) {
-        if(searchingElement != null){
+        if (searchingElement != null) {
             String cleanedSearchingElement = searchingElement.replaceAll("\\s", "").toLowerCase();
             String cleanedComparedElement = comparedElement.replaceAll("\\s", "").toLowerCase();
 
@@ -35,7 +43,7 @@ public class FuzzySearch {
     }
 
     public static boolean isFromTimeMatching(String visitTimeFrom, String comparedToHour) {
-        if(visitTimeFrom != null) {
+        if (visitTimeFrom != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             LocalTime from = LocalTime.parse(visitTimeFrom, formatter);
             LocalTime comparedHour = LocalTime.parse(comparedToHour, formatter);
@@ -46,7 +54,7 @@ public class FuzzySearch {
     }
 
     public static boolean isToTimeMatching(String visitTimeTo, String comparedToHour) {
-        if(visitTimeTo != null) {
+        if (visitTimeTo != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             LocalTime to = LocalTime.parse(visitTimeTo, formatter);
             LocalTime comparedHour = LocalTime.parse(comparedToHour, formatter);

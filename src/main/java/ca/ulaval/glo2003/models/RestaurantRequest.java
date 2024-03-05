@@ -80,7 +80,7 @@ public class RestaurantRequest {
         verifyValidHours();
     }
 
-    public static void verifyFuzzySearchValidParameters(FuzzySearch fuzzySearch) throws InvalidParameterException{
+    public static void verifyFuzzySearchValidParameters(FuzzySearch fuzzySearch) throws InvalidParameterException {
         verifyFuzzySearchNotNull(fuzzySearch);
         verifyFuzzySearchValidName(fuzzySearch);
         verifyFuzzySearchValidHours(fuzzySearch);
@@ -98,13 +98,7 @@ public class RestaurantRequest {
             String from = fuzzySearch.getHours().getFrom();
             String to = fuzzySearch.getHours().getTo();
 
-            if (from != null && !from.isEmpty() && !(from instanceof String) ||
-                    (to != null && !to.isEmpty() && !(to instanceof String))) {
-                throw new InvalidParameterException("Open or close hour parameter is invalid");
-            }
-
-            if (from != null && to != null &&
-                    LocalTime.parse(from).isAfter(LocalTime.parse(to))) {
+            if (from != null && to != null && LocalTime.parse(from).isAfter(LocalTime.parse(to))) {
                 throw new InvalidParameterException("The 'To' time is before the 'From' time");
             }
         }
@@ -135,7 +129,7 @@ public class RestaurantRequest {
     }
 
     private static void verifyFuzzySearchNotNull(FuzzySearch fuzzySearch) throws InvalidParameterException {
-        if(fuzzySearch == null){
+        if (fuzzySearch == null) {
             throw new InvalidParameterException("Search object is null");
         }
     }
