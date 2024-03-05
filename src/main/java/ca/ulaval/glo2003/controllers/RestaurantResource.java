@@ -7,7 +7,6 @@ import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
-import ca.ulaval.glo2003.domain.utils.FuzzySearch;
 import ca.ulaval.glo2003.domain.utils.ResourcesHandler;
 import ca.ulaval.glo2003.domain.factories.RestaurantFactory;
 import ca.ulaval.glo2003.models.FuzzySearchResponse;
@@ -104,7 +103,7 @@ public class RestaurantResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public List<FuzzySearchResponse> searchRestaurants(FuzzySearch search) throws InvalidParameterException {
-
+        RestaurantRequest.verifyFuzzySearchValidParameters(search);
         return resourcesHandler.getAllRestaurantsForSearch(search);
     }
 
