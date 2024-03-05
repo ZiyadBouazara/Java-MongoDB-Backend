@@ -19,41 +19,14 @@ public class ReservationRequestTest {
     private static final String INVALID_PHONE_NUMBER = "123";
 
     @Test
-    void givenWithValidParameters_shouldNotThrowException() {
+    void givenValidParameters_whenCreating_shouldNotThrowException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture().create();
 
         assertDoesNotThrow(reservationRequest::verifyParameters);
     }
 
     @Test
-    void givenWithValidGroupSize_shouldNotThrowInvalidParameterException() {
-        ReservationRequest reservationRequest = new ReservationRequestFixture()
-                .withGroupSize(1)
-                .create();
-
-        assertDoesNotThrow(reservationRequest::verifyParameters);
-    }
-
-    @Test
-    void given_withValidStartTime_shouldNotThrowInvalidParameterException() {
-        ReservationRequest reservationRequest = new ReservationRequestFixture()
-                .withStartTime(VALID_START_TIME)
-                .create();
-
-        assertDoesNotThrow(reservationRequest::verifyParameters);
-    }
-
-    @Test
-    void given_withValidDate_shouldNotThrowInvalidParameterException() {
-        ReservationRequest reservationRequest = new ReservationRequestFixture()
-                .withDate(VALID_DATE)
-                .create();
-
-        assertDoesNotThrow(reservationRequest::verifyParameters);
-    }
-
-    @Test
-    void given_withValidGroupSize_shouldNotThrowInvalidParameterException() {
+    void givenValidGroupSize_whenCreating_shouldNotThrowInvalidParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .withGroupSize(VALID_GROUP_SIZE)
                 .create();
@@ -62,7 +35,25 @@ public class ReservationRequestTest {
     }
 
     @Test
-    void given_withMissingDate_shouldThrowMissingParameterException() {
+    void givenValidStartTime_whenCreating_shouldNotThrowInvalidParameterException() {
+        ReservationRequest reservationRequest = new ReservationRequestFixture()
+                .withStartTime(VALID_START_TIME)
+                .create();
+
+        assertDoesNotThrow(reservationRequest::verifyParameters);
+    }
+
+    @Test
+    void givenValidDate_whenCreating_shouldNotThrowInvalidParameterException() {
+        ReservationRequest reservationRequest = new ReservationRequestFixture()
+                .withDate(VALID_DATE)
+                .create();
+
+        assertDoesNotThrow(reservationRequest::verifyParameters);
+    }
+
+    @Test
+    void givenWithMissingDate_whenCreating_shouldThrowMissingParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .createWithMissingDate();
 
@@ -70,7 +61,7 @@ public class ReservationRequestTest {
     }
 
     @Test
-    void given_withMissingStartTime_shouldThrowMissingParameterException() {
+    void givenWithMissingStartTime_whenCreating_shouldThrowMissingParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .createWithMissingStartTime();
 
@@ -78,7 +69,7 @@ public class ReservationRequestTest {
     }
 
     @Test
-    void given_withMissingGroupSize_shouldThrowMissingParameterException() {
+    void givenWithMissingGroupSize_whenCreating_shouldThrowMissingParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .createWithMissingGroupSize();
 
@@ -86,7 +77,7 @@ public class ReservationRequestTest {
     }
 
     @Test
-    void given_withMissingCustomer_shouldThrowMissingParameterException() {
+    void givenWithMissingCustomer_whenCreating_shouldThrowMissingParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .createWithMissingCustomer();
 
@@ -94,7 +85,7 @@ public class ReservationRequestTest {
     }
 
     @Test
-    void given_withInvalidCustomerEmail_shouldThrowInvalidParameterException() {
+    void givenWithInvalidCustomerEmail_whenCreating_shouldThrowInvalidParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .create();
         reservationRequest.getCustomer().setEmail(INVALID_EMAIL);
@@ -103,7 +94,7 @@ public class ReservationRequestTest {
     }
 
     @Test
-    void given_withInvalidCustomerPhoneNumber_shouldThrowInvalidParameterException() {
+    void givenWithInvalidCustomerPhoneNumber_whenCreating_shouldThrowInvalidParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .create();
         reservationRequest.getCustomer().setPhoneNumber(INVALID_PHONE_NUMBER);
@@ -112,7 +103,7 @@ public class ReservationRequestTest {
     }
 
     @Test
-    void given_withMissingCustomerName_shouldThrowMissingParameterException() {
+    void givenWithMissingCustomerName_whenCreating_shouldThrowMissingParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .create();
         reservationRequest.getCustomer().setName(null);
@@ -121,7 +112,7 @@ public class ReservationRequestTest {
     }
 
     @Test
-    void given_withMissingCustomerEmail_shouldThrowMissingParameterException() {
+    void givenWithMissingCustomerEmail_whenCreating_shouldThrowMissingParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .create();
         reservationRequest.getCustomer().setEmail(null);
@@ -130,7 +121,7 @@ public class ReservationRequestTest {
     }
 
     @Test
-    void given_withMissingCustomerPhoneNumber_shouldThrowMissingParameterException() {
+    void givenWithMissingCustomerPhoneNumber_whenCreating_shouldThrowMissingParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .create();
         reservationRequest.getCustomer().setPhoneNumber(null);
@@ -139,7 +130,7 @@ public class ReservationRequestTest {
     }
 
     @Test
-    void given_withInvalidGroupSize_shouldThrowInvalidParameterException() {
+    void givenWithInvalidGroupSize_whenCreating_shouldThrowInvalidParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .withGroupSize(INVALID_GROUP_SIZE)
                 .create();
@@ -148,7 +139,7 @@ public class ReservationRequestTest {
     }
 
     @Test
-    void given_withInvalidStartTime_shouldThrowInvalidParameterException() {
+    void givenWithInvalidStartTime_whenCreating_shouldThrowInvalidParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .withStartTime(INVALID_START_TIME)
                 .create();
@@ -157,7 +148,7 @@ public class ReservationRequestTest {
     }
 
     @Test
-    void given_withInvalidDate_shouldThrowInvalidParameterException() {
+    void givenWithInvalidDate_whenCreating_shouldThrowInvalidParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .withDate(INVALID_DATE)
                 .create();
