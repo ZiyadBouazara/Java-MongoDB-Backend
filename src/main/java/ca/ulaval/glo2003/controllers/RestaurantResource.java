@@ -60,7 +60,7 @@ public class RestaurantResource {
         Restaurant restaurant = restaurantFactory.buildRestaurant(ownerId, restaurantRequest);
         resourcesHandler.addRestaurant(restaurant);
 
-        URI newProductURI = UriBuilder.fromResource(RestaurantResource.class).path(restaurant.getId()).build();
+        URI newProductURI = UriBuilder.fromResource(RestaurantResource.class).path("restaurants").path(restaurant.getId()).build();
         return Response.created(newProductURI).build();
     }
 
