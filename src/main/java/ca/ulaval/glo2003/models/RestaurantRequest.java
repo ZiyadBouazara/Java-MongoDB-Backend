@@ -1,5 +1,6 @@
 package ca.ulaval.glo2003.models;
 
+import ca.ulaval.glo2003.domain.utils.FuzzySearch;
 import ca.ulaval.glo2003.domain.utils.Hours;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
@@ -16,8 +17,12 @@ public class RestaurantRequest {
     private Integer capacity;
     private Hours hours;
     private ReservationConfiguration reservations;
+
+    private FuzzySearch fuzzySearch;
     // Do not change this variable's name, the createRestaurant Body uses the name for assignation
     private static final String TIME_FORMAT_REGEX = "^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$";
+
+    private static final Pattern TIME_PATTERN_VISIT_TIME = Pattern.compile("^(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d$");
     private static final Pattern TIME_PATTERN = Pattern.compile(TIME_FORMAT_REGEX);
 
     public String getName() {
@@ -75,6 +80,60 @@ public class RestaurantRequest {
         verifyValidHours();
     }
 
+    public static void verifyFuzzySearchValidParameters(FuzzySearch fuzzySearch) throws InvalidParameterException {
+        verifyFuzzySearchNotNull(fuzzySearch);
+        verifyFuzzySearchValidName(fuzzySearch);
+        verifyFuzzySearchValidHours(fuzzySearch);
+    }
+
+    private static void verifyFuzzySearchValidName(FuzzySearch fuzzySearch) throws InvalidParameterException {
+        if (fuzzySearch.getName() != null && !(fuzzySearch.getName() instanceof String)) {
+            throw new InvalidParameterException("Name parameter is not a String");
+        }
+    }
+
+    private static void verifyFuzzySearchValidHours(FuzzySearch fuzzySearch) throws InvalidParameterException {
+        verifyValidVisitTimeHours(fuzzySearch);
+        if (fuzzySearch.getHours() != null) {
+            String from = fuzzySearch.getHours().getFrom();
+            String to = fuzzySearch.getHours().getTo();
+
+            if (from != null && to != null && LocalTime.parse(from).isAfter(LocalTime.parse(to))) {
+                throw new InvalidParameterException("The 'To' time is before the 'From' time");
+            }
+        }
+    }
+
+    private static void verifyValidVisitTimeFormat(String time) throws InvalidParameterException {
+        if (time == null || time.trim().isEmpty()) {
+            return;
+        }
+
+        Matcher matcher = TIME_PATTERN_VISIT_TIME.matcher(time);
+
+        if (!matcher.find()) {
+            throw new InvalidParameterException("Invalid time format: " + time + ". Use the 'HH:MM:SS' format");
+        }
+    }
+
+    private static void verifyValidVisitTimeHours(FuzzySearch fuzzySearch) throws InvalidParameterException {
+        verifyValidVisitTimeFormat(fuzzySearch.getHours().getFrom());
+        verifyValidVisitTimeFormat(fuzzySearch.getHours().getTo());
+    }
+
+    private static void verifyValidTimeFormat(String time) throws InvalidParameterException {
+        Matcher matcher = TIME_PATTERN.matcher(time);
+        if (!matcher.matches()) {
+            throw new InvalidParameterException("Invalid time format: " + time + ". Use the 'HH:MM:SS' format");
+        }
+    }
+
+    private static void verifyFuzzySearchNotNull(FuzzySearch fuzzySearch) throws InvalidParameterException {
+        if (fuzzySearch == null) {
+            throw new InvalidParameterException("Search object is null");
+        }
+    }
+
     private void verifyMissingCapacity() throws MissingParameterException {
         if (capacity == null) {
             throw new MissingParameterException("Missing parameter 'capacity'");
@@ -109,13 +168,6 @@ public class RestaurantRequest {
         verifyValidTimeFormat(hours.getOpen());
         verifyValidTimeFormat(hours.getClose());
         verifyOpeningAndClosingCriteria();
-    }
-
-    private void verifyValidTimeFormat(String time) throws InvalidParameterException {
-        Matcher matcher = TIME_PATTERN.matcher(time);
-        if (!matcher.matches()) {
-            throw new InvalidParameterException("Invalid time format: " + time + ". Use the 'HH:MM:SS' format");
-        }
     }
 
     private void verifyOpeningAndClosingCriteria() throws InvalidParameterException {
