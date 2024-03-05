@@ -4,6 +4,7 @@ import ca.ulaval.glo2003.domain.utils.Hours;
 import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 
+
 public class RestaurantResponse {
     public String id;
     public String name;
