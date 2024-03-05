@@ -2,6 +2,7 @@ package ca.ulaval.glo2003.model;
 
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
+import ca.ulaval.glo2003.model.fixture.RestaurantRequestFixture;
 import ca.ulaval.glo2003.models.RestaurantRequest;
 import jakarta.ws.rs.NotFoundException;
 import org.junit.jupiter.api.Test;

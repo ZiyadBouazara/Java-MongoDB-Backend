@@ -1,19 +1,28 @@
 package ca.ulaval.glo2003.domain.utils;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class FuzzySearch {
     private String name;
-    private VisitTime visitTime;
-    public FuzzySearch() {}
+    private VisitTime hours;
+    public FuzzySearch() {
+        this.hours = new VisitTime();
+    }
+    @JsonProperty("name")
     public String getName() {
         return (name != null) ? name : null;
     }
+    @JsonProperty("name")
     public void setName(String restaurantName) {
         this.name = restaurantName;
     }
-    public VisitTime getVisitTime(){return this.visitTime;}
+    @JsonProperty("hours")
+    public VisitTime getHours(){return this.hours;}
+
+    public void setHours(VisitTime visitTime){this.hours = visitTime;}
 
     public static boolean isFuzzySearchOnNameSuccessful(String searchingElement, String comparedElement) {
         if(searchingElement != null){

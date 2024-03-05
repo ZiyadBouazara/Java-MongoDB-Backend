@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class ResourcesHandler {
     private final Map<String, Restaurant> restaurants;
@@ -45,6 +46,16 @@ public class ResourcesHandler {
         restaurant.addReservation(reservation);
     }
 
+    public Reservation getReservation(String reservationId) throws NotFoundException {
+        for (Restaurant restaurant : restaurants.values()) {
+            var reservationIds = restaurant.getReservationsById();
+            for (String number : reservationIds.keySet()) {
+                if (Objects.equals(number, reservationId))
+                    return reservationIds.get(reservationId);
+            }
+        }
+        throw new NotFoundException();
+    }
     public List<FuzzySearchResponse> getAllRestaurantsForSearch(FuzzySearch search) {
         List<FuzzySearchResponse> searchedRestaurants = new ArrayList<>();
 
@@ -59,9 +70,9 @@ public class ResourcesHandler {
                 isMatchRestaurantName = true;
             }
 
-            if (search.getVisitTime() != null) {
-                isMatchRestaurantOpenHour = FuzzySearch.isFromTimeMatching(search.getVisitTime().getFrom(), restaurant.getHours().getOpen());
-                isMatchRestaurantCloseHour = FuzzySearch.isToTimeMatching(search.getVisitTime().getTo(), restaurant.getHours().getClose());
+            if (search.getHours() != null) {
+                isMatchRestaurantOpenHour = FuzzySearch.isFromTimeMatching(search.getHours().getFrom(), restaurant.getHours().getOpen());
+                isMatchRestaurantCloseHour = FuzzySearch.isToTimeMatching(search.getHours().getTo(), restaurant.getHours().getClose());
             } else {
                 isMatchRestaurantOpenHour = true;
                 isMatchRestaurantCloseHour = true;
