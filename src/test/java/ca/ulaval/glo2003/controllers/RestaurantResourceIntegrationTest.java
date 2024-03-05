@@ -6,7 +6,7 @@ import ca.ulaval.glo2003.domain.exceptions.mapper.NotFoundExceptionMapper;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.utils.Hours;
 import ca.ulaval.glo2003.domain.utils.ResourcesHandler;
-import ca.ulaval.glo2003.model.RestaurantRequestFixture;
+import ca.ulaval.glo2003.model.fixture.RestaurantRequestFixture;
 import ca.ulaval.glo2003.models.RestaurantRequest;
 import ca.ulaval.glo2003.models.RestaurantResponse;
 import jakarta.ws.rs.client.Entity;
