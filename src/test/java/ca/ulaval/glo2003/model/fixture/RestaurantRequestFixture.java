@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.model;
+package ca.ulaval.glo2003.model.fixture;
 
 import ca.ulaval.glo2003.domain.utils.Hours;
 import ca.ulaval.glo2003.models.RestaurantRequest;
