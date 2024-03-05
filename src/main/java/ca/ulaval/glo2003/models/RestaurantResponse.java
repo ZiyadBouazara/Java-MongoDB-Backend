@@ -11,11 +11,26 @@ public class RestaurantResponse {
     public Hours hours;
     public ReservationConfiguration reservations;
 
+    public RestaurantResponse() {
+    }
+
     public RestaurantResponse(Restaurant restaurant) {
         this.id = restaurant.getId();
         this.name = restaurant.getName();
         this.capacity = restaurant.getCapacity();
         this.hours = restaurant.getHours();
         this.reservations = restaurant.getRestaurantConfiguration();
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public Integer getCapacity() {
+        return this.capacity;
     }
 }

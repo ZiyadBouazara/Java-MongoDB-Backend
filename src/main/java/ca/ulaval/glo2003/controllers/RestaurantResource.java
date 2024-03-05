@@ -29,11 +29,11 @@ import static ca.ulaval.glo2003.models.RestaurantRequest.verifyRestaurantOwnersh
 
 @Path("restaurants")
 public class RestaurantResource {
-    private ResourcesHandler resourcesHandler;
+    public ResourcesHandler resourcesHandler;
     private RestaurantFactory restaurantFactory;
 
-    public RestaurantResource() {
-        this.resourcesHandler = new ResourcesHandler();
+    public RestaurantResource(ResourcesHandler resourcesHandler) {
+        this.resourcesHandler = resourcesHandler;
         this.restaurantFactory = new RestaurantFactory();
     }
 
@@ -65,6 +65,7 @@ public class RestaurantResource {
         throws MissingParameterException, NotFoundException {
         verifyMissingHeader(ownerID);
         Restaurant restaurant = resourcesHandler.getRestaurant(restaurantId);
+
         verifyRestaurantOwnership(restaurant.getOwnerId(), ownerID);
         return Response.ok(new RestaurantResponse(restaurant)).build();
     }

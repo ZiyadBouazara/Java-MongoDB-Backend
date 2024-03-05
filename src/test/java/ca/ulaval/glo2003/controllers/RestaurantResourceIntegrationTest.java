@@ -1,56 +1,60 @@
-package ca.ulaval.glo2003.controllers;//package ca.ulaval.glo2003.controllers;
+package ca.ulaval.glo2003.controllers;
 
-import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.domain.exceptions.mapper.InvalidParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.MissingParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.NotFoundExceptionMapper;
-import ca.ulaval.glo2003.domain.reservation.Reservation;
-import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.utils.Hours;
 import ca.ulaval.glo2003.domain.utils.ResourcesHandler;
+import ca.ulaval.glo2003.model.RestaurantRequestFixture;
+import ca.ulaval.glo2003.models.RestaurantRequest;
+import ca.ulaval.glo2003.models.RestaurantResponse;
 import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.Application;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
-import javassist.NotFoundException;
+import jakarta.ws.rs.NotFoundException;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.net.URI;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
 public class RestaurantResourceIntegrationTest extends JerseyTest {
-    private static final String RESTAURANT_ID = "1";
-    private static final String OWNER_ID = "1";
-    private static final String RESTAURANT_NAME = "Restaurant Name";
-    @Mock
-    private ReservationConfiguration mockReservationConfiguration;
-    @Mock
-    private Reservation mockReservation;
-    @Mock
-    private Hours mockHours;
-    private ResourcesHandler resourcesHandler = new ResourcesHandler();
-//    ResourcesHandler resourcesHandler = Mockito.mock(ResourcesHandler.class);
-    private Restaurant restaurant;
-    protected ResourceConfig configure() {
+    public static final String RESTAURANT_ID = "";
+    public static final String OWNER_ID = "1";
+    public static final String INVALID_OWNER_ID = "invalid";
+
+    public static final String RESTAURANT_NAME = "Restaurant Name";
+    private static final int VALID_RESTAURANTS_CAPACITY = 5;
+    public Restaurant validRestaurant;
+    public Restaurant invalidRestaurant;
+
+    ResourcesHandler resourcesHandler;
+    @Override
+    protected Application configure() {
+        Hours validHours = new Hours();
+        validHours.setOpen("11:00:00");
+        validHours.setClose("19:30:00");
+        validRestaurant = new Restaurant(OWNER_ID, RESTAURANT_NAME, VALID_RESTAURANTS_CAPACITY, validHours);
+        resourcesHandler = new ResourcesHandler();
+        resourcesHandler.addRestaurant(validRestaurant);
+
+
         return new ResourceConfig()
                 .register(new RestaurantResource(resourcesHandler))
-                .register(new InvalidParamExceptionMapper())
-                .register(new MissingParamExceptionMapper())
-                .register(new NotFoundExceptionMapper());
+                .register(InvalidParamExceptionMapper.class)
+                .register(MissingParamExceptionMapper.class)
+                .register(NotFoundExceptionMapper.class);
     }
 
     @Override
@@ -59,9 +63,7 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
     }
 
     @Test
-    public void getRestaurantsList_WhenStatusIsOk_returnsStatusOkWith200() {
-//        mockingRestaurantResponse();
-        when(resourcesHandler.getRestaurant(anyString())).thenReturn(restaurant);
+    public void givenOwnerHasRestaurant_whenGetRestaurant_shouldReturn200AndListOfRestaurants() {
 
         var response = target("/restaurants/")
                 .request()
@@ -72,74 +74,98 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
 
 
         assertThat(response.getStatus()).isEqualTo(200);
-        assertThat(body).contains("[]");
+        assertThat(body).contains("capacity\":5");
     }
 
     @Test
-    public void getRestaurantsList_WhenStatusIsNOTOk_returnsStatusOkWith400() throws MissingParameterException {
-        when(resourcesHandler.getRestaurant(RESTAURANT_ID)).thenThrow(new MissingParameterException("Invalid parameter 'name', can't be blank"));
-
+    public void whenGivenRestaurantWithMissingParameter_shouldReturnsStatusNotOk400_andThrowException() {
         var response = target("/restaurants/")
                 .request()
-                .header("Owner", OWNER_ID)
                 .get();
 
         assertThat(response.getStatus()).isEqualTo(400);
-        assertThat(response.readEntity(String.class)).contains("Invalid parameter 'name', can't be blank");
+        assertThat(response.readEntity(String.class)).contains("Missing 'Owner' header");
     }
 
     @Test
-    public void whenValidRestaurantId_returnsRestaurantResponse() {
-        Restaurant restaurant = persoBeforEach();
-//        givenRestoSuccess(restaurant);
-
-        System.out.println(restaurant+"lolllllll");
-        System.out.println(restaurant.getId()+"lolllllll");
-
-//        Mockito.when(resourcesHandler.getRestaurant(restaurant.getId())).thenReturn(this.restaurant);
-
-
-        System.out.println("Before making request to /restaurants/" + restaurant.getId());
-
-        Response response = target("/restaurants/" + restaurant.getId())
+    public void whenGivenValidRestaurantId_shouldGetRestaurant_andReturnValid200GetResponse() {
+        var response = target("/restaurants/{id}/")
+                .resolveTemplate("id", validRestaurant.getId())
                 .request()
                 .header("Owner", OWNER_ID)
                 .get();
 
-        System.out.println("After making request to /restaurants/" + restaurant.getId() + ", response status: " + response.getStatus());
-
         assertThat(response.getStatus()).isEqualTo(200);
+
+        RestaurantResponse responseRestaurant = response.readEntity(RestaurantResponse.class);
+
+        assertThat(responseRestaurant.getName()).isEqualTo("Restaurant Name");
     }
 
     @Test
-    public void givenRestaurantExists_whenSearching_thenResponseContainsRestaurantEntity() {
-        Mockito.when(resourcesHandler.getRestaurant(anyString())).thenThrow(new Exception());
+    public void whenGivenMissingOwnerHeader_shouldReturnInvalid400GetResponse_andThrowMissingParameterException() {
+        var response = target("/restaurants/{id}/")
+                .resolveTemplate("id", validRestaurant.getId())
+                .request()
+                .get();
 
+        assertThat(response.getStatus()).isEqualTo(400);
+        assertThat(response.readEntity(String.class)).contains("Missing 'Owner' header");
+    }
+
+    @Test
+    public void whenGivenInexistentRestaurantID_shouldReturnInvalid404GetResponse() {
         var response = target("/restaurants/{id}/")
                 .resolveTemplate("id", RESTAURANT_ID)
                 .request()
                 .header("Owner", OWNER_ID)
                 .get();
-        var body = response.readEntity(String.class);
 
         assertThat(response.getStatus()).isEqualTo(404);
-        assertThat(body).contains("Not Found");
     }
 
     @Test
-    public void postRestaurantTest() {
+    public void whenGivenInvalidOwner_shouldReturnInvalid404GetResponse_andThrowNotFoundException() {
+        assertThatThrownBy(() -> {
+            target("/restaurants/{id}/")
+                    .resolveTemplate("id", validRestaurant.getId())
+                    .request()
+                    .header("Owner", INVALID_OWNER_ID)
+                    .get(String.class);
+        }).isInstanceOf(NotFoundException.class)
+                .hasMessageContaining("Not Found")
+                .hasMessageContaining("404");
+
+    }
+
+
+    @Test
+    public void givenValidRestaurant_whenCreateRestaurant_shouldReturn201CreatedAndLocationHeader() {
         Response response = target("/restaurants/")
                 .request()
                 .header("Owner", OWNER_ID)
                 .post(Entity.json("{\"name\":\"La Botega\",\"capacity\":12, \"hours\":{\"open\":\"11:00:00\", \"close\":\"19:00:00\"}}"));
 
         assertEquals("Http Response should be 201 ", Response.Status.CREATED.getStatusCode(), response.getStatus());
+        assertTrue(response.getHeaderString("Location").contains("/restaurants/"));
+    }
+
+    @Test
+    public void givenMissingHeaderOwner_shouldThrowMissingParameterException() {
+        RestaurantRequest validRestaurantRequest = new RestaurantRequestFixture().create();
+
+        Response response = target("/restaurants").request().post(Entity.entity(validRestaurantRequest, MediaType.APPLICATION_JSON));
+
+        String responseBody = response.readEntity(String.class);
+
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertTrue(responseBody.contains("Missing 'Owner' header"));
+        assertTrue(responseBody.contains("MISSING_PARAMETER"));
     }
 
 
-
     @Test
-    public void postRestaurantTestFailedMissingParam() {
+    public void givenMissingParameter_whenCreateRestaurant_shouldThrowMissingParameterException() {
         Response response = target("/restaurants/")
                 .request()
                 .header("Owner", OWNER_ID)
@@ -150,7 +176,7 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
     }
 
     @Test
-    public void postRestaurantTestFailedInvalidParam() {
+    public void givenInvalidParameter_whenCreateRestaurant_shouldThrowInvalidParameterException() {
         Response response = target("/restaurants/")
                 .request()
                 .header("Owner", OWNER_ID)
@@ -158,23 +184,6 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
 
         assertEquals("Http Response should be 400 ", 400, response.getStatus());
         assertThat(response.readEntity(String.class)).contains("{\"description\":\"Invalid parameter 'name', cant be blank\",\"error\":\"INVALID_PARAMETER\"}");
-    }
-
-    private void givenRestoSuccess(Restaurant restaurant) {
-        when(resourcesHandler.getRestaurant(restaurant.getId())).thenReturn(restaurant);
-        this.resourcesHandler.addRestaurant(restaurant);
-        System.out.println(this.resourcesHandler.getRestaurant(this.restaurant.getId()) + "zoobooboobobo");
-    }
-
-    private void givenRestoNotSuccess(Restaurant restaurant) {
-        Mockito.when(resourcesHandler.getRestaurant(anyString())).thenThrow(new RuntimeException());
-    }
-
-    public Restaurant persoBeforEach() {
-        MockitoAnnotations.openMocks(this);
-        restaurant = new Restaurant("ownerId", "Restaurant Name", 100, mockHours, mockReservationConfiguration);
-
-        return restaurant;
     }
 }
 
