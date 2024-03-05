@@ -1,6 +1,5 @@
 package ca.ulaval.glo2003.domain.utils;
 
-import ca.ulaval.glo2003.controllers.RestaurantResource;
 import jakarta.ws.rs.NotFoundException;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.models.RestaurantResponse;
