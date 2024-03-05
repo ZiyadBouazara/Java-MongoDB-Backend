@@ -5,6 +5,7 @@ import ca.ulaval.glo2003.controllers.RestaurantResource;
 import ca.ulaval.glo2003.domain.exceptions.mapper.InvalidParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.MissingParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.NotFoundExceptionMapper;
+import ca.ulaval.glo2003.domain.utils.ResourcesHandler;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -15,9 +16,10 @@ public class Main {
     public static final String BASE_URI = "http://0.0.0.0:8080/";
 
     public static HttpServer startServer() {
+        final ResourcesHandler resourcesHandler = new ResourcesHandler();
         final ResourceConfig rc = new ResourceConfig()
             .register(new HealthResource())
-            .register(new RestaurantResource())
+            .register(new RestaurantResource(resourcesHandler))
             .register(new InvalidParamExceptionMapper())
             .register(new MissingParamExceptionMapper())
             .register(new NotFoundExceptionMapper());

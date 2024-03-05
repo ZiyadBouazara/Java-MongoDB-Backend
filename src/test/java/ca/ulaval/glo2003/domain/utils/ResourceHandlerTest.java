@@ -63,10 +63,13 @@ public class ResourceHandlerTest {
         resourcesHandler.addRestaurant(restaurant);
 
         List<RestaurantResponse> ownerRestaurants = resourcesHandler.getAllRestaurantsForOwner(OWNER_ID);
-        boolean allOwnersMatch = ownerRestaurants.stream()
-            .allMatch(restaurantResponse -> restaurantResponse.id.equals(OWNER_ID));
 
-        assertTrue(allOwnersMatch);
+        assertEquals(1, ownerRestaurants.size());
+
+        RestaurantResponse ownerRestaurant = ownerRestaurants.get(0);
+
+        assertEquals(restaurant.getName(), ownerRestaurant.getName());
+        assertEquals(restaurant.getCapacity(), ownerRestaurant.getCapacity());
     }
 
     @Test
