@@ -9,6 +9,7 @@ import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.domain.utils.ResourcesHandler;
 import ca.ulaval.glo2003.domain.factories.RestaurantFactory;
 import ca.ulaval.glo2003.models.ReservationRequest;
+import ca.ulaval.glo2003.models.ReservationResponse;
 import ca.ulaval.glo2003.models.RestaurantRequest;
 import ca.ulaval.glo2003.models.RestaurantResponse;
 import jakarta.ws.rs.Consumes;
@@ -30,7 +31,7 @@ import java.util.List;
 
 import static ca.ulaval.glo2003.models.RestaurantRequest.verifyRestaurantOwnership;
 
-@Path("restaurants")
+@Path("/")
 public class RestaurantResource {
     public ResourcesHandler resourcesHandler;
     private RestaurantFactory restaurantFactory;
@@ -41,6 +42,7 @@ public class RestaurantResource {
     }
 
     @GET
+    @Path("restaurants")
     @Produces(MediaType.APPLICATION_JSON)
     public List<RestaurantResponse> getRestaurants(@HeaderParam("Owner") String ownerId) throws MissingParameterException {
         verifyMissingHeader(ownerId);
@@ -48,6 +50,7 @@ public class RestaurantResource {
     }
 
     @POST
+    @Path("restaurants")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createRestaurant(@HeaderParam("Owner") String ownerId, RestaurantRequest restaurantRequest)
         throws InvalidParameterException, MissingParameterException, NotFoundException {
@@ -57,12 +60,12 @@ public class RestaurantResource {
         Restaurant restaurant = restaurantFactory.buildRestaurant(ownerId, restaurantRequest);
         resourcesHandler.addRestaurant(restaurant);
 
-        URI newProductURI = UriBuilder.fromResource(RestaurantResource.class).path(restaurant.getId()).build();
+        URI newProductURI = UriBuilder.fromResource(RestaurantResource.class).path("restaurants").path(restaurant.getId()).build();
         return Response.created(newProductURI).build();
     }
 
     @GET
-    @Path("/{id}")
+    @Path("restaurants/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRestaurant(@HeaderParam("Owner") String ownerID, @PathParam("id") String restaurantId)
         throws MissingParameterException, NotFoundException {
@@ -73,7 +76,7 @@ public class RestaurantResource {
     }
 
     @POST
-    @Path("/{id}/reservations")
+    @Path("restaurants/{id}/reservations")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest)
         throws NotFoundException, InvalidParameterException, MissingParameterException {
@@ -94,6 +97,15 @@ public class RestaurantResource {
             .path(reservation.getId())
             .build();
         return Response.created(newReservationURI).build();
+    }
+
+    @GET
+    @Path("reservations/{number}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getReservation(@PathParam("number") String reservationId)
+        throws NotFoundException {
+        Reservation reservation = resourcesHandler.getReservation(reservationId);
+        return Response.ok(new ReservationResponse(reservation, resourcesHandler)).build();
     }
 
     private void verifyValidRestaurantIdPath(String restaurantId) {

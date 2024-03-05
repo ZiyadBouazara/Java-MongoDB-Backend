@@ -18,8 +18,6 @@ import jakarta.ws.rs.NotFoundException;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.net.URI;
 
@@ -28,18 +26,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@ExtendWith(MockitoExtension.class)
 public class RestaurantResourceIntegrationTest extends JerseyTest {
     public static final String RESTAURANT_ID = "";
     public static final String OWNER_ID = "1";
     public static final String INVALID_OWNER_ID = "invalid";
-
     public static final String RESTAURANT_NAME = "Restaurant Name";
     private static final int VALID_RESTAURANTS_CAPACITY = 5;
     public Restaurant validRestaurant;
-    public Restaurant invalidRestaurant;
-
     ResourcesHandler resourcesHandler;
+
     @Override
     protected Application configure() {
         Hours validHours = new Hours();
@@ -50,11 +45,8 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
         resourcesHandler.addRestaurant(validRestaurant);
 
 
-        return new ResourceConfig()
-                .register(new RestaurantResource(resourcesHandler))
-                .register(InvalidParamExceptionMapper.class)
-                .register(MissingParamExceptionMapper.class)
-                .register(NotFoundExceptionMapper.class);
+        return new ResourceConfig().register(new RestaurantResource(resourcesHandler)).register(InvalidParamExceptionMapper.class)
+            .register(MissingParamExceptionMapper.class).register(NotFoundExceptionMapper.class);
     }
 
     @Override
@@ -64,14 +56,8 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
 
     @Test
     public void givenOwnerHasRestaurant_whenGetRestaurant_shouldReturn200AndListOfRestaurants() {
-
-        var response = target("/restaurants/")
-                .request()
-                .header("Owner", OWNER_ID)
-                .get();
-
+        var response = target("/restaurants/").request().header("Owner", OWNER_ID).get();
         var body = response.readEntity(String.class);
-
 
         assertThat(response.getStatus()).isEqualTo(200);
         assertThat(body).contains("capacity\":5");
@@ -79,9 +65,7 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
 
     @Test
     public void whenGivenRestaurantWithMissingParameter_shouldReturnsStatusNotOk400_andThrowException() {
-        var response = target("/restaurants/")
-                .request()
-                .get();
+        var response = target("/restaurants/").request().get();
 
         assertThat(response.getStatus()).isEqualTo(400);
         assertThat(response.readEntity(String.class)).contains("Missing 'Owner' header");
@@ -89,11 +73,8 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
 
     @Test
     public void whenGivenValidRestaurantId_shouldGetRestaurant_andReturnValid200GetResponse() {
-        var response = target("/restaurants/{id}/")
-                .resolveTemplate("id", validRestaurant.getId())
-                .request()
-                .header("Owner", OWNER_ID)
-                .get();
+        var response =
+            target("/restaurants/{id}/").resolveTemplate("id", validRestaurant.getId()).request().header("Owner", OWNER_ID).get();
 
         assertThat(response.getStatus()).isEqualTo(200);
 
@@ -104,10 +85,7 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
 
     @Test
     public void whenGivenMissingOwnerHeader_shouldReturnInvalid400GetResponse_andThrowMissingParameterException() {
-        var response = target("/restaurants/{id}/")
-                .resolveTemplate("id", validRestaurant.getId())
-                .request()
-                .get();
+        var response = target("/restaurants/{id}/").resolveTemplate("id", validRestaurant.getId()).request().get();
 
         assertThat(response.getStatus()).isEqualTo(400);
         assertThat(response.readEntity(String.class)).contains("Missing 'Owner' header");
@@ -115,37 +93,25 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
 
     @Test
     public void whenGivenInexistentRestaurantID_shouldReturnInvalid404GetResponse() {
-        var response = target("/restaurants/{id}/")
-                .resolveTemplate("id", RESTAURANT_ID)
-                .request()
-                .header("Owner", OWNER_ID)
-                .get();
+        var response = target("/restaurants/{id}/").resolveTemplate("id", RESTAURANT_ID).request().header("Owner", OWNER_ID).get();
 
         assertThat(response.getStatus()).isEqualTo(404);
     }
 
     @Test
     public void whenGivenInvalidOwner_shouldReturnInvalid404GetResponse_andThrowNotFoundException() {
-        assertThatThrownBy(() -> {
-            target("/restaurants/{id}/")
-                    .resolveTemplate("id", validRestaurant.getId())
-                    .request()
-                    .header("Owner", INVALID_OWNER_ID)
-                    .get(String.class);
-        }).isInstanceOf(NotFoundException.class)
-                .hasMessageContaining("Not Found")
-                .hasMessageContaining("404");
-
+        assertThatThrownBy(() -> target("/restaurants/{id}/")
+            .resolveTemplate("id", validRestaurant.getId()).request().header("Owner", INVALID_OWNER_ID)
+            .get(String.class))
+            .isInstanceOf(NotFoundException.class)
+            .hasMessageContaining("Not Found")
+            .hasMessageContaining("404");
     }
-
 
     @Test
     public void givenValidRestaurant_whenCreateRestaurant_shouldReturn201CreatedAndLocationHeader() {
-        Response response = target("/restaurants/")
-                .request()
-                .header("Owner", OWNER_ID)
-                .post(Entity.json("{\"name\":\"La Botega\",\"capacity\":12," +
-                        " \"hours\":{\"open\":\"11:00:00\", \"close\":\"19:00:00\"}}"));
+        Response response = target("/restaurants/").request().header("Owner", OWNER_ID).post(
+            Entity.json("{\"name\":\"La Botega\",\"capacity\":12," + " \"hours\":{\"open\":\"11:00:00\", \"close\":\"19:00:00\"}}"));
 
         assertEquals("Http Response should be 201 ", Response.Status.CREATED.getStatusCode(), response.getStatus());
         assertTrue(response.getHeaderString("Location").contains("/restaurants/"));
@@ -167,10 +133,8 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
 
     @Test
     public void givenMissingParameter_whenCreateRestaurant_shouldThrowMissingParameterException() {
-        Response response = target("/restaurants/")
-                .request()
-                .header("Owner", OWNER_ID)
-                .post(Entity.json("{\"name\":\"La Botega\", \"hours\":{\"open\":\"11:00:00\", \"close\":\"19:00:00\"}}"));
+        Response response = target("/restaurants/").request().header("Owner", OWNER_ID)
+            .post(Entity.json("{\"name\":\"La Botega\", \"hours\":{\"open\":\"11:00:00\", \"close\":\"19:00:00\"}}"));
 
         assertEquals("Http Response should be 400 ", 400, response.getStatus());
         assertThat(response.readEntity(String.class)).contains("Missing parameter 'capacity'");
@@ -178,15 +142,12 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
 
     @Test
     public void givenInvalidParameter_whenCreateRestaurant_shouldThrowInvalidParameterException() {
-        Response response = target("/restaurants/")
-                .request()
-                .header("Owner", OWNER_ID)
-                .post(Entity.json("{\"name\":\"\", \"capacity\":12," +
-                        " \"hours\":{\"open\":\"11:00:00\", \"close\":\"19:00:00\"}}"));
+        Response response = target("/restaurants/").request().header("Owner", OWNER_ID)
+            .post(Entity.json("{\"name\":\"\", \"capacity\":12," + " \"hours\":{\"open\":\"11:00:00\", \"close\":\"19:00:00\"}}"));
 
         assertEquals("Http Response should be 400 ", 400, response.getStatus());
-        assertThat(response.readEntity(String.class)).contains("{\"description\":\"Invalid parameter 'name'," +
-                " cant be blank\",\"error\":\"INVALID_PARAMETER\"}");
+        assertThat(response.readEntity(String.class)).contains(
+            "{\"description\":\"Invalid parameter 'name'," + " cant be blank\",\"error\":\"INVALID_PARAMETER\"}");
     }
 }
 

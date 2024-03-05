@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class ResourcesHandler {
     private final Map<String, Restaurant> restaurants;
@@ -44,4 +45,14 @@ public class ResourcesHandler {
         restaurant.addReservation(reservation);
     }
 
+    public Reservation getReservation(String reservationId) throws NotFoundException {
+        for (Restaurant restaurant : restaurants.values()) {
+            var reservationIds = restaurant.getReservationsById();
+            for (String number : reservationIds.keySet()) {
+                if (Objects.equals(number, reservationId))
+                    return reservationIds.get(reservationId);
+            }
+        }
+        throw new NotFoundException();
+    }
 }
