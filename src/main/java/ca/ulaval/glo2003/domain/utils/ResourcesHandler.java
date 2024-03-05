@@ -74,7 +74,7 @@ public class ResourcesHandler {
             if (search.getHours() != null) {
                 isMatchRestaurantOpenHour =
                     FuzzySearch.isFromTimeMatching(search.getHours().getFrom(), restaurant.getHours().getOpen());
-                isMatchRestaurantCloseHour = FuzzySearch.isToTimeMatching(search.getHours().getTo(), restaurant.getHours().getClose());
+                    isMatchRestaurantCloseHour = FuzzySearch.isToTimeMatching(search.getHours().getTo(), restaurant.getHours().getClose());
             } else {
                 isMatchRestaurantOpenHour = true;
                 isMatchRestaurantCloseHour = true;
