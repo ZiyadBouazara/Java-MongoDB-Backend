@@ -79,6 +79,7 @@ public class RestaurantResource {
         throws NotFoundException, InvalidParameterException, MissingParameterException {
         verifyValidRestaurantIdPath(restaurantId);
         reservationRequest.verifyParameters();
+        reservationRequest.adjustReservationStartTime();
         verifyValidReservationEndTime(reservationRequest, restaurantId);
         Reservation reservation = new Reservation(
             restaurantId,
@@ -108,7 +109,7 @@ public class RestaurantResource {
     }
 
     private void verifyValidReservationEndTime(ReservationRequest reservationRequest, String restaurantId)
-            throws InvalidParameterException {
+        throws InvalidParameterException {
         Restaurant restaurant = resourcesHandler.getRestaurant(restaurantId);
         ReservationConfiguration reservationConfiguration = restaurant.getRestaurantConfiguration();
         LocalTime reservationEndTime = calculateReservationEndTime(reservationRequest, reservationConfiguration);
@@ -118,17 +119,17 @@ public class RestaurantResource {
     }
 
     private LocalTime calculateReservationEndTime(
-            ReservationRequest reservationRequest, ReservationConfiguration reservationConfiguration) {
+        ReservationRequest reservationRequest, ReservationConfiguration reservationConfiguration) {
         LocalTime reservationStartTime = LocalTime.parse(reservationRequest.getStartTime());
         Duration reservationDuration = Duration.ofMinutes(reservationConfiguration.getDuration());
         return reservationStartTime.plus(reservationDuration);
     }
 
     private void verifyReservationWithinOperatingHours(
-            LocalTime reservationEndTime, LocalTime closingTime, LocalTime openingTime) throws InvalidParameterException {
+        LocalTime reservationEndTime, LocalTime closingTime, LocalTime openingTime) throws InvalidParameterException {
         if (reservationEndTime.isAfter(closingTime) || reservationEndTime.isBefore(openingTime)) {
             throw new InvalidParameterException(
-                    "Invalid reservation start time, the reservation exceeds the restaurant's closing time");
+                "Invalid reservation start time, the reservation exceeds the restaurant's closing time");
         }
     }
 }
