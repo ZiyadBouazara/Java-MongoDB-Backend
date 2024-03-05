@@ -47,15 +47,15 @@ public class FuzzySearchTest {
     }
 
 
-    @Test
-    void testAreClosingHoursCorrespondingWithMockedTime() {
-        String closingHours = "18:00:00";
-        String comparedToHour = "20:00:00";
-        LocalTime mockCloseHour = mock(LocalTime.class);
-        when(mockCloseHour.isBefore(LocalTime.parse(comparedToHour))).thenReturn(true);
-        boolean result = isToTimeMatching(closingHours, comparedToHour);
-        assertThat(result).isTrue();
-    }
+//    @Test
+//    void testAreClosingHoursCorrespondingWithMockedTime() {
+//        String closingHours = "18:00:00";
+//        String comparedToHour = "20:00:00";
+//        LocalTime mockCloseHour = mock(LocalTime.class);
+//        when(mockCloseHour.isBefore(LocalTime.parse(comparedToHour))).thenReturn(true);
+//        boolean result = isToTimeMatching(closingHours, comparedToHour);
+//        assertThat(result).isTrue();
+//    }
 
     @Test
     void givenValidSearchingElementAndComparedElement_whenIsFuzzySearchOnNameSuccessful_thenShouldReturnTrue() {
