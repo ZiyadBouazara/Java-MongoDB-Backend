@@ -2,14 +2,14 @@ package ca.ulaval.glo2003.domain.utils;
 
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalTime;
+//import java.time.LocalTime;
 
 import static ca.ulaval.glo2003.domain.utils.FuzzySearch.isFuzzySearchOnNameSuccessful;
 import static ca.ulaval.glo2003.domain.utils.FuzzySearch.isFromTimeMatching;
 import static ca.ulaval.glo2003.domain.utils.FuzzySearch.isToTimeMatching;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+//import static org.mockito.Mockito.mock;
+//import static org.mockito.Mockito.when;
 
 public class FuzzySearchTest {
 
