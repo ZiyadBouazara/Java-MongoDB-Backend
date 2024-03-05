@@ -64,11 +64,14 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
     }
 
     @Test
-    public void givenRestaurantWithMissingHeader_whenGetRestaurant_shouldReturn400AndThrowMissingParameterException() {
+    public void givenMissingOwnerHeader_whenGetRestaurant_shouldReturn400AndThrowMissingParameterException() {
         var response = target("/restaurants/").request().get();
 
+        String responseBody = response.readEntity(String.class);
         assertThat(response.getStatus()).isEqualTo(400);
-        assertThat(response.readEntity(String.class)).contains("Missing 'Owner' header");
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertTrue(responseBody.contains("Missing 'Owner' header"));
+        assertTrue(responseBody.contains("MISSING_PARAMETER"));
     }
 
     @Test
@@ -84,11 +87,14 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
     }
 
     @Test
-    public void givenMissingOwnerHeader_whenGetRestaurantWithId_shouldThrowMissingParameterException() {
+    public void givenMissingOwnerHeader_whenGetRestaurantWithId_shouldReturn400AndThrowMissingParameterException() {
         var response = target("/restaurants/{id}/").resolveTemplate("id", validRestaurant.getId()).request().get();
 
+        String responseBody = response.readEntity(String.class);
         assertThat(response.getStatus()).isEqualTo(400);
-        assertThat(response.readEntity(String.class)).contains("Missing 'Owner' header");
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertTrue(responseBody.contains("Missing 'Owner' header"));
+        assertTrue(responseBody.contains("MISSING_PARAMETER"));
     }
 
     @Test
@@ -118,13 +124,13 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
     }
 
     @Test
-    public void givenMissingHeaderOwner_whenCreateRestaurant_shouldThrowMissingParameterException() {
+    public void givenMissingOwnerHeader_whenCreateRestaurant_shouldThrowMissingParameterException() {
         RestaurantRequest validRestaurantRequest = new RestaurantRequestFixture().create();
 
         Response response = target("/restaurants").request().post(Entity.entity(validRestaurantRequest, MediaType.APPLICATION_JSON));
 
         String responseBody = response.readEntity(String.class);
-
+        assertThat(response.getStatus()).isEqualTo(400);
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
         assertTrue(responseBody.contains("Missing 'Owner' header"));
         assertTrue(responseBody.contains("MISSING_PARAMETER"));
