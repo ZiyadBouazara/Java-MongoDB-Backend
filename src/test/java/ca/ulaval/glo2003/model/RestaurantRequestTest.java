@@ -101,6 +101,5 @@ public class RestaurantRequestTest {
             .create();
 
         assertThrows(InvalidParameterException.class, restaurantRequest::verifyParameters);
-
     }
 }
