@@ -61,29 +61,30 @@ public class ResourcesHandler {
         List<FuzzySearchResponse> searchedRestaurants = new ArrayList<>();
 
         for (Restaurant restaurant : restaurants.values()) {
-            boolean isMatchRestaurantName;
-            boolean isMatchRestaurantOpenHour;
-            boolean isMatchRestaurantCloseHour;
-
-            if (search.getName() != null) {
-                isMatchRestaurantName = FuzzySearch.isFuzzySearchOnNameSuccessful(search.getName(), restaurant.getName());
-            } else {
-                isMatchRestaurantName = true;
-            }
-
-            if (search.getHours() != null) {
-                isMatchRestaurantOpenHour =
-                    FuzzySearch.isFromTimeMatching(search.getHours().getFrom(), restaurant.getHours().getOpen());
-                isMatchRestaurantCloseHour = FuzzySearch.isToTimeMatching(search.getHours().getTo(), restaurant.getHours().getClose());
-            } else {
-                isMatchRestaurantOpenHour = true;
-                isMatchRestaurantCloseHour = true;
-            }
-
-            if (isMatchRestaurantName && isMatchRestaurantOpenHour && isMatchRestaurantCloseHour) {
-                searchedRestaurants.add(new FuzzySearchResponse(restaurant));
+            if (shouldMatchRestaurantName(search, restaurant) &&
+                shouldMatchRestaurantHours(search, restaurant)) {
+                searchedRestaurants.add(getFuzzySearchResponseForRestaurant(restaurant));
             }
         }
+
         return searchedRestaurants;
     }
+
+    private boolean shouldMatchRestaurantName(FuzzySearch search, Restaurant restaurant) {
+        return search.getName() == null || FuzzySearch.isFuzzySearchOnNameSuccessful(search.getName(), restaurant.getName());
+    }
+
+    private boolean shouldMatchRestaurantHours(FuzzySearch search, Restaurant restaurant) {
+        if (search.getHours() == null) {
+            return true;
+        }
+
+        return FuzzySearch.isFromTimeMatching(search.getHours().getFrom(), restaurant.getHours().getOpen()) &&
+            FuzzySearch.isToTimeMatching(search.getHours().getTo(), restaurant.getHours().getClose());
+    }
+
+    private FuzzySearchResponse getFuzzySearchResponseForRestaurant(Restaurant restaurant) {
+        return new FuzzySearchResponse(restaurant);
+    }
+
 }
