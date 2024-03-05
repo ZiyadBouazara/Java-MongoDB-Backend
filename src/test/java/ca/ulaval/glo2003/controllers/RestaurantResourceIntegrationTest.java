@@ -185,7 +185,8 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
                         " \"hours\":{\"open\":\"11:00:00\", \"close\":\"19:00:00\"}}"));
 
         assertEquals("Http Response should be 400 ", 400, response.getStatus());
-        assertThat(response.readEntity(String.class)).contains("{\"description\":\"Invalid parameter 'name', cant be blank\",\"error\":\"INVALID_PARAMETER\"}");
+        assertThat(response.readEntity(String.class)).contains("{\"description\":\"Invalid parameter 'name'," +
+                " cant be blank\",\"error\":\"INVALID_PARAMETER\"}");
     }
 }
 
