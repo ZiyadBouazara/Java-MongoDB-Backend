@@ -3,9 +3,9 @@ FROM maven:3-amazoncorretto-21
 WORKDIR /app
 
 COPY pom.xml .
-RUN mvn exec:java || exit 0
+RUN mvn --batch-mode exec:java || exit 0
 
-COPY src src
-RUN mvn compile
+COPY . .
+RUN mvn --batch-mode compiler:compile
 
-CMD ["mvn", "exec:java", "--offline"]
+CMD ["mvn", "--batch-mode", "--offline", "exec:java"]
