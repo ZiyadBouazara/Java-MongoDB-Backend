@@ -32,11 +32,11 @@ import static ca.ulaval.glo2003.models.RestaurantRequest.verifyRestaurantOwnersh
 
 @Path("restaurants")
 public class RestaurantResource {
-    private ResourcesHandler resourcesHandler;
+    public ResourcesHandler resourcesHandler;
     private RestaurantFactory restaurantFactory;
 
-    public RestaurantResource() {
-        this.resourcesHandler = new ResourcesHandler();
+    public RestaurantResource(ResourcesHandler resourcesHandler) {
+        this.resourcesHandler = resourcesHandler;
         this.restaurantFactory = new RestaurantFactory();
     }
 
