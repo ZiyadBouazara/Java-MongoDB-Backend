@@ -1,5 +1,6 @@
 package ca.ulaval.glo2003.models;
 
+import ca.ulaval.glo2003.domain.utils.FuzzySearch;
 import ca.ulaval.glo2003.domain.utils.Hours;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
@@ -16,6 +17,8 @@ public class RestaurantRequest {
     private Integer capacity;
     private Hours hours;
     private ReservationConfiguration reservations;
+
+    private FuzzySearch fuzzySearch;
     // Do not change this variable's name, the createRestaurant Body uses the name for assignation
     private static final String TIME_FORMAT_REGEX = "^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$";
     private static final Pattern TIME_PATTERN = Pattern.compile(TIME_FORMAT_REGEX);
@@ -73,6 +76,41 @@ public class RestaurantRequest {
         verifyValidName();
         verifyValidCapacity();
         verifyValidHours();
+    }
+
+    public void verifyFuzzySearchValidParameters() throws InvalidParameterException{
+        verifyFuzzySearchNotNull();
+        verifyFuzzySearchValidName();
+        verifyFuzzySearchValidHours();
+    }
+
+    private void verifyFuzzySearchValidName() throws InvalidParameterException {
+        if (fuzzySearch.getName() != null && !(fuzzySearch.getName() instanceof String)) {
+            throw new InvalidParameterException("Name parameter is not a String");
+        }
+    }
+
+    private void verifyFuzzySearchValidHours() throws InvalidParameterException{
+        verifyValidHours();
+        if (fuzzySearch.getVisitTime() != null) {
+            if (fuzzySearch.getVisitTime().getFrom() != null && !(fuzzySearch.getVisitTime().getFrom() instanceof String)) {
+                throw new InvalidParameterException("Open hour parameter is invalid");
+            }
+
+            if (fuzzySearch.getVisitTime().getTo() != null && !(fuzzySearch.getVisitTime().getTo() instanceof String)) {
+                throw new InvalidParameterException("Close hour parameter is invalid");
+            }
+
+            if(LocalTime.parse(fuzzySearch.getVisitTime().getFrom()).isAfter(LocalTime.parse(fuzzySearch.getVisitTime().getTo()))){
+                throw new InvalidParameterException("The 'To' time is before the 'From' time");
+            }
+        }
+    }
+
+    private void verifyFuzzySearchNotNull() throws InvalidParameterException {
+        if(fuzzySearch == null){
+            throw new InvalidParameterException("Search object is null");
+        }
     }
 
     private void verifyMissingCapacity() throws MissingParameterException {
