@@ -55,7 +55,7 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
     }
 
     @Test
-    public void givenOwnerHasRestaurant_whenGetRestaurant_shouldReturn200AndListOfRestaurants() {
+    public void givenOwnerHasRestaurant_whenGetRestaurants_shouldReturn200AndListOfRestaurants() {
         var response = target("/restaurants/").request().header("Owner", OWNER_ID).get();
         var body = response.readEntity(String.class);
 
@@ -64,7 +64,7 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
     }
 
     @Test
-    public void whenGivenRestaurantWithMissingParameter_shouldReturnsStatusNotOk400_andThrowException() {
+    public void givenRestaurantWithMissingHeader_whenGetRestaurant_shouldReturn400AndThrowMissingParameterException() {
         var response = target("/restaurants/").request().get();
 
         assertThat(response.getStatus()).isEqualTo(400);
@@ -72,7 +72,7 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
     }
 
     @Test
-    public void whenGivenValidRestaurantId_shouldGetRestaurant_andReturnValid200GetResponse() {
+    public void givenValidRestaurant_whenGetRestaurantWithId_shouldReturn200AndRestaurant() {
         var response =
             target("/restaurants/{id}/").resolveTemplate("id", validRestaurant.getId()).request().header("Owner", OWNER_ID).get();
 
@@ -84,7 +84,7 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
     }
 
     @Test
-    public void whenGivenMissingOwnerHeader_shouldReturnInvalid400GetResponse_andThrowMissingParameterException() {
+    public void givenMissingOwnerHeader_whenGetRestaurantWithId_shouldThrowMissingParameterException() {
         var response = target("/restaurants/{id}/").resolveTemplate("id", validRestaurant.getId()).request().get();
 
         assertThat(response.getStatus()).isEqualTo(400);
@@ -92,14 +92,14 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
     }
 
     @Test
-    public void whenGivenInexistentRestaurantID_shouldReturnInvalid404GetResponse() {
+    public void givenNonExistentRestaurantId_whenGetRestaurantWithId_shouldReturn404() {
         var response = target("/restaurants/{id}/").resolveTemplate("id", RESTAURANT_ID).request().header("Owner", OWNER_ID).get();
 
         assertThat(response.getStatus()).isEqualTo(404);
     }
 
     @Test
-    public void whenGivenInvalidOwner_shouldReturnInvalid404GetResponse_andThrowNotFoundException() {
+    public void givenInvalidOwner_whenGetRestaurantWithId_shouldThrowNotFoundExceptionAnd404() {
         assertThatThrownBy(() -> target("/restaurants/{id}/")
             .resolveTemplate("id", validRestaurant.getId()).request().header("Owner", INVALID_OWNER_ID)
             .get(String.class))
@@ -118,7 +118,7 @@ public class RestaurantResourceIntegrationTest extends JerseyTest {
     }
 
     @Test
-    public void givenMissingHeaderOwner_shouldThrowMissingParameterException() {
+    public void givenMissingHeaderOwner_whenCreateRestaurant_shouldThrowMissingParameterException() {
         RestaurantRequest validRestaurantRequest = new RestaurantRequestFixture().create();
 
         Response response = target("/restaurants").request().post(Entity.entity(validRestaurantRequest, MediaType.APPLICATION_JSON));
