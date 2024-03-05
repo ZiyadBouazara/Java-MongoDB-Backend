@@ -34,12 +34,6 @@ public class Restaurant {
         this.reservationConfiguration = reservationConfiguration;
     }
 
-    public Restaurant(String name, Hours hours, Integer capacity){
-        this.name = name;
-        this.hours = hours;
-        this.capacity = capacity;
-    }
-
     public String getId() {
         return id;
     }
@@ -56,7 +50,9 @@ public class Restaurant {
         return capacity;
     }
 
-    public Hours getHours() {return hours; }
+    public Hours getHours() {
+        return hours;
+    }
 
     public ReservationConfiguration getRestaurantConfiguration() {
         return reservationConfiguration;

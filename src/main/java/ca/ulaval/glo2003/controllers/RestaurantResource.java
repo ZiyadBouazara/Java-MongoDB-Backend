@@ -1,14 +1,12 @@
 package ca.ulaval.glo2003.controllers;
 
 import ca.ulaval.glo2003.Main;
-import ca.ulaval.glo2003.domain.utils.FuzzySearch;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.domain.utils.ResourcesHandler;
 import ca.ulaval.glo2003.domain.factories.RestaurantFactory;
-import ca.ulaval.glo2003.models.FuzzySearchResponse;
 import ca.ulaval.glo2003.models.ReservationRequest;
 import ca.ulaval.glo2003.models.RestaurantRequest;
 import ca.ulaval.glo2003.models.RestaurantResponse;
@@ -25,11 +23,11 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
 
 import java.net.URI;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-@Path("/")
+import static ca.ulaval.glo2003.models.RestaurantRequest.verifyRestaurantOwnership;
+
+@Path("restaurants")
 public class RestaurantResource {
     private ResourcesHandler resourcesHandler;
     private RestaurantFactory restaurantFactory;
@@ -40,7 +38,6 @@ public class RestaurantResource {
     }
 
     @GET
-    @Path("restaurants")
     @Produces(MediaType.APPLICATION_JSON)
     public List<RestaurantResponse> getRestaurants(@HeaderParam("Owner") String ownerId) throws MissingParameterException {
         verifyMissingHeader(ownerId);
@@ -48,7 +45,6 @@ public class RestaurantResource {
     }
 
     @POST
-    @Path("restaurants")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createRestaurant(@HeaderParam("Owner") String ownerId, RestaurantRequest restaurantRequest)
         throws InvalidParameterException, MissingParameterException, NotFoundException {
@@ -63,7 +59,7 @@ public class RestaurantResource {
     }
 
     @GET
-    @Path("restaurants/{id}")
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRestaurant(@HeaderParam("Owner") String ownerID, @PathParam("id") String restaurantId)
         throws MissingParameterException, NotFoundException {
@@ -74,7 +70,7 @@ public class RestaurantResource {
     }
 
     @POST
-    @Path("restaurants/{id}/reservations")
+    @Path("/{id}/reservations")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest)
         throws NotFoundException, InvalidParameterException, MissingParameterException {
@@ -96,30 +92,17 @@ public class RestaurantResource {
         return Response.created(newReservationURI).build();
     }
 
-    @POST
-    @Path("/search/restaurants")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<FuzzySearchResponse> searchRestaurants(FuzzySearch search) throws InvalidParameterException {
-        //TODO: verifyFuzzySearch method and how to implement it here or import it in this class directly
-        return resourcesHandler.getAllRestaurantsForSearch(search);
-    }
-
     private void verifyValidRestaurantIdPath(String restaurantId) {
         if (resourcesHandler.getRestaurant(restaurantId) == null) {
             throw new NotFoundException("Restaurant not found with ID: " + restaurantId);
         }
     }
-
     private void verifyMissingHeader(String ownerId) throws MissingParameterException {
         if (ownerId == null) {
             throw new MissingParameterException("Missing 'Owner' header");
         }
     }
 
-    private void verifyRestaurantOwnership(String expectedOwnerId, String actualOwnerId) throws NotFoundException {
-        if (!expectedOwnerId.equals(actualOwnerId)) {
-            throw new NotFoundException();
-        }
-    }
+
+
 }
