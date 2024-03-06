@@ -2,6 +2,7 @@ package ca.ulaval.glo2003.domain.utils;
 
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
+import ca.ulaval.glo2003.models.FuzzySearchResponse;
 import ca.ulaval.glo2003.models.RestaurantResponse;
 import jakarta.ws.rs.NotFoundException;
 
@@ -55,4 +56,35 @@ public class ResourcesHandler {
         }
         throw new NotFoundException();
     }
+
+    public List<FuzzySearchResponse> getAllRestaurantsForSearch(FuzzySearch search) {
+        List<FuzzySearchResponse> searchedRestaurants = new ArrayList<>();
+
+        for (Restaurant restaurant : restaurants.values()) {
+            if (shouldMatchRestaurantName(search, restaurant) &&
+                shouldMatchRestaurantHours(search, restaurant)) {
+                searchedRestaurants.add(getFuzzySearchResponseForRestaurant(restaurant));
+            }
+        }
+
+        return searchedRestaurants;
+    }
+
+    protected boolean shouldMatchRestaurantName(FuzzySearch search, Restaurant restaurant) {
+        return search.getName() == null || FuzzySearch.isFuzzySearchOnNameSuccessful(search.getName(), restaurant.getName());
+    }
+
+    protected boolean shouldMatchRestaurantHours(FuzzySearch search, Restaurant restaurant) {
+        if (search.getHours() == null) {
+            return true;
+        }
+
+        return FuzzySearch.isFromTimeMatching(search.getHours().getFrom(), restaurant.getHours().getOpen()) &&
+            FuzzySearch.isToTimeMatching(search.getHours().getTo(), restaurant.getHours().getClose());
+    }
+
+    protected FuzzySearchResponse getFuzzySearchResponseForRestaurant(Restaurant restaurant) {
+        return new FuzzySearchResponse(restaurant);
+    }
+
 }
