@@ -64,3 +64,53 @@ En moyenne, notre équipe avait environ 3 pull-requests en attente de révision,
 
 3. Afin d'améliorer notre processus, le consensus au sein de notre équipe est qu'il serait bénéfique d'organiser des réunions de synchronisation et de discussions plus fréquemment. De plus, il serait impératif de diminuer encore davantage la taille des issues afin de faciliter la fusion une fois l'issue finalisée. Enfin, nous devrions commencer à attribuer des issues et des revues de code à plusieurs personnes plutôt qu'à une seule, car cela améliore la communication entre les membres de l'équipe et augmente la compréhension du code et de la logique générale de l'application.
 
+## Architecture
+### Rôles des classes principales
+![Local Image](../images/tp2/architecture.png)
+- ReservationConfiguration : Permet de configurer une réservation pour un restaurant. Cela permet de définir le nombre de places disponibles, le temps de réservation minimum et le temps de réservation maximum.
+- ReservationRequest : Permet de faire une requête pour la réservation d'un restaurant.
+- RestaurantRequest : Permet de faire une requête pour la création d'un restaurant.
+- ResourcesHandler : Permet de gérer les ressources telles que les restaurants et les réservations, et de les sauvegarder temporairement (Runtime).
+Il effectue également la création des classes principales en appelant les factories respectivent qui les build par la suite.
+- Restaurant : Permet de créer un restaurant et d'avoir accès à ses attributs.
+- Reservation : Permet de créer une réservation et d'avoir accès à ses attributs.
+- RestaurantResource : Permet de gérer les requêtes pour les restaurants.
+- InvalidParamExceptionMapper : Permet de gérer les exceptions InvalidParamException.
+- MissingParamExceptionMapper : Permet de gérer les exceptions MissingParamException.
+- NotFoundExceptionMapper : Permet de gérer les exceptions NotFoundException.
+- Main : Permet de démarrer le serveur.
+- FuzzySearch : Permet d'avoir l'objet de recherche de Restaurant à travers lequel on peut rechercher un restaurant par son nom, par l'heure à laquelle il est possible d'y aller et l'heure de départ.
+Utiliser une classe comme ceci permet une recherche plus flexible.
+- VisitTime: Représente le temps auquel un client peut aller au restaurant et en repartir. C'est pour cette raison que cette classe contient un from et un to.
+- ...Response : Copie d'un objet complexe qui est retourné à l'utilisateur (DTO) 
+
+### Nos choix
+Nous voulions déléguer les tâche telles que la validation à une classe séparé de la Resource, donc nous avons créé ResourceHandler 
+qui effectuent plusieurs validations par rapport aux requêtes reçues. Nous avons également établis des DTOS pour la transition entre les différentes couches de l'architecture.
+Aussi, nous avons une classe utilitaire qui regroupe différentes classes telles que FuzzySearch pour la recherche de Restaurants. Finalement, nous avons une classe RestaurantFactory,
+qui s'occuper de build les Restaurants selon la configuration de réservation fournis par l'utilisateur.
+
+### Relations  suspectes et des solutions potentielles
+Dans le but de nous rapprocher du Principe de Responsabilité Unique (SRP), nous avons envisagé l'ajout d'un resourceHandler,
+chargé de soulager la resource en lui déléguant la gestion de toutes les actions sur les objets du 
+domaine, telles que la sauvegarde et la recherche. Cependant, nous avons rapidement constaté que le 
+Handler devenait une 'godclass'.
+
+Pour notre prochaine itération, nous opterons pour un service qui délèguera ses tâches à des factories et des assembleurs afin de promouvoir non seulement le SRP mais aussi le Principe d'Ouverture/Fermeture (OCP).
+
+De plus, nous créons actuellement des objets du domaine dans notre resource, ce qui entraîne une violation du 
+Principe d'Inversion de Dépendance (DIP). Dans notre prochaine itération, nous veillerons à tirer parti 
+des DTOs et à ne passer que les arguments de ceux-ci aux couches supérieures. 
+En résolvant ainsi le problème de DIP, nous espérons nous rapprocher davantage du SRP et de l'OCP. 
+Notre resource ne fera que recevoir et envoyer des données au service, sans plus.
+
+Actuellement, nos validations sont effectuées dans les objets de requêtes (DTO), ce qui n'est pas une pratique courante. 
+Les requêtes sont censées être des types immuables qui ne font que représenter une requête entrée par un client. 
+Cela dit, dans notre prochaine itération, la validation pour la création d'entités se fera dans les
+factories, lesquelles seront appelées dans le service. Ainsi, le jour où nous voulons modifier la façon 
+dont nous créons un restaurant, nous n'aurons qu'à modifier la factory correspondante.
+
+Un autre point important est que notre ResourceHandler agit actuellement à la fois comme un orchestrateur et comme une base de données via un map qui garde les restaurants en mémoire. Nous souhaitons éliminer ce concept en 
+introduisant une interface pour les options de persistance. Ainsi, nos bases de données n'auront qu'à suivre le contrat offert pour les implémenter. Ceci renforce davantage le principe d'Ouverture/Fermeture (OCP).
+
+**Dans le diagramme d'architecture, les flèches rouges représentent les connexions que nous prévoyons supprimer dans la prochaine livraison, car elles enfreignent certains principes discutés précédemment.**
