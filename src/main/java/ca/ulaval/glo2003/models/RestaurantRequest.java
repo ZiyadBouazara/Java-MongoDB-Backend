@@ -18,7 +18,6 @@ public class RestaurantRequest {
     private Hours hours;
     private ReservationConfiguration reservations;
 
-    private FuzzySearch fuzzySearch;
     // Do not change this variable's name, the createRestaurant Body uses the name for assignation
     private static final String TIME_FORMAT_REGEX = "^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$";
 
@@ -53,10 +52,6 @@ public class RestaurantRequest {
         return reservations;
     }
 
-    public void setReservations(ReservationConfiguration reservations) {
-        this.reservations = reservations;
-    }
-
     public static void verifyRestaurantOwnership(String expectedOwnerId, String actualOwnerId) throws NotFoundException {
         if (!expectedOwnerId.equals(actualOwnerId)) {
             throw new NotFoundException();
@@ -87,7 +82,7 @@ public class RestaurantRequest {
     }
 
     public static void verifyFuzzySearchValidName(FuzzySearch fuzzySearch) throws InvalidParameterException {
-        if (fuzzySearch.getName() != null && !(fuzzySearch.getName() instanceof String)) {
+        if ((fuzzySearch.getName() != null) && !(fuzzySearch.getName() instanceof String)) {
             throw new InvalidParameterException("Name parameter is not a String");
         }
     }

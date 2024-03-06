@@ -116,5 +116,4 @@ public class RestaurantRequestTest {
                 .hasMessage("Search object is null");
 
     }
-
 }
