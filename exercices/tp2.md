@@ -110,4 +110,7 @@ Cela dit, dans notre prochaine itération, la validation pour la création d'ent
 factories, lesquelles seront appelées dans le service. Ainsi, le jour où nous voulons modifier la façon 
 dont nous créons un restaurant, nous n'aurons qu'à modifier la factory correspondante.
 
+Un autre point important est que notre ResourceHandler agit actuellement à la fois comme un orchestrateur et comme une base de données via un map qui garde les restaurants en mémoire. Nous souhaitons éliminer ce concept en 
+introduisant une interface pour les options de persistance. Ainsi, nos bases de données n'auront qu'à suivre le contrat offert pour les implémenter. Ceci renforce davantage le principe d'Ouverture/Fermeture (OCP).
+
 **Dans le diagramme d'architecture, les flèches rouges représentent les connexions que nous prévoyons supprimer dans la prochaine livraison, car elles enfreignent certains principes discutés précédemment.**
