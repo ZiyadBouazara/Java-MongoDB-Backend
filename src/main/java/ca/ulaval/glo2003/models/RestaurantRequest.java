@@ -82,7 +82,7 @@ public class RestaurantRequest {
     }
 
     public static void verifyFuzzySearchValidName(FuzzySearch fuzzySearch) throws InvalidParameterException {
-        if ((fuzzySearch.getName() != null) && !(fuzzySearch.getName() instanceof String)) {
+        if (fuzzySearch.getName() != null && !(fuzzySearch.getName() instanceof String)) {
             throw new InvalidParameterException("Name parameter is not a String");
         }
     }
