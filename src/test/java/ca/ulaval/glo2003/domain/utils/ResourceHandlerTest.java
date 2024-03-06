@@ -106,3 +106,4 @@ public class ResourceHandlerTest {
         assertThrows(NotFoundException.class, () -> resourcesHandler.getReservation("NonExistingReservation"));
     }
 }
+

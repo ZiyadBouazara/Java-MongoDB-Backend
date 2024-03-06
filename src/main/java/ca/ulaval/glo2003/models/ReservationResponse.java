@@ -2,6 +2,7 @@ package ca.ulaval.glo2003.models;
 
 import ca.ulaval.glo2003.domain.customer.Customer;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
+import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.utils.ResourcesHandler;
 import ca.ulaval.glo2003.domain.utils.Time;
 
@@ -15,11 +16,13 @@ public class ReservationResponse {
     public RestaurantReservationResponse restaurant;
 
     public ReservationResponse(Reservation reservation, ResourcesHandler resourcesHandler) {
+        Restaurant restaurant = resourcesHandler.getRestaurant(reservation.getRestaurantId());
+
         this.number = reservation.getId();
         this.date = reservation.getDate();
-        this.time = new Time(reservation.getStartTime());
+        this.time = new Time(reservation.getStartTime(), restaurant);
         this.groupSize = reservation.getGroupSize();
         this.customer = reservation.getCustomer();
-        this.restaurant = new RestaurantReservationResponse(resourcesHandler.getRestaurant(reservation.getRestaurantId()));
+        this.restaurant = new RestaurantReservationResponse(restaurant);
     }
 }
