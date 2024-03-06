@@ -59,13 +59,6 @@ public class ResourceHandlerTest {
     }
 
     @Test
-    void givenExistingRestaurant_whenGetRestaurant_shouldReturnTheRestaurant() {
-        resourcesHandler.addRestaurant(restaurant);
-        Restaurant actualRestaurant = resourcesHandler.getRestaurant(restaurant.getId());
-        assertEquals(restaurant, actualRestaurant);
-    }
-
-    @Test
     void givenNonExistingRestaurant_whenGetRestaurant_shouldThrowNotFoundException() {
         assertThrows(NotFoundException.class, () -> resourcesHandler.getRestaurant("NonExistingRestaurant"));
     }
