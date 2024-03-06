@@ -7,6 +7,7 @@ public class RestaurantRequestFixture {
     private String name = "name";
     private int capacity = 5;
     private final Hours hours = initValidHours();
+    private Integer nameInteger;
 
     private Hours initValidHours() {
         Hours validHours = new Hours();
@@ -46,6 +47,11 @@ public class RestaurantRequestFixture {
 
     public RestaurantRequestFixture withName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public RestaurantRequestFixture withNameInteger(Integer name) {
+        this.nameInteger = name;
         return this;
     }
 

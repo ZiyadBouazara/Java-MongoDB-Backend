@@ -42,24 +42,24 @@ public class FuzzySearch {
         return true;
     }
 
-    public static boolean isFromTimeMatching(String visitTimeFrom, String comparedToHour) {
+    public static boolean isFromTimeMatching(String visitTimeFrom, String restaurantOpeningHour) {
         if (visitTimeFrom != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             LocalTime from = LocalTime.parse(visitTimeFrom, formatter);
-            LocalTime comparedHour = LocalTime.parse(comparedToHour, formatter);
+            LocalTime restaurantOpenHour = LocalTime.parse(restaurantOpeningHour, formatter);
 
-            return from.isAfter(comparedHour) || from.equals(comparedHour);
+            return from.isAfter(restaurantOpenHour) || from.equals(restaurantOpenHour);
         }
         return true;
     }
 
-    public static boolean isToTimeMatching(String visitTimeTo, String comparedToHour) {
+    public static boolean isToTimeMatching(String visitTimeTo, String restaurantClosingHour) {
         if (visitTimeTo != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             LocalTime to = LocalTime.parse(visitTimeTo, formatter);
-            LocalTime comparedHour = LocalTime.parse(comparedToHour, formatter);
+            LocalTime restaurantCloseHour = LocalTime.parse(restaurantClosingHour, formatter);
 
-            return to.isBefore(comparedHour) || to.equals(comparedHour);
+            return to.isBefore(restaurantCloseHour) || to.equals(restaurantCloseHour);
         }
         return true;
     }
