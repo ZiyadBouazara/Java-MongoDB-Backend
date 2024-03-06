@@ -1,16 +1,23 @@
 package ca.ulaval.glo2003.domain.utils;
 
+import ca.ulaval.glo2003.domain.customer.Customer;
+import ca.ulaval.glo2003.domain.reservation.Reservation;
 import jakarta.ws.rs.NotFoundException;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.models.RestaurantResponse;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class ResourceHandlerTest {
@@ -18,9 +25,12 @@ public class ResourceHandlerTest {
     private static final String OWNER_ID = "1";
     private static final String RESTAURANT_NAME = "Restaurant Name";
     private static final int EXPECTED_OWNER_RESTAURANTS_COUNT = 1;
+    private static final String RESERVATION_ID = "1";
     private ResourcesHandler resourcesHandler;
     @Mock
     private Restaurant restaurant;
+    @Mock
+    private Reservation reservation;
 
     @BeforeEach
     void setUp() {
@@ -28,6 +38,8 @@ public class ResourceHandlerTest {
         when(restaurant.getId()).thenReturn(RESTAURANT_ID);
         when(restaurant.getOwnerId()).thenReturn(OWNER_ID);
         when(restaurant.getName()).thenReturn(RESTAURANT_NAME);
+        when(reservation.getId()).thenReturn(RESERVATION_ID);
+        when(reservation.getRestaurantId()).thenReturn(RESTAURANT_ID);
 
         resourcesHandler = new ResourcesHandler();
     }
@@ -37,13 +49,6 @@ public class ResourceHandlerTest {
         resourcesHandler.addRestaurant(restaurant);
         Restaurant addedRestaurant = resourcesHandler.getRestaurant(restaurant.getId());
         assertEquals(restaurant, addedRestaurant);
-    }
-
-    @Test
-    void givenExistingRestaurant_whenGetRestaurant_shouldReturnTheRestaurant() {
-        resourcesHandler.addRestaurant(restaurant);
-        Restaurant actualRestaurant = resourcesHandler.getRestaurant(restaurant.getId());
-        assertEquals(restaurant, actualRestaurant);
     }
 
     @Test
@@ -66,7 +71,7 @@ public class ResourceHandlerTest {
 
         assertEquals(1, ownerRestaurants.size());
 
-        RestaurantResponse ownerRestaurant = ownerRestaurants.get(0);
+        RestaurantResponse ownerRestaurant = ownerRestaurants.getFirst();
 
         assertEquals(restaurant.getName(), ownerRestaurant.getName());
         assertEquals(restaurant.getCapacity(), ownerRestaurant.getCapacity());
@@ -78,5 +83,28 @@ public class ResourceHandlerTest {
         assertTrue(ownerRestaurants.isEmpty());
     }
 
-    //TODO : Add Tests for the reservation in the ResourceHandler
+    @Test
+    void whenAddingReservation_shouldAddToReservationsMap() {
+        resourcesHandler.addRestaurant(restaurant);
+        resourcesHandler.addReservation(reservation);
+
+        verify(restaurant, times(1)).addReservation(reservation);
+    }
+
+    @Test
+    void givenExistingReservation_whenGetReservation_shouldReturnReservation() {
+        Map<String, Reservation> reservationsById = new HashMap<>();
+        reservationsById.put(RESERVATION_ID, reservation);
+        when(restaurant.getReservationsById()).thenReturn(reservationsById);
+        resourcesHandler.addRestaurant(restaurant);
+
+        Reservation addedReservation = resourcesHandler.getReservation(RESERVATION_ID);
+
+        assertEquals(reservation, addedReservation);
+    }
+
+    @Test
+    void givenNonExistingReservation_whenGetReservation_shouldThrowNotFoundException() {
+        assertThrows(NotFoundException.class, () -> resourcesHandler.getReservation("NonExistingReservation"));
+    }
 }
