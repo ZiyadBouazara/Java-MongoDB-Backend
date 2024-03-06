@@ -70,11 +70,11 @@ public class ResourcesHandler {
         return searchedRestaurants;
     }
 
-    private boolean shouldMatchRestaurantName(FuzzySearch search, Restaurant restaurant) {
+    protected boolean shouldMatchRestaurantName(FuzzySearch search, Restaurant restaurant) {
         return search.getName() == null || FuzzySearch.isFuzzySearchOnNameSuccessful(search.getName(), restaurant.getName());
     }
 
-    private boolean shouldMatchRestaurantHours(FuzzySearch search, Restaurant restaurant) {
+    protected boolean shouldMatchRestaurantHours(FuzzySearch search, Restaurant restaurant) {
         if (search.getHours() == null) {
             return true;
         }
@@ -83,7 +83,7 @@ public class ResourcesHandler {
             FuzzySearch.isToTimeMatching(search.getHours().getTo(), restaurant.getHours().getClose());
     }
 
-    private FuzzySearchResponse getFuzzySearchResponseForRestaurant(Restaurant restaurant) {
+    protected FuzzySearchResponse getFuzzySearchResponseForRestaurant(Restaurant restaurant) {
         return new FuzzySearchResponse(restaurant);
     }
 

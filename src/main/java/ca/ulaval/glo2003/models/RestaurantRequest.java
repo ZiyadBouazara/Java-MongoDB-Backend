@@ -18,7 +18,6 @@ public class RestaurantRequest {
     private Hours hours;
     private ReservationConfiguration reservations;
 
-    private FuzzySearch fuzzySearch;
     // Do not change this variable's name, the createRestaurant Body uses the name for assignation
     private static final String TIME_FORMAT_REGEX = "^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$";
 
@@ -53,10 +52,6 @@ public class RestaurantRequest {
         return reservations;
     }
 
-    public void setReservations(ReservationConfiguration reservations) {
-        this.reservations = reservations;
-    }
-
     public static void verifyRestaurantOwnership(String expectedOwnerId, String actualOwnerId) throws NotFoundException {
         if (!expectedOwnerId.equals(actualOwnerId)) {
             throw new NotFoundException();
@@ -86,7 +81,7 @@ public class RestaurantRequest {
         verifyFuzzySearchValidHours(fuzzySearch);
     }
 
-    private static void verifyFuzzySearchValidName(FuzzySearch fuzzySearch) throws InvalidParameterException {
+    public static void verifyFuzzySearchValidName(FuzzySearch fuzzySearch) throws InvalidParameterException {
         if (fuzzySearch.getName() != null && !(fuzzySearch.getName() instanceof String)) {
             throw new InvalidParameterException("Name parameter is not a String");
         }
@@ -104,11 +99,10 @@ public class RestaurantRequest {
         }
     }
 
-    private static void verifyValidVisitTimeFormat(String time) throws InvalidParameterException {
+    public static void verifyValidVisitTimeFormat(String time) throws InvalidParameterException {
         if (time == null || time.trim().isEmpty()) {
             return;
         }
-
         Matcher matcher = TIME_PATTERN_VISIT_TIME.matcher(time);
 
         if (!matcher.find()) {
@@ -121,14 +115,14 @@ public class RestaurantRequest {
         verifyValidVisitTimeFormat(fuzzySearch.getHours().getTo());
     }
 
-    private static void verifyValidTimeFormat(String time) throws InvalidParameterException {
+    public static void verifyValidTimeFormat(String time) throws InvalidParameterException {
         Matcher matcher = TIME_PATTERN.matcher(time);
         if (!matcher.matches()) {
             throw new InvalidParameterException("Invalid time format: " + time + ". Use the 'HH:MM:SS' format");
         }
     }
 
-    private static void verifyFuzzySearchNotNull(FuzzySearch fuzzySearch) throws InvalidParameterException {
+    public static void verifyFuzzySearchNotNull(FuzzySearch fuzzySearch) throws InvalidParameterException {
         if (fuzzySearch == null) {
             throw new InvalidParameterException("Search object is null");
         }
@@ -195,3 +189,4 @@ public class RestaurantRequest {
         }
     }
 }
+

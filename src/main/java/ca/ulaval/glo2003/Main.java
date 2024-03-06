@@ -6,7 +6,6 @@ import ca.ulaval.glo2003.domain.exceptions.mapper.InvalidParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.MissingParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.NotFoundExceptionMapper;
 import ca.ulaval.glo2003.domain.utils.ResourcesHandler;
-import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -15,7 +14,7 @@ import java.net.URI;
 public class Main {
     public static final String BASE_URI = "http://0.0.0.0:8080/";
 
-    public static HttpServer startServer() {
+    public static void startServer() {
         final ResourcesHandler resourcesHandler = new ResourcesHandler();
         final ResourceConfig rc = new ResourceConfig()
             .register(new HealthResource())
@@ -24,7 +23,7 @@ public class Main {
             .register(new MissingParamExceptionMapper())
             .register(new NotFoundExceptionMapper());
 
-        return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+        GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
 
     public static void main(String[] args) {

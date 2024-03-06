@@ -17,4 +17,21 @@ public class FuzzySearchResponse {
         this.capacity = restaurant.getCapacity();
         this.hours = restaurant.getHours();
     }
+
+
+    public String getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public Integer getCapacity() {
+        return this.capacity;
+    }
+
+    public Hours getHours() {
+        return this.hours;
+    }
 }

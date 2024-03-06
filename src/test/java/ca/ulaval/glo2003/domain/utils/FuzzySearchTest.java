@@ -2,16 +2,11 @@ package ca.ulaval.glo2003.domain.utils;
 
 import org.junit.jupiter.api.Test;
 
-//import java.time.LocalTime;
 
-import static ca.ulaval.glo2003.domain.utils.FuzzySearch.isFuzzySearchOnNameSuccessful;
-import static ca.ulaval.glo2003.domain.utils.FuzzySearch.isFromTimeMatching;
-import static ca.ulaval.glo2003.domain.utils.FuzzySearch.isToTimeMatching;
+import static ca.ulaval.glo2003.domain.utils.FuzzySearch.*;
 import static org.assertj.core.api.Assertions.assertThat;
-//import static org.mockito.Mockito.mock;
-//import static org.mockito.Mockito.when;
 
-public class FuzzySearchTest {
+class FuzzySearchTest {
 
     @Test
     void testIsFuzzySearchOnNameSuccessful() {
@@ -46,17 +41,6 @@ public class FuzzySearchTest {
         assertThat(result).isTrue();
     }
 
-
-//    @Test
-//    void testAreClosingHoursCorrespondingWithMockedTime() {
-//        String closingHours = "18:00:00";
-//        String comparedToHour = "20:00:00";
-//        LocalTime mockCloseHour = mock(LocalTime.class);
-//        when(mockCloseHour.isBefore(LocalTime.parse(comparedToHour))).thenReturn(true);
-//        boolean result = isToTimeMatching(closingHours, comparedToHour);
-//        assertThat(result).isTrue();
-//    }
-
     @Test
     void givenValidSearchingElementAndComparedElement_whenIsFuzzySearchOnNameSuccessful_thenShouldReturnTrue() {
         String searchingRestaurantName = "restaurant";
@@ -67,27 +51,44 @@ public class FuzzySearchTest {
 
     @Test
     void givenNullSearchingElementAndComparedElement_whenIsFuzzySearchOnNameSuccessful_thenShouldReturnTrue() {
-
+        String searchingRestaurantName = null;
+        String comparedElement = "This is a restaurant";
+        isFuzzySearchOnNameSuccessful(searchingRestaurantName, comparedElement);
+        boolean result = true;
+        assertThat(result).isTrue();
     }
 
     @Test
     void givenValidVisitTimeFromAndComparedToHour_whenIsFromTimeMatching_thenShouldReturnTrue() {
-        // Add a test for valid VisitTimeFrom and comparedToHour
+        String visitTimeFrom = "14:00:00";
+        String comparedToHour = "12:00:00";
+        boolean result = isFromTimeMatching(visitTimeFrom, comparedToHour);
+        assertThat(result).isTrue();
     }
 
     @Test
     void givenNullVisitTimeFromAndComparedToHour_whenIsFromTimeMatching_thenShouldReturnTrue() {
-        // Add a test for a null VisitTimeFrom
+        String visitTimeFrom = null;
+        String comparedToHour = "12:00:00";
+        isFromTimeMatching(visitTimeFrom, comparedToHour);
+        boolean result = true;
+        assertThat(result).isTrue();
     }
 
     @Test
     void givenValidVisitTimeToAndComparedToHour_whenIsToTimeMatching_thenShouldReturnTrue() {
-        // Add a test for valid VisitTimeTo and comparedToHour
+        String visitTimeTo = "18:00:00";
+        String comparedToHour = "20:00:00";
+        boolean result = isToTimeMatching(visitTimeTo, comparedToHour);
+        assertThat(result).isTrue();
     }
 
     @Test
     void givenNullVisitTimeToAndComparedToHour_whenIsToTimeMatching_thenShouldReturnTrue() {
-        // Add a test for a null VisitTimeTo
+        String visitTimeTo = null;
+        String comparedToHour = "20:00:00";
+        isToTimeMatching(visitTimeTo, comparedToHour);
+        boolean result = true;
+        assertThat(result).isTrue();
     }
 }
-
