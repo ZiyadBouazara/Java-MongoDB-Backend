@@ -1,6 +1,6 @@
 package ca.ulaval.glo2003.domain.restaurant;
 
-import ca.ulaval.glo2003.controllers.models.ReservationConfigurationDTO;
+import ca.ulaval.glo2003.service.dtos.ReservationConfigurationDTO;
 import ca.ulaval.glo2003.domain.hours.Hours;
 
 public class RestaurantFactory {

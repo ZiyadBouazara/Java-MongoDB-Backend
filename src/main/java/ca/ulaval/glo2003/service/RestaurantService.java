@@ -1,9 +1,9 @@
 package ca.ulaval.glo2003.service;
 
-import ca.ulaval.glo2003.controllers.models.HoursDTO;
-import ca.ulaval.glo2003.controllers.models.ReservationConfigurationDTO;
-import ca.ulaval.glo2003.controllers.models.RestaurantResponse;
-import ca.ulaval.glo2003.domain.hours.HoursAssembler;
+import ca.ulaval.glo2003.service.dtos.HoursDTO;
+import ca.ulaval.glo2003.service.dtos.ReservationConfigurationDTO;
+import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
+import ca.ulaval.glo2003.service.assembler.HoursAssembler;
 import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.restaurant.RestaurantFactory;

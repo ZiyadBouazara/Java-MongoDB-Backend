@@ -1,8 +1,8 @@
 package ca.ulaval.glo2003.service;
 
-import ca.ulaval.glo2003.controllers.models.CustomerDTO;
+import ca.ulaval.glo2003.service.dtos.CustomerDTO;
 import ca.ulaval.glo2003.domain.customer.Customer;
-import ca.ulaval.glo2003.domain.customer.CustomerAssembler;
+import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
 import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.reservation.ReservationFactory;

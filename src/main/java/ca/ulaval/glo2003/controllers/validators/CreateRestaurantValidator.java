@@ -1,7 +1,7 @@
 package ca.ulaval.glo2003.controllers.validators;
 
-import ca.ulaval.glo2003.controllers.models.HoursDTO;
-import ca.ulaval.glo2003.controllers.models.RestaurantRequest;
+import ca.ulaval.glo2003.service.dtos.HoursDTO;
+import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import java.time.Duration;

@@ -1,4 +1,6 @@
-package ca.ulaval.glo2003.controllers.models;
+package ca.ulaval.glo2003.controllers.requests;
+
+import ca.ulaval.glo2003.service.dtos.CustomerDTO;
 
 public record ReservationRequest(
         String date,

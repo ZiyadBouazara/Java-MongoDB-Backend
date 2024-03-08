@@ -1,7 +1,7 @@
 package ca.ulaval.glo2003.controllers.validators;
 
-import ca.ulaval.glo2003.controllers.models.CustomerDTO;
-import ca.ulaval.glo2003.controllers.models.ReservationRequest;
+import ca.ulaval.glo2003.service.dtos.CustomerDTO;
+import ca.ulaval.glo2003.controllers.requests.ReservationRequest;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 

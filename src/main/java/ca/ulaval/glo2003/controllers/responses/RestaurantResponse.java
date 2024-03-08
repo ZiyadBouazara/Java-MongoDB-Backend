@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.controllers.models;
+package ca.ulaval.glo2003.controllers.responses;
 
 import ca.ulaval.glo2003.domain.hours.Hours;
 import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
