@@ -1,6 +1,6 @@
 package ca.ulaval.glo2003.domain.restaurant;
 
-import ca.ulaval.glo2003.domain.utils.Hours;
+import ca.ulaval.glo2003.domain.hours.Hours;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 
 import java.util.Map;

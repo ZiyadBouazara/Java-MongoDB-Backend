@@ -72,8 +72,7 @@ public class RestaurantResource {
                 ownerId,
                 restaurantRequest.name(),
                 restaurantRequest.capacity(),
-                restaurantRequest.hours().open(),
-                restaurantRequest.hours().close(),
+                restaurantRequest.hours(),
                 restaurantRequest.reservations());
 
         URI newProductURI = UriBuilder.fromResource(RestaurantResource.class).path(restaurantId).build();
@@ -97,15 +96,13 @@ public class RestaurantResource {
     public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest)
             throws InvalidParameterException, MissingParameterException {
         createReservationValidator.validateReservationRequest(reservationRequest);
+
         String createdReservationId = reservationService.createReservation(
                 restaurantId,
                 reservationRequest.date(),
                 reservationRequest.startTime(),
                 reservationRequest.groupSize(),
-                reservationRequest.customer().name(),
-                reservationRequest.customer().email(),
-                reservationRequest.customer().phoneNumber()
-                );
+                reservationRequest.customer());
 
         URI newReservationURI = UriBuilder.fromPath(Main.BASE_URI)
             .path("reservations")

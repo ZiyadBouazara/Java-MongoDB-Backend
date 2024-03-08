@@ -1,15 +1,16 @@
 package ca.ulaval.glo2003.domain.restaurant;
 
 import ca.ulaval.glo2003.controllers.models.ReservationConfigurationDTO;
-import ca.ulaval.glo2003.domain.utils.Hours;
+import ca.ulaval.glo2003.domain.hours.Hours;
 
 public class RestaurantFactory {
 
-    public Restaurant build(String ownerId,
-                            String name,
-                            Integer capacity,
-                            Hours hours,
-                            ReservationConfigurationDTO reservations) {
+    public Restaurant buildRestaurant(String ownerId,
+                                      String name,
+                                      Integer capacity,
+                                      Hours hours,
+                                      ReservationConfigurationDTO reservations) {
+
         if (hasReservationConfiguration(reservations)) {
             return buildRestaurantWithReservationConfiguration(
                     ownerId,

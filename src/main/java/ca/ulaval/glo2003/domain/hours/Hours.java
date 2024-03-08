@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.domain.utils;
+package ca.ulaval.glo2003.domain.hours;
 
 public class Hours {
     private String open;
