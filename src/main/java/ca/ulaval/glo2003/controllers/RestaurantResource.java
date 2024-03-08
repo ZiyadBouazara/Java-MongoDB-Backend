@@ -1,7 +1,6 @@
 package ca.ulaval.glo2003.controllers;
 
 import ca.ulaval.glo2003.Main;
-import ca.ulaval.glo2003.controllers.models.RestaurantDetails;
 import ca.ulaval.glo2003.controllers.validators.CreateReservationValidator;
 import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
@@ -28,7 +27,6 @@ import jakarta.ws.rs.core.UriBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 
 @Path("restaurants")
@@ -58,7 +56,7 @@ public class RestaurantResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<RestaurantDetails> getRestaurants(@HeaderParam("Owner") String ownerId) throws MissingParameterException {
+    public List<RestaurantResponse> getRestaurants(@HeaderParam("Owner") String ownerId) throws MissingParameterException {
         headerValidator.verifyMissingHeader(ownerId);
         return restaurantService.getRestaurantsForOwnerId(ownerId);
     }
@@ -70,16 +68,13 @@ public class RestaurantResource {
         headerValidator.verifyMissingHeader(ownerId);
         createRestaurantValidator.validate(ownerId, restaurantRequest);
 
-        Optional<Integer> reservationsDuration = restaurantRequest.reservations() != null ?
-                Optional.of(restaurantRequest.reservations().duration()) : Optional.empty();
-
         String restaurantId = restaurantService.createRestaurant(
                 ownerId,
                 restaurantRequest.name(),
                 restaurantRequest.capacity(),
                 restaurantRequest.hours().open(),
                 restaurantRequest.hours().close(),
-                reservationsDuration);
+                restaurantRequest.reservations());
 
         URI newProductURI = UriBuilder.fromResource(RestaurantResource.class).path(restaurantId).build();
         return Response.created(newProductURI).build();
@@ -88,12 +83,12 @@ public class RestaurantResource {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRestaurant(@HeaderParam("Owner") String ownerId, @PathParam("id") String restaurantId)
+    public RestaurantResponse getRestaurant(@HeaderParam("Owner") String ownerId, @PathParam("id") String restaurantId)
         throws MissingParameterException, NotFoundException {
         headerValidator.verifyMissingHeader(ownerId);
-        RestaurantDetails response = restaurantService.getRestaurant(restaurantId);
+        RestaurantResponse response = restaurantService.getRestaurant(restaurantId);
         getRestaurantValidator.validateRestaurantOwnership(ownerId, response.ownerId());
-        return Response.ok(response).build();
+        return response;
     }
 
     @POST

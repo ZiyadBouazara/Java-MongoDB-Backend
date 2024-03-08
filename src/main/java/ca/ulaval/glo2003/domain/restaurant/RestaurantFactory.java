@@ -1,16 +1,15 @@
-package ca.ulaval.glo2003.domain.factories;
+package ca.ulaval.glo2003.domain.restaurant;
 
+import ca.ulaval.glo2003.controllers.models.ReservationConfigurationDTO;
 import ca.ulaval.glo2003.domain.utils.Hours;
-import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
-import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 
 public class RestaurantFactory {
 
-    public Restaurant buildRestaurant(String ownerId,
-                                      String name,
-                                      Integer capacity,
-                                      Hours hours,
-                                      ReservationConfiguration reservations) {
+    public Restaurant build(String ownerId,
+                            String name,
+                            Integer capacity,
+                            Hours hours,
+                            ReservationConfigurationDTO reservations) {
         if (hasReservationConfiguration(reservations)) {
             return buildRestaurantWithReservationConfiguration(
                     ownerId,
@@ -26,19 +25,20 @@ public class RestaurantFactory {
         }
     }
 
-    private boolean hasReservationConfiguration(ReservationConfiguration reservations) {
+    private boolean hasReservationConfiguration(ReservationConfigurationDTO reservations) {
         return reservations != null;
     }
 
     private Restaurant buildRestaurantWithReservationConfiguration(
-            String ownerId, String name, Integer capacity, Hours hours, ReservationConfiguration reservations) {
+            String ownerId, String name, Integer capacity, Hours hours, ReservationConfigurationDTO reservations) {
+        ReservationConfiguration reservationConfiguration = new ReservationConfiguration(reservations.duration());
 
         return new Restaurant(
             ownerId,
             name,
             capacity,
             hours,
-            reservations);
+            reservationConfiguration);
     }
 
     private Restaurant buildRestaurantWithoutReservationConfiguration(

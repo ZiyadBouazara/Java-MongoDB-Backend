@@ -1,26 +1,27 @@
 package ca.ulaval.glo2003.service;
 
-import ca.ulaval.glo2003.controllers.models.HoursDTO;
 import ca.ulaval.glo2003.controllers.models.ReservationConfigurationDTO;
-import ca.ulaval.glo2003.controllers.models.RestaurantDetails;
 import ca.ulaval.glo2003.controllers.models.RestaurantResponse;
 import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
-import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
+import ca.ulaval.glo2003.domain.restaurant.RestaurantFactory;
 import ca.ulaval.glo2003.domain.utils.Hours;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class RestaurantService {
     private final RestaurantAndReservationRepository restaurantAndReservationRepository;
+    private final RestaurantFactory restaurantFactory;
 
     @Inject
-    public RestaurantService(RestaurantAndReservationRepository restaurantAndReservationRepository) {
+    public RestaurantService(RestaurantAndReservationRepository restaurantAndReservationRepository,
+                             RestaurantFactory restaurantFactory) {
+
         this.restaurantAndReservationRepository = restaurantAndReservationRepository;
+        this.restaurantFactory = restaurantFactory;
     }
 
     public String createRestaurant(String ownerId,
@@ -28,32 +29,25 @@ public class RestaurantService {
                                    Integer capacity,
                                    String openTime,
                                    String closeTime,
-                                   Optional<Integer> reservationsDuration) {
+                                   ReservationConfigurationDTO reservationsDuration) {
         Hours hours = new Hours(openTime, closeTime);
-        ReservationConfiguration reservations = constructRestaurantBasedOnReservationConfiguration(reservationsDuration);
-        Restaurant restaurant = new Restaurant(ownerId, name, capacity, hours, reservations);
+        Restaurant restaurant = restaurantFactory.build(ownerId, name, capacity, hours, reservationsDuration);
         restaurantAndReservationRepository.saveRestaurant(restaurant);
         return restaurant.getId();
     }
 
-    public List<RestaurantDetails> getRestaurantsForOwnerId(String ownerId) {
+    public List<RestaurantResponse> getRestaurantsForOwnerId(String ownerId) {
         List<Restaurant> ownerRestaurants = restaurantAndReservationRepository.findRestaurantsByOwnerId(ownerId);
         return ownerRestaurants.stream()
                 .map(RestaurantResponse::new)
                 .collect(Collectors.toList());
     }
 
-    public RestaurantDetails getRestaurant(String restaurantId) {
+    public RestaurantResponse getRestaurant(String restaurantId) {
         Restaurant restaurant = restaurantAndReservationRepository.findRestaurantByRestaurantId(restaurantId);
         if (restaurant == null) {
             throw new NotFoundException("Restaurant with ID " + restaurantId + " not found");
         }
         return new RestaurantResponse(restaurant);
-    }
-
-    private ReservationConfiguration constructRestaurantBasedOnReservationConfiguration(Optional<Integer> reservationsDuration) {
-        ReservationConfiguration reservations;
-        reservations = reservationsDuration.map(ReservationConfiguration::new).orElseGet(ReservationConfiguration::new);
-        return reservations;
     }
 }
