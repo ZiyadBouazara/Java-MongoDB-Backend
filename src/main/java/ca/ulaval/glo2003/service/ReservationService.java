@@ -1,5 +1,7 @@
 package ca.ulaval.glo2003.service;
 
+import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
+import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.service.dtos.CustomerDTO;
 import ca.ulaval.glo2003.domain.customer.Customer;
 import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
@@ -27,7 +29,12 @@ public class ReservationService {
             String date,
             String startTime,
             Integer groupSize,
-            CustomerDTO customerDTO) {
+            CustomerDTO customerDTO) throws InvalidParameterException {
+
+        Restaurant restaurant = restaurantAndReservationRepository.findRestaurantByRestaurantId(restaurantId);
+        if (restaurant.getCapacity() < groupSize) {
+            throw new InvalidParameterException("The reservation groupSize cannot exceed the restaurant's capacity");
+        }
 
         Customer customer = customerAssembler.fromDTO(customerDTO);
         Reservation reservation = reservationFactory.createReservation(restaurantId, date, startTime, groupSize, customer);
