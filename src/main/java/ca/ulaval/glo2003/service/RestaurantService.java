@@ -35,7 +35,7 @@ public class RestaurantService {
                                    HoursDTO hoursDto,
                                    ReservationConfigurationDTO reservationsDuration) {
         Hours hours = hoursAssembler.fromDTO(hoursDto);
-        Restaurant restaurant = restaurantFactory.buildRestaurant(ownerId, name, capacity, hours, reservationsDuration);
+        Restaurant restaurant = restaurantFactory.createRestaurant(ownerId, name, capacity, hours, reservationsDuration);
         restaurantAndReservationRepository.saveRestaurant(restaurant);
         return restaurant.getId();
     }

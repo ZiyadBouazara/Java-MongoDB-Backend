@@ -5,11 +5,11 @@ import ca.ulaval.glo2003.domain.hours.Hours;
 
 public class RestaurantFactory {
 
-    public Restaurant buildRestaurant(String ownerId,
-                                      String name,
-                                      Integer capacity,
-                                      Hours hours,
-                                      ReservationConfigurationDTO reservations) {
+    public Restaurant createRestaurant(String ownerId,
+                                       String name,
+                                       Integer capacity,
+                                       Hours hours,
+                                       ReservationConfigurationDTO reservations) {
 
         if (hasReservationConfiguration(reservations)) {
             return buildRestaurantWithReservationConfiguration(
