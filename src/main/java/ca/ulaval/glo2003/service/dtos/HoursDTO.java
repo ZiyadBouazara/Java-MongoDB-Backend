@@ -1,7 +1,9 @@
 package ca.ulaval.glo2003.service.dtos;
 
-public record HoursDTO(String open,
-                       String close) {
+import jakarta.validation.constraints.NotBlank;
+
+public record HoursDTO(@NotBlank String open,
+                       @NotBlank String close) {
 
 }
 

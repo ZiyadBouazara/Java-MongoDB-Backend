@@ -1,4 +1,6 @@
 package ca.ulaval.glo2003.service.dtos;
 
-public record ReservationConfigurationDTO(Integer duration) {
+import jakarta.annotation.Nullable;
+
+public record ReservationConfigurationDTO(@Nullable Integer duration) {
 }

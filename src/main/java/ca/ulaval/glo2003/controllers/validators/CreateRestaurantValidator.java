@@ -21,7 +21,7 @@ public class CreateRestaurantValidator {
     public void verifyParameters(RestaurantRequest restaurantRequest)
             throws InvalidParameterException, MissingParameterException {
 
-        verifyMissingParameters(restaurantRequest);
+        //verifyMissingParameters(restaurantRequest);
         verifyValidParameters(restaurantRequest);
     }
 
