@@ -21,6 +21,7 @@ public class ReservationService {
         this.reservationFactory = reservationFactory;
         this.customerAssembler = customerAssembler;
     }
+
     public String createReservation(
             String restaurantId,
             String date,
@@ -29,7 +30,7 @@ public class ReservationService {
             CustomerDTO customerDTO) {
 
         Customer customer = customerAssembler.fromDTO(customerDTO);
-        Reservation reservation = reservationFactory.buildReservation(restaurantId, date, startTime, groupSize, customer);
+        Reservation reservation = reservationFactory.createReservation(restaurantId, date, startTime, groupSize, customer);
         restaurantAndReservationRepository.saveReservation(reservation);
         return reservation.getId();
     }
