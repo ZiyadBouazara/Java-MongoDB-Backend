@@ -3,10 +3,13 @@ package ca.ulaval.glo2003.controllers;
 import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
 import ca.ulaval.glo2003.controllers.validators.HeaderValidator;
+import ca.ulaval.glo2003.controllers.validators.SearchRestaurantValidator;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
+import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
+import ca.ulaval.glo2003.domain.fuzzySearch.FuzzySearch;
 import ca.ulaval.glo2003.service.RestaurantService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -31,17 +34,20 @@ public class RestaurantResource {
     private final CreateRestaurantValidator createRestaurantValidator;
     private final GetRestaurantValidator getRestaurantValidator;
     private final HeaderValidator headerValidator;
+    private final SearchRestaurantValidator restaurantSearchValidator;
 
     @Inject
     public RestaurantResource(RestaurantService restaurantService,
                               HeaderValidator headerValidator,
                               CreateRestaurantValidator createRestaurantValidator,
-                              GetRestaurantValidator getRestaurantValidator) {
+                              GetRestaurantValidator getRestaurantValidator,
+                              SearchRestaurantValidator restaurantSearchValidator) {
 
         this.restaurantService = restaurantService;
         this.headerValidator = headerValidator;
         this.createRestaurantValidator = createRestaurantValidator;
         this.getRestaurantValidator = getRestaurantValidator;
+        this.restaurantSearchValidator = restaurantSearchValidator;
     }
 
     @GET
@@ -79,4 +85,15 @@ public class RestaurantResource {
         getRestaurantValidator.validateRestaurantOwnership(ownerId, response.ownerId());
         return response;
     }
+
+    @POST
+    @Path("/search/restaurants")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<FuzzySearchResponse> searchRestaurants(FuzzySearch search) throws InvalidParameterException {
+        SearchRestaurantValidator.verifyFuzzySearchValidParameters(search);
+        return restaurantService.getAllRestaurantsForSearch(search);
+    }
+
+
 }
