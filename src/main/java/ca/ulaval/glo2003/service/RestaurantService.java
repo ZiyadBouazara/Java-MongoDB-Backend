@@ -1,5 +1,6 @@
 package ca.ulaval.glo2003.service;
 
+import ca.ulaval.glo2003.controllers.assemblers.RestaurantResponseAssembler;
 import ca.ulaval.glo2003.service.dtos.HoursDTO;
 import ca.ulaval.glo2003.service.dtos.ReservationConfigurationDTO;
 import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
@@ -15,18 +16,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class RestaurantService {
+
     private final RestaurantAndReservationRepository restaurantAndReservationRepository;
     private final RestaurantFactory restaurantFactory;
     private final HoursAssembler hoursAssembler;
+    private final RestaurantResponseAssembler restaurantResponseAssembler;
 
     @Inject
     public RestaurantService(RestaurantAndReservationRepository restaurantAndReservationRepository,
-                             RestaurantFactory restaurantFactory,
-                             HoursAssembler hoursAssembler) {
+                             RestaurantFactory restaurantFactory, HoursAssembler hoursAssembler,
+                             RestaurantResponseAssembler restaurantResponseAssembler) {
 
         this.restaurantAndReservationRepository = restaurantAndReservationRepository;
         this.restaurantFactory = restaurantFactory;
         this.hoursAssembler = hoursAssembler;
+        this.restaurantResponseAssembler = restaurantResponseAssembler;
     }
 
     public String createRestaurant(String ownerId,
@@ -43,8 +47,8 @@ public class RestaurantService {
     public List<RestaurantResponse> getRestaurantsForOwnerId(String ownerId) {
         List<Restaurant> ownerRestaurants = restaurantAndReservationRepository.findRestaurantsByOwnerId(ownerId);
         return ownerRestaurants.stream()
-                .map(RestaurantResponse::new)
-                .collect(Collectors.toList());
+            .map(restaurantResponseAssembler::toDTO)
+            .collect(Collectors.toList());
     }
 
     public RestaurantResponse getRestaurant(String restaurantId) {
@@ -52,6 +56,6 @@ public class RestaurantService {
         if (restaurant == null) {
             throw new NotFoundException("Restaurant with ID " + restaurantId + " not found");
         }
-        return new RestaurantResponse(restaurant);
+        return restaurantResponseAssembler.toDTO(restaurant);
     }
 }

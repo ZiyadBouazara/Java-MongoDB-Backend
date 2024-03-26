@@ -1,5 +1,6 @@
 package ca.ulaval.glo2003.injection;
 
+import ca.ulaval.glo2003.controllers.assemblers.RestaurantResponseAssembler;
 import ca.ulaval.glo2003.controllers.validators.CreateReservationValidator;
 import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
@@ -12,6 +13,7 @@ import ca.ulaval.glo2003.service.ReservationService;
 import ca.ulaval.glo2003.service.RestaurantService;
 import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
 import ca.ulaval.glo2003.service.assembler.HoursAssembler;
+import ca.ulaval.glo2003.service.assembler.ReservationConfigurationAssembler;
 import jakarta.inject.Singleton;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 
@@ -33,5 +35,7 @@ public class ApplicationBinder extends AbstractBinder {
         bind(HoursAssembler.class).to(HoursAssembler.class);
         bind(CustomerAssembler.class).to(CustomerAssembler.class);
         bind(ReservationFactory.class).to(ReservationFactory.class);
+        bind(ReservationConfigurationAssembler.class).to(ReservationConfigurationAssembler.class);
+        bind(RestaurantResponseAssembler.class).to(RestaurantResponseAssembler.class);
     }
 }
