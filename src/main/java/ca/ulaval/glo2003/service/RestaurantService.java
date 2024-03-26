@@ -1,5 +1,8 @@
 package ca.ulaval.glo2003.service;
 
+
+import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
+import ca.ulaval.glo2003.domain.fuzzySearch.FuzzySearch;
 import ca.ulaval.glo2003.service.dtos.HoursDTO;
 import ca.ulaval.glo2003.service.dtos.ReservationConfigurationDTO;
 import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
@@ -11,6 +14,7 @@ import ca.ulaval.glo2003.domain.hours.Hours;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,4 +58,37 @@ public class RestaurantService {
         }
         return new RestaurantResponse(restaurant);
     }
+
+    //TODO: Implement this method when a getAllRestaurants method gets created in the repo.
+    public List<FuzzySearchResponse> getAllRestaurantsForSearch(FuzzySearch search) {
+        List<FuzzySearchResponse> searchedRestaurants = new ArrayList<>();
+
+        /*for (Restaurant restaurant : restaurants.values()) {
+            if (shouldMatchRestaurantName(search, restaurant) &&
+                    shouldMatchRestaurantHours(search, restaurant)) {
+                searchedRestaurants.add(getFuzzySearchResponseForRestaurant(restaurant));
+            }
+        }*/
+
+        return searchedRestaurants;
+    }
+
+    //TODO: (possibility to move these elsewhere in utils of service layer)
+    public boolean shouldMatchRestaurantName(FuzzySearch search, Restaurant restaurant) {
+        return search.getName() == null || FuzzySearch.isFuzzySearchOnNameSuccessful(search.getName(), restaurant.getName());
+    }
+
+    public boolean shouldMatchRestaurantHours(FuzzySearch search, Restaurant restaurant) {
+        if (search.getHours() == null) {
+            return true;
+        }
+
+        return FuzzySearch.isFromTimeMatching(search.getHours().getFrom(), restaurant.getHours().getOpen()) &&
+                FuzzySearch.isToTimeMatching(search.getHours().getTo(), restaurant.getHours().getClose());
+    }
+
+    public FuzzySearchResponse getFuzzySearchResponseForRestaurant(Restaurant restaurant) {
+        return new FuzzySearchResponse(restaurant);
+    }
+
 }
