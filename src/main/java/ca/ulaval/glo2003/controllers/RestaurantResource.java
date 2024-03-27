@@ -1,5 +1,8 @@
 package ca.ulaval.glo2003.controllers;
 
+import ca.ulaval.glo2003.Main;
+import ca.ulaval.glo2003.controllers.requests.ReservationRequest;
+import ca.ulaval.glo2003.controllers.validators.CreateReservationValidator;
 import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
 import ca.ulaval.glo2003.controllers.validators.HeaderValidator;
@@ -7,6 +10,7 @@ import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
+import ca.ulaval.glo2003.service.ReservationService;
 import ca.ulaval.glo2003.service.RestaurantService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -27,21 +31,25 @@ import java.util.List;
 
 @Path("restaurants")
 public class RestaurantResource {
+    private final ReservationService reservationService;
     private final RestaurantService restaurantService;
     private final CreateRestaurantValidator createRestaurantValidator;
     private final GetRestaurantValidator getRestaurantValidator;
     private final HeaderValidator headerValidator;
+    private final CreateReservationValidator createReservationValidator;
 
     @Inject
-    public RestaurantResource(RestaurantService restaurantService,
+    public RestaurantResource(ReservationService reservationService, RestaurantService restaurantService,
                               HeaderValidator headerValidator,
                               CreateRestaurantValidator createRestaurantValidator,
-                              GetRestaurantValidator getRestaurantValidator) {
-
+                              GetRestaurantValidator getRestaurantValidator,
+                              CreateReservationValidator createReservationValidator) {
+        this.reservationService = reservationService;
         this.restaurantService = restaurantService;
         this.headerValidator = headerValidator;
         this.createRestaurantValidator = createRestaurantValidator;
         this.getRestaurantValidator = getRestaurantValidator;
+        this.createReservationValidator = createReservationValidator;
     }
 
     @GET
@@ -59,11 +67,11 @@ public class RestaurantResource {
         createRestaurantValidator.validate(ownerId, restaurantRequest);
 
         String restaurantId = restaurantService.createRestaurant(
-                ownerId,
-                restaurantRequest.name(),
-                restaurantRequest.capacity(),
-                restaurantRequest.hours(),
-                restaurantRequest.reservations());
+            ownerId,
+            restaurantRequest.name(),
+            restaurantRequest.capacity(),
+            restaurantRequest.hours(),
+            restaurantRequest.reservations());
 
         URI newProductURI = UriBuilder.fromResource(RestaurantResource.class).path(restaurantId).build();
         return Response.created(newProductURI).build();
@@ -79,4 +87,26 @@ public class RestaurantResource {
         getRestaurantValidator.validateRestaurantOwnership(ownerId, response.ownerId());
         return response;
     }
+
+    @POST
+    @Path("/{id}/reservations")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest)
+        throws InvalidParameterException, MissingParameterException {
+        createReservationValidator.validateReservationRequest(reservationRequest);
+
+        String createdReservationId = reservationService.createReservation(
+            restaurantId,
+            reservationRequest.date(),
+            reservationRequest.startTime(),
+            reservationRequest.groupSize(),
+            reservationRequest.customer());
+
+        URI newReservationURI = UriBuilder.fromPath(Main.BASE_URI)
+            .path("reservations")
+            .path(createdReservationId)
+            .build();
+        return Response.created(newReservationURI).build();
+    }
 }
+

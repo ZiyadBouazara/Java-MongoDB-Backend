@@ -8,6 +8,7 @@ import jakarta.ws.rs.NotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class InMemoryRestaurantAndReservationRepository implements RestaurantAndReservationRepository {
@@ -40,4 +41,12 @@ public class InMemoryRestaurantAndReservationRepository implements RestaurantAnd
         return restaurants.get(restaurantId);
     }
 
+    @Override
+    public Restaurant findRestaurantByReservationId(String reservationId) throws NotFoundException {
+        Optional<Restaurant> foundRestaurant = restaurants.values().stream()
+            .filter(restaurant -> restaurant.getReservationsById().containsKey(reservationId))
+            .findFirst();
+
+        return foundRestaurant.orElseThrow(NotFoundException::new);
+    }
 }

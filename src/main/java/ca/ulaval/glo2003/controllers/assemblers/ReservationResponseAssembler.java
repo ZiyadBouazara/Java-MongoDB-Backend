@@ -11,17 +11,14 @@ import ca.ulaval.glo2003.service.dtos.TimeDTO;
 public class ReservationResponseAssembler {
 
     public ReservationResponse toDTO(Reservation reservation, Restaurant restaurant) {
-        TimeDTO timeDTO = createTimeDTO(reservation, restaurant);
-        CustomerDTO customerDTO = createCustomerDTO(reservation);
-        RestaurantResponseWithoutConfiguration restaurantResponseWithoutConfiguration = createRestaurantResponseWithoutConfiguration(restaurant);
 
         return new ReservationResponse(
             reservation.getId(),
             reservation.getDate(),
-            timeDTO,
+            createTimeDTO(reservation, restaurant),
             reservation.getGroupSize(),
-            customerDTO,
-            restaurantResponseWithoutConfiguration);
+            createCustomerDTO(reservation),
+            createRestaurantResponseWithoutConfiguration(restaurant));
     }
 
     private TimeDTO createTimeDTO(Reservation reservation, Restaurant restaurant) {
@@ -29,7 +26,10 @@ public class ReservationResponseAssembler {
     }
 
     private CustomerDTO createCustomerDTO(Reservation reservation) {
-        return new CustomerDTO(reservation.getCustomer().getName(), reservation.getCustomer().getEmail(), reservation.getCustomer().getPhoneNumber());
+        return new CustomerDTO(
+            reservation.getCustomer().getName(),
+            reservation.getCustomer().getEmail(),
+            reservation.getCustomer().getPhoneNumber());
     }
 
     private RestaurantResponseWithoutConfiguration createRestaurantResponseWithoutConfiguration(Restaurant restaurant) {
