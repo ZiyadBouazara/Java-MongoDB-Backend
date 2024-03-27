@@ -6,6 +6,7 @@ import ca.ulaval.glo2003.controllers.validators.CreateReservationValidator;
 import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
 import ca.ulaval.glo2003.controllers.validators.HeaderValidator;
+import ca.ulaval.glo2003.controllers.validators.SearchRestaurantValidator;
 import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.ReservationFactory;
 import ca.ulaval.glo2003.domain.restaurant.RestaurantFactory;
@@ -31,6 +32,7 @@ public class ApplicationBinder extends AbstractBinder {
         bind(CreateRestaurantValidator.class).to(CreateRestaurantValidator.class);
         bind(CreateReservationValidator.class).to(CreateReservationValidator.class);
         bind(GetRestaurantValidator.class).to(GetRestaurantValidator.class);
+        bind(SearchRestaurantValidator.class).to(SearchRestaurantValidator.class);
         bind(RestaurantFactory.class).to(RestaurantFactory.class);
         bind(HoursAssembler.class).to(HoursAssembler.class);
         bind(CustomerAssembler.class).to(CustomerAssembler.class);

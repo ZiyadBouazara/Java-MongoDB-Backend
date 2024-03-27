@@ -12,17 +12,17 @@ public class RestaurantFactory {
                                        ReservationConfigurationDTO reservations) {
 
         if (hasReservationConfiguration(reservations)) {
-            return buildRestaurantWithReservationConfiguration(
-                    ownerId,
-                    name,
-                    capacity,
-                    hours,
-                    reservations);
+            return createRestaurantWithReservationConfiguration(
+                ownerId,
+                name,
+                capacity,
+                hours,
+                reservations);
         } else {
-            return buildRestaurantWithoutReservationConfiguration(ownerId,
-                    name,
-                    capacity,
-                    hours);
+            return createRestaurantWithoutReservationConfiguration(ownerId,
+                name,
+                capacity,
+                hours);
         }
     }
 
@@ -30,8 +30,8 @@ public class RestaurantFactory {
         return reservations != null;
     }
 
-    private Restaurant buildRestaurantWithReservationConfiguration(
-            String ownerId, String name, Integer capacity, Hours hours, ReservationConfigurationDTO reservations) {
+    private Restaurant createRestaurantWithReservationConfiguration(
+        String ownerId, String name, Integer capacity, Hours hours, ReservationConfigurationDTO reservations) {
         ReservationConfiguration reservationConfiguration = new ReservationConfiguration(reservations.duration());
 
         return new Restaurant(
@@ -42,8 +42,8 @@ public class RestaurantFactory {
             reservationConfiguration);
     }
 
-    private Restaurant buildRestaurantWithoutReservationConfiguration(
-            String ownerId, String name, Integer capacity, Hours hours) {
+    private Restaurant createRestaurantWithoutReservationConfiguration(
+        String ownerId, String name, Integer capacity, Hours hours) {
         return new Restaurant(
             ownerId,
             name,
