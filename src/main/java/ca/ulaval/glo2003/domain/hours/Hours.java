@@ -3,7 +3,8 @@ package ca.ulaval.glo2003.domain.hours;
 public class Hours {
     private String open;
     private String close;
-
+    public Hours() {
+    }
     public Hours(String open, String close) {
         this.open = open;
         this.close = close;
