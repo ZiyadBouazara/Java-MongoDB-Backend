@@ -3,7 +3,7 @@ package ca.ulaval.glo2003.domain.restaurant.utils;
 import org.junit.jupiter.api.Test;
 
 
-import static ca.ulaval.glo2003.domain.fuzzySearch.FuzzySearch.*;
+import static ca.ulaval.glo2003.domain.utils.FuzzySearch.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FuzzySearchTest {

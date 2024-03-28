@@ -15,6 +15,7 @@ import ca.ulaval.glo2003.service.ReservationService;
 import ca.ulaval.glo2003.service.RestaurantService;
 import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
 import ca.ulaval.glo2003.service.assembler.HoursAssembler;
+import ca.ulaval.glo2003.service.assembler.VisitTimeAssembler;
 import jakarta.inject.Singleton;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 
@@ -35,6 +36,7 @@ public class ApplicationBinder extends AbstractBinder {
         bind(SearchRestaurantValidator.class).to(SearchRestaurantValidator.class);
         bind(RestaurantFactory.class).to(RestaurantFactory.class);
         bind(HoursAssembler.class).to(HoursAssembler.class);
+        bind(VisitTimeAssembler.class).to(VisitTimeAssembler.class);
         bind(CustomerAssembler.class).to(CustomerAssembler.class);
         bind(ReservationFactory.class).to(ReservationFactory.class);
         bind(RestaurantResponseAssembler.class).to(RestaurantResponseAssembler.class);

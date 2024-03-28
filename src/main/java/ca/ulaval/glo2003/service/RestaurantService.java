@@ -1,8 +1,10 @@
 package ca.ulaval.glo2003.service;
 
 import ca.ulaval.glo2003.controllers.assemblers.RestaurantResponseAssembler;
+import ca.ulaval.glo2003.controllers.requests.FuzzySearchRequest;
 import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
-import ca.ulaval.glo2003.domain.fuzzySearch.FuzzySearch;
+import ca.ulaval.glo2003.domain.utils.FuzzySearch;
+import ca.ulaval.glo2003.service.assembler.VisitTimeAssembler;
 import ca.ulaval.glo2003.service.dtos.HoursDTO;
 import ca.ulaval.glo2003.service.dtos.ReservationConfigurationDTO;
 import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
@@ -10,7 +12,7 @@ import ca.ulaval.glo2003.service.assembler.HoursAssembler;
 import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.restaurant.RestaurantFactory;
-import ca.ulaval.glo2003.domain.hours.Hours;
+import ca.ulaval.glo2003.domain.utils.Hours;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 
@@ -62,7 +64,7 @@ public class RestaurantService {
         return restaurantResponseAssembler.toDTO(restaurant);
     }
 
-    public List<FuzzySearchResponse> getAllRestaurantsForSearch(FuzzySearch search) {
+    public List<FuzzySearchResponse> getAllRestaurantsForSearch(FuzzySearchRequest search) {
         List<FuzzySearchResponse> searchedRestaurants = new ArrayList<>();
 
         for (Restaurant restaurant : restaurantAndReservationRepository.getAllRestaurants()) {
@@ -71,26 +73,26 @@ public class RestaurantService {
                 searchedRestaurants.add(getFuzzySearchResponseForRestaurant(restaurant));
             }
         }
-
         return searchedRestaurants;
     }
 
     //TODO: (possibility to move these elsewhere in utils of service layer)
-    public boolean shouldMatchRestaurantName(FuzzySearch search, Restaurant restaurant) {
-        return search.getName() == null || FuzzySearch.isFuzzySearchOnNameSuccessful(search.getName(), restaurant.getName());
+    public boolean shouldMatchRestaurantName(FuzzySearchRequest search, Restaurant restaurant) {
+        return search.name() == null || FuzzySearch.isFuzzySearchOnNameSuccessful(search.name(), restaurant.getName());
     }
 
-    public boolean shouldMatchRestaurantHours(FuzzySearch search, Restaurant restaurant) {
-        if (search.getHours() == null) {
+    public boolean shouldMatchRestaurantHours(FuzzySearchRequest search, Restaurant restaurant) {
+        //TODO: Test without Fuzzy assembler here, and test with it then (should work tho)
+        if (search.visitTime() == null) {
             return true;
         }
 
-        return FuzzySearch.isFromTimeMatching(search.getHours().getFrom(), restaurant.getHours().getOpen()) &&
-                FuzzySearch.isToTimeMatching(search.getHours().getTo(), restaurant.getHours().getClose());
+        return FuzzySearch.isFromTimeMatching(search.visitTime().from(), restaurant.getHours().getOpen()) &&
+                FuzzySearch.isToTimeMatching(search.visitTime().to(), restaurant.getHours().getClose());
     }
 
     public FuzzySearchResponse getFuzzySearchResponseForRestaurant(Restaurant restaurant) {
-        return new FuzzySearchResponse(restaurant);
+        return new FuzzySearchResponse(restaurant.getId(), restaurant.getName(), restaurant.getCapacity(), hoursAssembler.toDTO(restaurant.getHours()));
     }
 
 }

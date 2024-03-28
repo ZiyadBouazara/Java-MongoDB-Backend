@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.domain.visitTime;
+package ca.ulaval.glo2003.domain.utils;
 
 public class VisitTime {
     private String from;

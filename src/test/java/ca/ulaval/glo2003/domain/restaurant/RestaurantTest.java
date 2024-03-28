@@ -1,7 +1,7 @@
 package ca.ulaval.glo2003.domain.restaurant;
 
 import ca.ulaval.glo2003.domain.reservation.Reservation;
-import ca.ulaval.glo2003.domain.hours.Hours;
+import ca.ulaval.glo2003.domain.utils.Hours;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

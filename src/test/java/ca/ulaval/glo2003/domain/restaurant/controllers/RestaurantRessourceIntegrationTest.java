@@ -6,7 +6,7 @@
 //import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
 //import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
 //import ca.ulaval.glo2003.controllers.validators.HeaderValidator;
-//import ca.ulaval.glo2003.domain.hours.Hours;
+//import ca.ulaval.glo2003.domain.utils.Hours;
 //import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 //import ca.ulaval.glo2003.domain.restaurant.controllers.api.JerseyTestApi;
 //import ca.ulaval.glo2003.service.RestaurantService;

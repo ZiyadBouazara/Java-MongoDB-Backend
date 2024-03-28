@@ -1,6 +1,5 @@
-package ca.ulaval.glo2003.domain.fuzzySearch;
+package ca.ulaval.glo2003.domain.utils;
 
-import ca.ulaval.glo2003.domain.visitTime.VisitTime;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalTime;

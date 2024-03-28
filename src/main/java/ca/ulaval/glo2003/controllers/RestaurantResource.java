@@ -1,7 +1,9 @@
 package ca.ulaval.glo2003.controllers;
 
 import ca.ulaval.glo2003.Main;
+import ca.ulaval.glo2003.controllers.requests.FuzzySearchRequest;
 import ca.ulaval.glo2003.controllers.requests.ReservationRequest;
+import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
 import ca.ulaval.glo2003.controllers.validators.CreateReservationValidator;
 import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
@@ -11,8 +13,6 @@ import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
-import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
-import ca.ulaval.glo2003.domain.fuzzySearch.FuzzySearch;
 import ca.ulaval.glo2003.service.ReservationService;
 import ca.ulaval.glo2003.service.RestaurantService;
 import jakarta.inject.Inject;
@@ -98,7 +98,7 @@ public class RestaurantResource {
     @Path("/search/restaurants")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public List<FuzzySearchResponse> searchRestaurants(FuzzySearch search) throws InvalidParameterException {
+    public List<FuzzySearchResponse> searchRestaurants(FuzzySearchRequest search) throws InvalidParameterException {
         SearchRestaurantValidator.verifyFuzzySearchValidParameters(search);
         return restaurantService.getAllRestaurantsForSearch(search);
     }
