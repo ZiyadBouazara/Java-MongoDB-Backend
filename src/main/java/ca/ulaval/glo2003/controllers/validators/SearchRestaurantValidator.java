@@ -2,7 +2,7 @@ package ca.ulaval.glo2003.controllers.validators;
 
 import ca.ulaval.glo2003.controllers.requests.FuzzySearchRequest;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
-import ca.ulaval.glo2003.domain.utils.FuzzySearch;
+
 import java.time.LocalTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,20 +14,20 @@ public class SearchRestaurantValidator {
     private static final Pattern TIME_PATTERN = Pattern.compile(TIME_FORMAT_REGEX);
 
 
-    public static void verifyFuzzySearchValidParameters(FuzzySearchRequest fuzzySearch) throws InvalidParameterException {
+    public void verifyFuzzySearchValidParameters(FuzzySearchRequest fuzzySearch) throws InvalidParameterException {
         verifyFuzzySearchNotNull(fuzzySearch);
         verifyFuzzySearchValidName(fuzzySearch);
-        verifyFuzzySearchValidHours(fuzzySearch);
+        //verifyFuzzySearchValidVisitTime(fuzzySearch);
     }
 
-    public static void verifyFuzzySearchValidName(FuzzySearchRequest fuzzySearch) throws InvalidParameterException {
+    public void verifyFuzzySearchValidName(FuzzySearchRequest fuzzySearch) throws InvalidParameterException {
         if (fuzzySearch.name() != null && !(fuzzySearch.name() instanceof String)) {
             throw new InvalidParameterException("Name parameter is not a String");
         }
     }
 
-    private static void verifyFuzzySearchValidHours(FuzzySearchRequest fuzzySearch) throws InvalidParameterException {
-        verifyValidVisitTimeHours(fuzzySearch);
+    private void verifyFuzzySearchValidVisitTime(FuzzySearchRequest fuzzySearch) throws InvalidParameterException {
+        verifyValidVisitTimeFormatForFromAndTo(fuzzySearch);
         if (fuzzySearch.visitTime() != null) {
             String from = fuzzySearch.visitTime().from();
             String to = fuzzySearch.visitTime().to();
@@ -49,20 +49,12 @@ public class SearchRestaurantValidator {
         }
     }
 
-    private static void verifyValidVisitTimeHours(FuzzySearchRequest fuzzySearch) throws InvalidParameterException {
-        assert fuzzySearch.visitTime() != null;
+    private void verifyValidVisitTimeFormatForFromAndTo(FuzzySearchRequest fuzzySearch) throws InvalidParameterException {
         verifyValidVisitTimeFormat(fuzzySearch.visitTime().from());
         verifyValidVisitTimeFormat(fuzzySearch.visitTime().to());
     }
 
-    public static void verifyValidTimeFormat(String time) throws InvalidParameterException {
-        Matcher matcher = TIME_PATTERN.matcher(time);
-        if (!matcher.matches()) {
-            throw new InvalidParameterException("Invalid time format: " + time + ". Use the 'HH:MM:SS' format");
-        }
-    }
-
-    public static void verifyFuzzySearchNotNull(FuzzySearchRequest fuzzySearch) throws InvalidParameterException {
+    private void verifyFuzzySearchNotNull(FuzzySearchRequest fuzzySearch) throws InvalidParameterException {
         if (fuzzySearch == null) {
             throw new InvalidParameterException("Search object is null");
         }

@@ -13,8 +13,10 @@ import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
+import ca.ulaval.glo2003.domain.utils.FuzzySearch;
 import ca.ulaval.glo2003.service.ReservationService;
 import ca.ulaval.glo2003.service.RestaurantService;
+import ca.ulaval.glo2003.service.assembler.FuzzySearchAssembler;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -32,7 +34,7 @@ import java.net.URI;
 import java.util.List;
 
 
-@Path("restaurants")
+@Path("/")
 public class RestaurantResource {
     private final ReservationService reservationService;
     private final RestaurantService restaurantService;
@@ -41,24 +43,28 @@ public class RestaurantResource {
     private final HeaderValidator headerValidator;
     private final CreateReservationValidator createReservationValidator;
     private final SearchRestaurantValidator restaurantSearchValidator;
+    private final FuzzySearchAssembler fuzzySearchAssembler;
 
     @Inject
     public RestaurantResource(ReservationService reservationService, RestaurantService restaurantService,
                               HeaderValidator headerValidator,
                               CreateRestaurantValidator createRestaurantValidator,
                               GetRestaurantValidator getRestaurantValidator,
-                              SearchRestaurantValidator restaurantSearchValidator,
-                              CreateReservationValidator createReservationValidator) {
+                              CreateReservationValidator createReservationValidator,
+                              SearchRestaurantValidator searchRestaurantValidator,
+                              FuzzySearchAssembler fuzzySearchAssembler) {
         this.reservationService = reservationService;
         this.restaurantService = restaurantService;
         this.headerValidator = headerValidator;
         this.createRestaurantValidator = createRestaurantValidator;
         this.getRestaurantValidator = getRestaurantValidator;
-        this.restaurantSearchValidator = restaurantSearchValidator;
         this.createReservationValidator = createReservationValidator;
+        this.restaurantSearchValidator = searchRestaurantValidator;
+        this.fuzzySearchAssembler = fuzzySearchAssembler;
     }
 
     @GET
+    @Path("restaurants")
     @Produces(MediaType.APPLICATION_JSON)
     public List<RestaurantResponse> getRestaurants(@HeaderParam("Owner") String ownerId) throws MissingParameterException {
         headerValidator.verifyMissingHeader(ownerId);
@@ -66,6 +72,7 @@ public class RestaurantResource {
     }
 
     @POST
+    @Path("restaurants")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createRestaurant(@HeaderParam("Owner") String ownerId, RestaurantRequest restaurantRequest)
         throws InvalidParameterException, MissingParameterException, NotFoundException {
@@ -84,7 +91,7 @@ public class RestaurantResource {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("restaurants/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public RestaurantResponse getRestaurant(@HeaderParam("Owner") String ownerId, @PathParam("id") String restaurantId)
         throws MissingParameterException, NotFoundException {
@@ -95,16 +102,19 @@ public class RestaurantResource {
     }
 
     @POST
-    @Path("/search/restaurants")
+    @Path("search/restaurants")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public List<FuzzySearchResponse> searchRestaurants(FuzzySearchRequest search) throws InvalidParameterException {
-        SearchRestaurantValidator.verifyFuzzySearchValidParameters(search);
-        return restaurantService.getAllRestaurantsForSearch(search);
+        restaurantSearchValidator.verifyFuzzySearchValidParameters(search);
+
+        //TODO: Confirm if the switch should be done on controller layer or service layer
+        FuzzySearch fuzzySearch = fuzzySearchAssembler.fromDTO(search);
+        return restaurantService.getAllRestaurantsForSearch(fuzzySearch);
     }
 
     @POST
-    @Path("/{id}/reservations")
+    @Path("restaurants/{id}/reservations")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest)
         throws InvalidParameterException, MissingParameterException {

@@ -1,5 +1,6 @@
 package ca.ulaval.glo2003.domain.utils;
 
+import ca.ulaval.glo2003.controllers.requests.FuzzySearchRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalTime;
@@ -11,6 +12,11 @@ public class FuzzySearch {
 
     public FuzzySearch() {
         this.hours = new VisitTime();
+    }
+
+    public FuzzySearch(String name, VisitTime hours) {
+        this.name = name;
+        this.hours = hours;
     }
 
     @JsonProperty("name")

@@ -14,6 +14,7 @@ import ca.ulaval.glo2003.infrastructure.InMemoryRestaurantAndReservationReposito
 import ca.ulaval.glo2003.service.ReservationService;
 import ca.ulaval.glo2003.service.RestaurantService;
 import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
+import ca.ulaval.glo2003.service.assembler.FuzzySearchAssembler;
 import ca.ulaval.glo2003.service.assembler.HoursAssembler;
 import ca.ulaval.glo2003.service.assembler.VisitTimeAssembler;
 import jakarta.inject.Singleton;
@@ -36,6 +37,7 @@ public class ApplicationBinder extends AbstractBinder {
         bind(SearchRestaurantValidator.class).to(SearchRestaurantValidator.class);
         bind(RestaurantFactory.class).to(RestaurantFactory.class);
         bind(HoursAssembler.class).to(HoursAssembler.class);
+        bind(FuzzySearchAssembler.class).to(FuzzySearchAssembler.class);
         bind(VisitTimeAssembler.class).to(VisitTimeAssembler.class);
         bind(CustomerAssembler.class).to(CustomerAssembler.class);
         bind(ReservationFactory.class).to(ReservationFactory.class);
