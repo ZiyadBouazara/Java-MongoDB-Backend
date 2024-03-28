@@ -59,16 +59,15 @@ public class RestaurantService {
         return new RestaurantResponse(restaurant);
     }
 
-    //TODO: Implement this method when a getAllRestaurants method gets created in the repo.
     public List<FuzzySearchResponse> getAllRestaurantsForSearch(FuzzySearch search) {
         List<FuzzySearchResponse> searchedRestaurants = new ArrayList<>();
 
-        /*for (Restaurant restaurant : restaurants.values()) {
+        for (Restaurant restaurant : restaurantAndReservationRepository.getAllRestaurants()) {
             if (shouldMatchRestaurantName(search, restaurant) &&
                     shouldMatchRestaurantHours(search, restaurant)) {
                 searchedRestaurants.add(getFuzzySearchResponseForRestaurant(restaurant));
             }
-        }*/
+        }
 
         return searchedRestaurants;
     }
