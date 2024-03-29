@@ -6,7 +6,7 @@ import ca.ulaval.glo2003.service.dtos.VisitTimeDTO;
 public class VisitTimeAssembler {
 
     public VisitTime fromDTO(VisitTimeDTO visitTimeDTO) {
-        return new VisitTime();
+        return new VisitTime(visitTimeDTO.from(), visitTimeDTO.to());
     }
 
     public VisitTimeDTO toDTO(VisitTime visitTime) {

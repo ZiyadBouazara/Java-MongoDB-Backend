@@ -17,7 +17,7 @@ public class SearchRestaurantValidator {
     public void verifyFuzzySearchValidParameters(FuzzySearchRequest fuzzySearch) throws InvalidParameterException {
         verifyFuzzySearchNotNull(fuzzySearch);
         verifyFuzzySearchValidName(fuzzySearch);
-        //verifyFuzzySearchValidVisitTime(fuzzySearch);
+        verifyFuzzySearchValidVisitTime(fuzzySearch);
     }
 
     public void verifyFuzzySearchValidName(FuzzySearchRequest fuzzySearch) throws InvalidParameterException {
@@ -28,9 +28,9 @@ public class SearchRestaurantValidator {
 
     private void verifyFuzzySearchValidVisitTime(FuzzySearchRequest fuzzySearch) throws InvalidParameterException {
         verifyValidVisitTimeFormatForFromAndTo(fuzzySearch);
-        if (fuzzySearch.visitTime() != null) {
-            String from = fuzzySearch.visitTime().from();
-            String to = fuzzySearch.visitTime().to();
+        if (fuzzySearch.opened() != null) {
+            String from = fuzzySearch.opened().from();
+            String to = fuzzySearch.opened().to();
 
             if (from != null && to != null && LocalTime.parse(from).isAfter(LocalTime.parse(to))) {
                 throw new InvalidParameterException("The 'To' time is before the 'From' time");
@@ -50,8 +50,10 @@ public class SearchRestaurantValidator {
     }
 
     private void verifyValidVisitTimeFormatForFromAndTo(FuzzySearchRequest fuzzySearch) throws InvalidParameterException {
-        verifyValidVisitTimeFormat(fuzzySearch.visitTime().from());
-        verifyValidVisitTimeFormat(fuzzySearch.visitTime().to());
+        if(fuzzySearch.opened() != null) {
+            verifyValidVisitTimeFormat(fuzzySearch.opened().from());
+            verifyValidVisitTimeFormat(fuzzySearch.opened().to());
+        }
     }
 
     private void verifyFuzzySearchNotNull(FuzzySearchRequest fuzzySearch) throws InvalidParameterException {

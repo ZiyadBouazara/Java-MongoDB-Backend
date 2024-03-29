@@ -5,4 +5,4 @@ import jakarta.annotation.Nullable;
 
 public record FuzzySearchRequest(@Nullable String name,
                                  @Nullable
-                                 VisitTimeDTO visitTime) { }
+                                 VisitTimeDTO opened) { }

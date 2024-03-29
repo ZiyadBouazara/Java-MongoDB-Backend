@@ -63,7 +63,7 @@
 //                OWNER_ID,
 //                validRestaurant.getName(),
 //                validRestaurant.getCapacity(),
-//                validRestaurant.getHours(),
+//                validRestaurant.getOpened(),
 //                validRestaurant.getRestaurantConfiguration());
 //
 //        restaurantRequest = new RestaurantRequest(

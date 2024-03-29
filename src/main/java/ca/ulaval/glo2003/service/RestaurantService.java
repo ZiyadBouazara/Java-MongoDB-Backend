@@ -1,11 +1,9 @@
 package ca.ulaval.glo2003.service;
 
 import ca.ulaval.glo2003.controllers.assemblers.RestaurantResponseAssembler;
-import ca.ulaval.glo2003.controllers.requests.FuzzySearchRequest;
 import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
 import ca.ulaval.glo2003.domain.utils.FuzzySearch;
 import ca.ulaval.glo2003.service.assembler.FuzzySearchAssembler;
-import ca.ulaval.glo2003.service.assembler.VisitTimeAssembler;
 import ca.ulaval.glo2003.service.dtos.HoursDTO;
 import ca.ulaval.glo2003.service.dtos.ReservationConfigurationDTO;
 import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
@@ -86,17 +84,15 @@ public class RestaurantService {
     }
 
     public boolean shouldMatchRestaurantHours(FuzzySearch search, Restaurant restaurant) {
-        //TODO: Test without Fuzzy assembler here, and test with it then (should work tho)
-        if (search.getHours() == null) {
+        if (search.getOpened() == null) {
             return true;
         }
 
-        return FuzzySearch.isFromTimeMatching(search.getHours().getFrom(), restaurant.getHours().getOpen()) &&
-                FuzzySearch.isToTimeMatching(search.getHours().getTo(), restaurant.getHours().getClose());
+        return FuzzySearch.isFromTimeMatching(search.getOpened().getFrom(), restaurant.getHours().getOpen()) &&
+                FuzzySearch.isToTimeMatching(search.getOpened().getTo(), restaurant.getHours().getClose());
     }
 
     public FuzzySearchResponse getFuzzySearchResponseForRestaurant(Restaurant restaurant) {
         return new FuzzySearchResponse(restaurant.getId(), restaurant.getName(), restaurant.getCapacity(), hoursAssembler.toDTO(restaurant.getHours()));
     }
-
 }

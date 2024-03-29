@@ -1,6 +1,5 @@
 package ca.ulaval.glo2003.domain.utils;
 
-import ca.ulaval.glo2003.controllers.requests.FuzzySearchRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalTime;
@@ -8,15 +7,14 @@ import java.time.format.DateTimeFormatter;
 
 public class FuzzySearch {
     private String name;
-    private VisitTime hours;
+    private VisitTime opened;
 
     public FuzzySearch() {
-        this.hours = new VisitTime();
     }
 
-    public FuzzySearch(String name, VisitTime hours) {
+    public FuzzySearch(String name, VisitTime opened) {
         this.name = name;
-        this.hours = hours;
+        this.opened = opened;
     }
 
     @JsonProperty("name")
@@ -29,13 +27,13 @@ public class FuzzySearch {
         this.name = restaurantName;
     }
 
-    @JsonProperty("hours")
-    public VisitTime getHours() {
-        return this.hours;
+    @JsonProperty("opened")
+    public VisitTime getOpened() {
+        return this.opened;
     }
 
-    public void setHours(VisitTime visitTime) {
-        this.hours = visitTime;
+    public void setOpened(VisitTime visitTime) {
+        this.opened = visitTime;
     }
 
     public static boolean isFuzzySearchOnNameSuccessful(String searchingElement, String comparedElement) {
@@ -49,12 +47,14 @@ public class FuzzySearch {
     }
 
     public static boolean isFromTimeMatching(String visitTimeFrom, String restaurantOpeningHour) {
+        //TODO: WTF logic here should be working but isn't
         if (visitTimeFrom != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            LocalTime from = LocalTime.parse(visitTimeFrom, formatter);
+            LocalTime searchFrom = LocalTime.parse(visitTimeFrom, formatter);
             LocalTime restaurantOpenHour = LocalTime.parse(restaurantOpeningHour, formatter);
 
-            return from.isAfter(restaurantOpenHour) || from.equals(restaurantOpenHour);
+            System.out.println(searchFrom.isAfter(restaurantOpenHour) || searchFrom.equals(restaurantOpenHour));
+            return searchFrom.isAfter(restaurantOpenHour) || searchFrom.equals(restaurantOpenHour);
         }
         return true;
     }
@@ -62,10 +62,10 @@ public class FuzzySearch {
     public static boolean isToTimeMatching(String visitTimeTo, String restaurantClosingHour) {
         if (visitTimeTo != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            LocalTime to = LocalTime.parse(visitTimeTo, formatter);
+            LocalTime searchTo = LocalTime.parse(visitTimeTo, formatter);
             LocalTime restaurantCloseHour = LocalTime.parse(restaurantClosingHour, formatter);
 
-            return to.isBefore(restaurantCloseHour) || to.equals(restaurantCloseHour);
+            return searchTo.isBefore(restaurantCloseHour) || searchTo.equals(restaurantCloseHour);
         }
         return true;
     }
