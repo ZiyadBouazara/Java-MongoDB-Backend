@@ -36,29 +36,24 @@ import java.util.List;
 
 @Path("/")
 public class RestaurantResource {
-    private final ReservationService reservationService;
     private final RestaurantService restaurantService;
     private final CreateRestaurantValidator createRestaurantValidator;
     private final GetRestaurantValidator getRestaurantValidator;
     private final HeaderValidator headerValidator;
-    private final CreateReservationValidator createReservationValidator;
     private final SearchRestaurantValidator restaurantSearchValidator;
     private final FuzzySearchAssembler fuzzySearchAssembler;
 
     @Inject
-    public RestaurantResource(ReservationService reservationService, RestaurantService restaurantService,
+    public RestaurantResource(RestaurantService restaurantService,
                               HeaderValidator headerValidator,
                               CreateRestaurantValidator createRestaurantValidator,
                               GetRestaurantValidator getRestaurantValidator,
-                              CreateReservationValidator createReservationValidator,
                               SearchRestaurantValidator searchRestaurantValidator,
                               FuzzySearchAssembler fuzzySearchAssembler) {
-        this.reservationService = reservationService;
         this.restaurantService = restaurantService;
         this.headerValidator = headerValidator;
         this.createRestaurantValidator = createRestaurantValidator;
         this.getRestaurantValidator = getRestaurantValidator;
-        this.createReservationValidator = createReservationValidator;
         this.restaurantSearchValidator = searchRestaurantValidator;
         this.fuzzySearchAssembler = fuzzySearchAssembler;
     }
@@ -111,27 +106,6 @@ public class RestaurantResource {
         //TODO: Confirm if the switch should be done on controller layer or service layer
         FuzzySearch fuzzySearch = fuzzySearchAssembler.fromDTO(search);
         return restaurantService.getAllRestaurantsForSearch(fuzzySearch);
-    }
-
-    @POST
-    @Path("restaurants/{id}/reservations")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest)
-        throws InvalidParameterException, MissingParameterException {
-        createReservationValidator.validateReservationRequest(reservationRequest);
-
-        String createdReservationId = reservationService.createReservation(
-            restaurantId,
-            reservationRequest.date(),
-            reservationRequest.startTime(),
-            reservationRequest.groupSize(),
-            reservationRequest.customer());
-
-        URI newReservationURI = UriBuilder.fromPath(Main.BASE_URI)
-            .path("reservations")
-            .path(createdReservationId)
-            .build();
-        return Response.created(newReservationURI).build();
     }
 }
 
