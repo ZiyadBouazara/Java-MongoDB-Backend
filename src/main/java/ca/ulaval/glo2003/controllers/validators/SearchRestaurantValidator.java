@@ -50,7 +50,7 @@ public class SearchRestaurantValidator {
     }
 
     private void verifyValidVisitTimeFormatForFromAndTo(FuzzySearchRequest fuzzySearch) throws InvalidParameterException {
-        if(fuzzySearch.opened() != null) {
+        if (fuzzySearch.opened() != null) {
             verifyValidVisitTimeFormat(fuzzySearch.opened().from());
             verifyValidVisitTimeFormat(fuzzySearch.opened().to());
         }

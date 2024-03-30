@@ -8,7 +8,7 @@ public class HoursAssembler {
         return new Hours(hoursDTO.open(), hoursDTO.close());
     }
 
-    public HoursDTO toDTO(Hours hours){
+    public HoursDTO toDTO(Hours hours) {
         return new HoursDTO(hours.getOpen(), hours.getClose());
     }
 }

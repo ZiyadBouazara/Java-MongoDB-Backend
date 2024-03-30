@@ -67,7 +67,8 @@ class FuzzySearchTest {
     }
 
     @Test
-    void givenValidVisitTimeFromAndComparedToHourAndVisitTimeBeforeRestaurantOpeningHour_whenIsFromTimeMatching_thenShouldReturnFalse() {
+    void
+        givenValidVisitTimeFromAndComparedToHourAndVisitTimeBeforeRestaurantOpeningHour_whenIsFromTimeMatching_thenShouldReturnFalse() {
         String visitTimeFrom = "10:00:00";
         String comparedToHour = "12:00:00";
         boolean result = isFromTimeMatching(visitTimeFrom, comparedToHour);
