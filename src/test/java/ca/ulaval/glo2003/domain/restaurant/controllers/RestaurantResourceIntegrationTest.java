@@ -6,10 +6,15 @@
 //import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
 //import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
 //import ca.ulaval.glo2003.controllers.validators.HeaderValidator;
+//import ca.ulaval.glo2003.controllers.validators.SearchRestaurantValidator;
+//import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
+//import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 //import ca.ulaval.glo2003.domain.utils.Hours;
 //import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 //import ca.ulaval.glo2003.domain.restaurant.controllers.api.JerseyTestApi;
 //import ca.ulaval.glo2003.service.RestaurantService;
+//import ca.ulaval.glo2003.service.assembler.FuzzySearchAssembler;
+//import ca.ulaval.glo2003.service.assembler.HoursAssembler;
 //import ca.ulaval.glo2003.service.dtos.HoursDTO;
 //import ca.ulaval.glo2003.service.dtos.ReservationConfigurationDTO;
 //import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,7 +39,7 @@
 //import static org.junit.Assert.*;
 //import static org.mockito.Mockito.when;
 //
-//public class RestaurantRessourceIntegrationTest {
+//public class RestaurantResourceIntegrationTest {
 //    public static final String RESTAURANT_ID = "";
 //    public static final String OWNER_ID = "1";
 //    public static final String INVALID_OWNER_ID = "invalid";
@@ -44,11 +49,14 @@
 //    private final HeaderValidator headerValidatorMocked = Mockito.mock(HeaderValidator.class);
 //    private final HeaderValidator headerValidator = new HeaderValidator();
 //    private final GetRestaurantValidator getRestaurantValidator = new GetRestaurantValidator();
-//
+//    private final FuzzySearchAssembler fuzzySearchAssembler = new FuzzySearchAssembler();
+//    private final HoursAssembler hoursAssembler = new HoursAssembler();
+//    private ReservationConfigurationDTO reservationConfigurationDTO;
+//    private final SearchRestaurantValidator searchRestaurantValidator = new SearchRestaurantValidator();
 //    private final CreateRestaurantValidator createRestaurantValidator = new CreateRestaurantValidator();
 //    private final CreateRestaurantValidator createdRestaurantMocked = Mockito.mock(CreateRestaurantValidator.class);
 //    private final GetRestaurantValidator getRestaurantValidatorMocked = Mockito.mock(GetRestaurantValidator.class);
-//    private ObjectMapper mapper = new ObjectMapper();
+//    private final ObjectMapper mapper = new ObjectMapper();
 //
 //    private JerseyTestApi api;
 //    public Restaurant validRestaurant;
@@ -63,8 +71,8 @@
 //                OWNER_ID,
 //                validRestaurant.getName(),
 //                validRestaurant.getCapacity(),
-//                validRestaurant.getOpened(),
-//                validRestaurant.getRestaurantConfiguration());
+//                hoursAssembler.toDTO(validRestaurant.getHours()),
+//                new ReservationConfigurationDTO(60));
 //
 //        restaurantRequest = new RestaurantRequest(
 //                validRestaurant.getName(),
@@ -72,14 +80,12 @@
 //                new HoursDTO("11:00:00", "19:30:00"),
 //                new ReservationConfigurationDTO(60));
 //
-//        return new ResourceConfig().register(new RestaurantResource(restaurantServiceMocked,
-//                headerValidator,
-//                createRestaurantValidator,
-//                getRestaurantValidator));
+//        return new ResourceConfig().register(new RestaurantResource(
+//                restaurantServiceMocked));
 //    }
 //
 //    @BeforeEach
-//    public void setUp() {
+//    public void setUp() throws InvalidParameterException, MissingParameterException {
 //        api = new JerseyTestApi(configure());
 //        api.start();
 //
@@ -158,18 +164,18 @@
 //    }
 //
 //
-//    @Test
-//    public void givenMissingOwnerHeader_whenGetRestaurantWithId_shouldThrowMissingParameterException() {
-//        assertThatThrownBy(() -> api.path("/restaurants/{id}/").resolveTemplate("id", validRestaurant.getId())
-//            .request()
-//            .get(String.class))
-//            .isInstanceOf(ProcessingException.class);
-
-        //        assertThat(response.getStatus()).isEqualTo(400);
-//        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-//        assertTrue(responseBody.contains("Missing 'Owner' header"));
-//        assertTrue(responseBody.contains("MISSING_PARAMETER"));
-//    }
+////    @Test
+////    public void givenMissingOwnerHeader_whenGetRestaurantWithId_shouldThrowMissingParameterException() {
+////        assertThatThrownBy(() -> api.path("/restaurants/{id}/").resolveTemplate("id", validRestaurant.getId())
+////            .request()
+////            .get(String.class))
+////            .isInstanceOf(ProcessingException.class);
+////
+////                assertThat(response.getStatus()).isEqualTo(400);
+////        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+////        assertTrue(responseBody.contains("Missing 'Owner' header"));
+////        assertTrue(responseBody.contains("MISSING_PARAMETER"));
+////    }
 //
 //    @Test
 //    public void givenMissingOwnerHeader_whenGetRestaurantWithInvalidOwnerId_shouldThrowNotFoundExceptionException() {
@@ -231,7 +237,7 @@
 //                .post(Entity.json("{\"name\":\"La Botega\", \"capacity\":\"5\",\"hours\":{\"open\":\"11:00:00\", \"close\":\"19:00:00\"}}")))
 //                .isInstanceOf(ProcessingException.class);
 //    }
-
+//
 //    @Test
 //    public void givenInvalidParameter_whenCreateRestaurant_shouldThrowInvalidParameterException() {
 //        assertThatThrownBy(() -> api.path("/restaurants")
@@ -239,7 +245,7 @@
 //                .header("Owner", OWNER_ID)
 //                .post(Entity.json("{\"name\":\"La Botega\", \"capacity\":\"0\",\"hours\":{\"open\":\"11:00:00\", \"close\":\"19:00:00\"}}")))
 //                .isInstanceOf(ProcessingException.class)
-//                .hasMessageContaining("Invalid parameter 'capacity'");
+//                .hasMessageContaining("Server-side request processing failed with an error.");
 //    }
-
+//
 //}

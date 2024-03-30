@@ -1,17 +1,22 @@
 package ca.ulaval.glo2003.service;
 
 import ca.ulaval.glo2003.controllers.assemblers.RestaurantResponseAssembler;
+import ca.ulaval.glo2003.controllers.requests.FuzzySearchRequest;
+import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
+import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
+import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
+import ca.ulaval.glo2003.controllers.validators.HeaderValidator;
+import ca.ulaval.glo2003.controllers.validators.SearchRestaurantValidator;
+import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
+import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.domain.utils.FuzzySearch;
 import ca.ulaval.glo2003.service.assembler.FuzzySearchAssembler;
-import ca.ulaval.glo2003.service.dtos.HoursDTO;
-import ca.ulaval.glo2003.service.dtos.ReservationConfigurationDTO;
 import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
 import ca.ulaval.glo2003.service.assembler.HoursAssembler;
 import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.restaurant.RestaurantFactory;
-import ca.ulaval.glo2003.domain.utils.Hours;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 
@@ -21,6 +26,10 @@ import java.util.stream.Collectors;
 
 public class RestaurantService {
 
+    private final CreateRestaurantValidator createRestaurantValidator = new CreateRestaurantValidator();
+    private final GetRestaurantValidator getRestaurantValidator = new GetRestaurantValidator();
+    private final HeaderValidator headerValidator = new HeaderValidator();
+    private final SearchRestaurantValidator restaurantSearchValidator = new SearchRestaurantValidator();
     private final RestaurantAndReservationRepository restaurantAndReservationRepository;
     private final RestaurantFactory restaurantFactory;
     private final HoursAssembler hoursAssembler;
@@ -41,32 +50,43 @@ public class RestaurantService {
     }
 
     public String createRestaurant(String ownerId,
-                                   String name,
-                                   Integer capacity,
-                                   HoursDTO hoursDto,
-                                   ReservationConfigurationDTO reservationsDuration) {
-        Hours hours = hoursAssembler.fromDTO(hoursDto);
-        Restaurant restaurant = restaurantFactory.createRestaurant(ownerId, name, capacity, hours, reservationsDuration);
+                                   RestaurantRequest restaurantRequest)
+            throws InvalidParameterException, MissingParameterException {
+
+        headerValidator.verifyMissingHeader(ownerId);
+        createRestaurantValidator.validate(ownerId, restaurantRequest);
+
+        Restaurant restaurant = restaurantFactory.createRestaurant(ownerId, restaurantRequest);
         restaurantAndReservationRepository.saveRestaurant(restaurant);
         return restaurant.getId();
     }
 
-    public List<RestaurantResponse> getRestaurantsForOwnerId(String ownerId) {
+    public List<RestaurantResponse> getRestaurantsForOwnerId(String ownerId)
+            throws MissingParameterException {
+        headerValidator.verifyMissingHeader(ownerId);
+
         List<Restaurant> ownerRestaurants = restaurantAndReservationRepository.findRestaurantsByOwnerId(ownerId);
         return ownerRestaurants.stream()
             .map(restaurantResponseAssembler::toDTO)
             .collect(Collectors.toList());
     }
 
-    public RestaurantResponse getRestaurant(String restaurantId) {
+    public RestaurantResponse getRestaurant(String ownerId, String restaurantId)
+            throws MissingParameterException {
+        headerValidator.verifyMissingHeader(ownerId);
         Restaurant restaurant = restaurantAndReservationRepository.findRestaurantByRestaurantId(restaurantId);
         if (restaurant == null) {
             throw new NotFoundException("Restaurant with ID " + restaurantId + " not found");
         }
+
+        getRestaurantValidator.validateRestaurantOwnership(ownerId, restaurant.getOwnerId());
         return restaurantResponseAssembler.toDTO(restaurant);
     }
 
-    public List<FuzzySearchResponse> getAllRestaurantsForSearch(FuzzySearch search) {
+    public List<FuzzySearchResponse> getAllRestaurantsForSearch(FuzzySearchRequest search)
+            throws InvalidParameterException {
+        restaurantSearchValidator.verifyFuzzySearchValidParameters(search);
+
         List<FuzzySearchResponse> searchedRestaurants = new ArrayList<>();
 
         for (Restaurant restaurant : restaurantAndReservationRepository.getAllRestaurants()) {
@@ -79,17 +99,17 @@ public class RestaurantService {
     }
 
     //TODO: (possibility to move these elsewhere in utils of service layer)
-    public boolean shouldMatchRestaurantName(FuzzySearch search, Restaurant restaurant) {
-        return search.getName() == null || FuzzySearch.isFuzzySearchOnNameSuccessful(search.getName(), restaurant.getName());
+    public boolean shouldMatchRestaurantName(FuzzySearchRequest search, Restaurant restaurant) {
+        return search.name() == null || FuzzySearch.isFuzzySearchOnNameSuccessful(search.name(), restaurant.getName());
     }
 
-    public boolean shouldMatchRestaurantHours(FuzzySearch search, Restaurant restaurant) {
-        if (search.getOpened() == null) {
+    public boolean shouldMatchRestaurantHours(FuzzySearchRequest search, Restaurant restaurant) {
+        if (search.opened() == null) {
             return true;
         }
 
-        return FuzzySearch.isFromTimeMatching(search.getOpened().getFrom(), restaurant.getHours().getOpen()) &&
-                FuzzySearch.isToTimeMatching(search.getOpened().getTo(), restaurant.getHours().getClose());
+        return FuzzySearch.isFromTimeMatching(search.opened().from(), restaurant.getHours().getOpen()) &&
+                FuzzySearch.isToTimeMatching(search.opened().to(), restaurant.getHours().getClose());
     }
 
     public FuzzySearchResponse getFuzzySearchResponseForRestaurant(Restaurant restaurant) {
