@@ -93,6 +93,10 @@ public class RestaurantService {
     }
 
     public FuzzySearchResponse getFuzzySearchResponseForRestaurant(Restaurant restaurant) {
-        return new FuzzySearchResponse(restaurant.getId(), restaurant.getName(), restaurant.getCapacity(), hoursAssembler.toDTO(restaurant.getHours()));
+        return new FuzzySearchResponse(
+            restaurant.getId(),
+            restaurant.getName(),
+            restaurant.getCapacity(),
+            hoursAssembler.toDTO(restaurant.getHours()));
     }
 }

@@ -29,5 +29,8 @@ public class MongoRestaurantAndReservationRepository implements RestaurantAndRes
     }
 
     @Override
-    public List<Restaurant> getAllRestaurants() {return null;}
+    public List<Restaurant> getAllRestaurants() {
+        return null;
+    }
+
 }
