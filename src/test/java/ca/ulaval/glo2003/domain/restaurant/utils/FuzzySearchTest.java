@@ -3,7 +3,7 @@ package ca.ulaval.glo2003.domain.restaurant.utils;
 import org.junit.jupiter.api.Test;
 
 
-import static ca.ulaval.glo2003.domain.fuzzySearch.FuzzySearch.*;
+import static ca.ulaval.glo2003.domain.utils.FuzzySearch.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FuzzySearchTest {
@@ -59,11 +59,20 @@ class FuzzySearchTest {
     }
 
     @Test
-    void givenValidVisitTimeFromAndComparedToHour_whenIsFromTimeMatching_thenShouldReturnTrue() {
+    void givenValidVisitTimeFromAndComparedToHourAndVisitTimeAfterRestaurantOpeningHour_whenIsFromTimeMatching_thenShouldReturnTrue() {
         String visitTimeFrom = "14:00:00";
         String comparedToHour = "12:00:00";
         boolean result = isFromTimeMatching(visitTimeFrom, comparedToHour);
         assertThat(result).isTrue();
+    }
+
+    @Test
+    void
+        givenValidVisitTimeFromAndComparedToHourAndVisitTimeBeforeRestaurantOpeningHour_whenIsFromTimeMatching_thenShouldReturnFalse() {
+        String visitTimeFrom = "10:00:00";
+        String comparedToHour = "12:00:00";
+        boolean result = isFromTimeMatching(visitTimeFrom, comparedToHour);
+        assertThat(result).isFalse();
     }
 
     @Test

@@ -1,8 +1,9 @@
 package ca.ulaval.glo2003.service;
 
-
+import ca.ulaval.glo2003.controllers.assemblers.RestaurantResponseAssembler;
 import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
-import ca.ulaval.glo2003.domain.fuzzySearch.FuzzySearch;
+import ca.ulaval.glo2003.domain.utils.FuzzySearch;
+import ca.ulaval.glo2003.service.assembler.FuzzySearchAssembler;
 import ca.ulaval.glo2003.service.dtos.HoursDTO;
 import ca.ulaval.glo2003.service.dtos.ReservationConfigurationDTO;
 import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
@@ -10,7 +11,7 @@ import ca.ulaval.glo2003.service.assembler.HoursAssembler;
 import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.restaurant.RestaurantFactory;
-import ca.ulaval.glo2003.domain.hours.Hours;
+import ca.ulaval.glo2003.domain.utils.Hours;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 
@@ -19,18 +20,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class RestaurantService {
+
     private final RestaurantAndReservationRepository restaurantAndReservationRepository;
     private final RestaurantFactory restaurantFactory;
     private final HoursAssembler hoursAssembler;
+    private final RestaurantResponseAssembler restaurantResponseAssembler;
+    private final FuzzySearchAssembler fuzzySearchAssembler;
 
     @Inject
     public RestaurantService(RestaurantAndReservationRepository restaurantAndReservationRepository,
-                             RestaurantFactory restaurantFactory,
-                             HoursAssembler hoursAssembler) {
+                             RestaurantFactory restaurantFactory, HoursAssembler hoursAssembler,
+                             RestaurantResponseAssembler restaurantResponseAssembler,
+                             FuzzySearchAssembler fuzzySearchAssembler) {
 
         this.restaurantAndReservationRepository = restaurantAndReservationRepository;
         this.restaurantFactory = restaurantFactory;
         this.hoursAssembler = hoursAssembler;
+        this.restaurantResponseAssembler = restaurantResponseAssembler;
+        this.fuzzySearchAssembler = fuzzySearchAssembler;
     }
 
     public String createRestaurant(String ownerId,
@@ -47,8 +54,8 @@ public class RestaurantService {
     public List<RestaurantResponse> getRestaurantsForOwnerId(String ownerId) {
         List<Restaurant> ownerRestaurants = restaurantAndReservationRepository.findRestaurantsByOwnerId(ownerId);
         return ownerRestaurants.stream()
-                .map(RestaurantResponse::new)
-                .collect(Collectors.toList());
+            .map(restaurantResponseAssembler::toDTO)
+            .collect(Collectors.toList());
     }
 
     public RestaurantResponse getRestaurant(String restaurantId) {
@@ -56,20 +63,18 @@ public class RestaurantService {
         if (restaurant == null) {
             throw new NotFoundException("Restaurant with ID " + restaurantId + " not found");
         }
-        return new RestaurantResponse(restaurant);
+        return restaurantResponseAssembler.toDTO(restaurant);
     }
 
-    //TODO: Implement this method when a getAllRestaurants method gets created in the repo.
     public List<FuzzySearchResponse> getAllRestaurantsForSearch(FuzzySearch search) {
         List<FuzzySearchResponse> searchedRestaurants = new ArrayList<>();
 
-        /*for (Restaurant restaurant : restaurants.values()) {
+        for (Restaurant restaurant : restaurantAndReservationRepository.getAllRestaurants()) {
             if (shouldMatchRestaurantName(search, restaurant) &&
                     shouldMatchRestaurantHours(search, restaurant)) {
                 searchedRestaurants.add(getFuzzySearchResponseForRestaurant(restaurant));
             }
-        }*/
-
+        }
         return searchedRestaurants;
     }
 
@@ -79,16 +84,19 @@ public class RestaurantService {
     }
 
     public boolean shouldMatchRestaurantHours(FuzzySearch search, Restaurant restaurant) {
-        if (search.getHours() == null) {
+        if (search.getOpened() == null) {
             return true;
         }
 
-        return FuzzySearch.isFromTimeMatching(search.getHours().getFrom(), restaurant.getHours().getOpen()) &&
-                FuzzySearch.isToTimeMatching(search.getHours().getTo(), restaurant.getHours().getClose());
+        return FuzzySearch.isFromTimeMatching(search.getOpened().getFrom(), restaurant.getHours().getOpen()) &&
+                FuzzySearch.isToTimeMatching(search.getOpened().getTo(), restaurant.getHours().getClose());
     }
 
     public FuzzySearchResponse getFuzzySearchResponseForRestaurant(Restaurant restaurant) {
-        return new FuzzySearchResponse(restaurant);
+        return new FuzzySearchResponse(
+            restaurant.getId(),
+            restaurant.getName(),
+            restaurant.getCapacity(),
+            hoursAssembler.toDTO(restaurant.getHours()));
     }
-
 }

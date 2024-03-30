@@ -10,4 +10,6 @@ public interface RestaurantAndReservationRepository {
     void saveReservation(Reservation reservation);
     List<Restaurant> findRestaurantsByOwnerId(String ownerId);
     Restaurant findRestaurantByRestaurantId(String restaurantId);
+    Restaurant findRestaurantByReservationId(String reservationId);
+    List<Restaurant> getAllRestaurants();
 }

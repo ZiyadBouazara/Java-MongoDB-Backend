@@ -1,6 +1,6 @@
 package ca.ulaval.glo2003.domain.restaurant;
 
-import ca.ulaval.glo2003.domain.hours.Hours;
+import ca.ulaval.glo2003.domain.utils.Hours;
 import ca.ulaval.glo2003.service.dtos.ReservationConfigurationDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

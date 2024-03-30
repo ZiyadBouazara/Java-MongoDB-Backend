@@ -1,22 +1,12 @@
 package ca.ulaval.glo2003.controllers.responses;
 
-import ca.ulaval.glo2003.domain.hours.Hours;
-import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
-import ca.ulaval.glo2003.domain.restaurant.Restaurant;
+import ca.ulaval.glo2003.service.dtos.HoursDTO;
+import ca.ulaval.glo2003.service.dtos.ReservationConfigurationDTO;
 
 public record RestaurantResponse(String id,
                                   String ownerId,
                                   String name,
                                   Integer capacity,
-                                  Hours hours,
-                                  ReservationConfiguration reservations) {
-    public RestaurantResponse(Restaurant restaurant) {
-        this(
-                restaurant.getId(),
-                restaurant.getOwnerId(),
-                restaurant.getName(),
-                restaurant.getCapacity(),
-                restaurant.getHours(),
-                restaurant.getRestaurantConfiguration());
-    }
+                                  HoursDTO hours,
+                                  ReservationConfigurationDTO reservations) {
 }
