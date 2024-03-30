@@ -6,6 +6,7 @@ import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
 import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
 import ca.ulaval.glo2003.controllers.validators.HeaderValidator;
+import ca.ulaval.glo2003.controllers.validators.SearchRestaurantValidator;
 import ca.ulaval.glo2003.domain.hours.Hours;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.restaurant.controllers.api.JerseyTestApi;
@@ -48,8 +49,8 @@ public class RestaurantRessourceIntegrationTest {
     private final CreateRestaurantValidator createRestaurantValidator = new CreateRestaurantValidator();
     private final CreateRestaurantValidator createdRestaurantMocked = Mockito.mock(CreateRestaurantValidator.class);
     private final GetRestaurantValidator getRestaurantValidatorMocked = Mockito.mock(GetRestaurantValidator.class);
-    private ObjectMapper mapper = new ObjectMapper();
-
+    private final SearchRestaurantValidator searchRestaurantValidator = Mockito.mock(SearchRestaurantValidator.class);
+    private final ObjectMapper mapper = new ObjectMapper();
     private JerseyTestApi api;
     public Restaurant validRestaurant;
     public RestaurantResponse expectedResponse;
@@ -75,7 +76,8 @@ public class RestaurantRessourceIntegrationTest {
         return new ResourceConfig().register(new RestaurantResource(restaurantServiceMocked,
                 headerValidator,
                 createRestaurantValidator,
-                getRestaurantValidator));
+                getRestaurantValidator,
+                searchRestaurantValidator));
     }
 
     @BeforeEach
