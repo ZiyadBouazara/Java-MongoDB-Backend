@@ -9,9 +9,6 @@ public class FuzzySearch {
     private String name;
     private VisitTime opened;
 
-    public FuzzySearch() {
-    }
-
     public FuzzySearch(String name, VisitTime opened) {
         this.name = name;
         this.opened = opened;

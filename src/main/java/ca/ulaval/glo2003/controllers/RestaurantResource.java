@@ -4,11 +4,7 @@ import ca.ulaval.glo2003.Main;
 import ca.ulaval.glo2003.controllers.requests.FuzzySearchRequest;
 import ca.ulaval.glo2003.controllers.requests.ReservationRequest;
 import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
-import ca.ulaval.glo2003.controllers.validators.CreateReservationValidator;
-import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
-import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
-import ca.ulaval.glo2003.controllers.validators.HeaderValidator;
-import ca.ulaval.glo2003.controllers.validators.SearchRestaurantValidator;
+import ca.ulaval.glo2003.controllers.validators.*;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
@@ -18,14 +14,7 @@ import ca.ulaval.glo2003.service.ReservationService;
 import ca.ulaval.glo2003.service.RestaurantService;
 import ca.ulaval.glo2003.service.assembler.FuzzySearchAssembler;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.HeaderParam;
-import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
@@ -41,16 +30,17 @@ public class RestaurantResource {
     private final CreateRestaurantValidator createRestaurantValidator;
     private final GetRestaurantValidator getRestaurantValidator;
     private final HeaderValidator headerValidator;
-    private final CreateReservationValidator createReservationValidator;
+    private final ReservationValidator reservationValidator;
     private final SearchRestaurantValidator restaurantSearchValidator;
     private final FuzzySearchAssembler fuzzySearchAssembler;
+
 
     @Inject
     public RestaurantResource(ReservationService reservationService, RestaurantService restaurantService,
                               HeaderValidator headerValidator,
                               CreateRestaurantValidator createRestaurantValidator,
                               GetRestaurantValidator getRestaurantValidator,
-                              CreateReservationValidator createReservationValidator,
+                              ReservationValidator reservationValidator,
                               SearchRestaurantValidator searchRestaurantValidator,
                               FuzzySearchAssembler fuzzySearchAssembler) {
         this.reservationService = reservationService;
@@ -58,7 +48,7 @@ public class RestaurantResource {
         this.headerValidator = headerValidator;
         this.createRestaurantValidator = createRestaurantValidator;
         this.getRestaurantValidator = getRestaurantValidator;
-        this.createReservationValidator = createReservationValidator;
+        this.reservationValidator = reservationValidator;
         this.restaurantSearchValidator = searchRestaurantValidator;
         this.fuzzySearchAssembler = fuzzySearchAssembler;
     }
@@ -118,7 +108,7 @@ public class RestaurantResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest)
         throws InvalidParameterException, MissingParameterException {
-        createReservationValidator.validateReservationRequest(reservationRequest);
+        reservationValidator.validateReservationRequest(reservationRequest);
 
         String createdReservationId = reservationService.createReservation(
             restaurantId,
@@ -133,5 +123,16 @@ public class RestaurantResource {
             .build();
         return Response.created(newReservationURI).build();
     }
+
+    @GET
+    @Path("restaurants/{id}/reservations")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getReservations(@QueryParam("date") String date, @QueryParam("customerName") String customerName)
+    throws InvalidParameterException, MissingParameterException, NotFoundException{
+        //reservationValidator.verifyGetReservationValidParameters(date, customerName);
+
+        return Response.ok().build();
+    }
+
 }
 
