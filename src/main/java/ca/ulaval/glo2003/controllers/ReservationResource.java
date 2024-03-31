@@ -3,7 +3,7 @@ package ca.ulaval.glo2003.controllers;
 import ca.ulaval.glo2003.Main;
 import ca.ulaval.glo2003.controllers.requests.ReservationRequest;
 import ca.ulaval.glo2003.controllers.responses.ReservationResponse;
-import ca.ulaval.glo2003.controllers.validators.CreateReservationValidator;
+import ca.ulaval.glo2003.controllers.validators.ReservationValidator;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.service.ReservationService;
@@ -24,12 +24,12 @@ import java.net.URI;
 @Path("/")
 public class ReservationResource {
     private final ReservationService reservationService;
-    private final CreateReservationValidator createReservationValidator;
+    private final ReservationValidator reservationValidator;
 
     @Inject
-    public ReservationResource(ReservationService reservationService, CreateReservationValidator createReservationValidator) {
+    public ReservationResource(ReservationService reservationService, ReservationValidator reservationValidator) {
         this.reservationService = reservationService;
-        this.createReservationValidator = createReservationValidator;
+        this.reservationValidator = reservationValidator;
     }
 
     @POST
@@ -37,7 +37,7 @@ public class ReservationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest)
         throws InvalidParameterException, MissingParameterException {
-        createReservationValidator.validateReservationRequest(reservationRequest);
+        reservationValidator.validateReservationRequest(reservationRequest);
 
         String createdReservationId = reservationService.createReservation(
             restaurantId,
