@@ -3,10 +3,10 @@
 //import ca.ulaval.glo2003.controllers.RestaurantResource;
 //import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 //import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
-//import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
-//import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
-//import ca.ulaval.glo2003.controllers.validators.HeaderValidator;
-//import ca.ulaval.glo2003.controllers.validators.SearchRestaurantValidator;
+//import ca.ulaval.glo2003.service.validators.CreateRestaurantValidator;
+//import ca.ulaval.glo2003.service.validators.GetRestaurantValidator;
+//import ca.ulaval.glo2003.service.validators.HeaderValidator;
+//import ca.ulaval.glo2003.service.validators.SearchRestaurantValidator;
 //import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 //import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 //import ca.ulaval.glo2003.domain.utils.Hours;
@@ -57,7 +57,6 @@
 //    private final CreateRestaurantValidator createdRestaurantMocked = Mockito.mock(CreateRestaurantValidator.class);
 //    private final GetRestaurantValidator getRestaurantValidatorMocked = Mockito.mock(GetRestaurantValidator.class);
 //    private final ObjectMapper mapper = new ObjectMapper();
-//
 //    private JerseyTestApi api;
 //    public Restaurant validRestaurant;
 //    public RestaurantResponse expectedResponse;
@@ -92,12 +91,9 @@
 //        List<RestaurantResponse> mockResponse = Collections.singletonList(expectedResponse);
 //        Mockito.when(restaurantServiceMocked.getRestaurantsForOwnerId(Mockito.anyString())).thenReturn(mockResponse);
 //
-//        when(restaurantServiceMocked.getRestaurant(validRestaurant.getId())).thenReturn(expectedResponse);
+//        when(restaurantServiceMocked.getRestaurant(OWNER_ID, validRestaurant.getId())).thenReturn(expectedResponse);
 //        when(restaurantServiceMocked.createRestaurant(OWNER_ID,
-//                restaurantRequest.name(),
-//                restaurantRequest.capacity(),
-//                restaurantRequest.hours(),
-//                restaurantRequest.reservations())).thenReturn(validRestaurant.getId());
+//                restaurantRequest)).thenReturn(validRestaurant.getId());
 //    }
 //
 //    @AfterEach
@@ -130,10 +126,21 @@
 //
 //    @Test
 //    public void givenMissingOwnerHeader_whenGetRestaurant_shouldReturn400AndThrowMissingParameterException() {
-//        assertThatThrownBy(() -> api.path("/restaurants/")
+////        assertThatThrownBy(() -> api.path("/restaurants/")
+////                .request()
+////                .get(String.class))
+////                .isInstanceOf(MissingParameterException.class);
+//
+//        var response = api.path("/restaurants/")
 //                .request()
-//                .get(String.class))
-//                .isInstanceOf(ProcessingException.class);
+//                .header("", "")
+//                .get();
+//
+//        String responseBody = response.readEntity(String.class);
+//        assertThat(response.getStatus()).isEqualTo(400);
+//        Assertions.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+//        Assertions.assertTrue(responseBody.contains("Missing 'Owner' header"));
+//        Assertions.assertTrue(responseBody.contains("MISSING_PARAMETER"));
 //    }
 //
 //    @Test
@@ -163,19 +170,25 @@
 //        Assertions.assertEquals("Restaurant Name", nameValue);
 //    }
 //
-//
-////    @Test
-////    public void givenMissingOwnerHeader_whenGetRestaurantWithId_shouldThrowMissingParameterException() {
+//    @Test
+//    public void givenMissingOwnerHeader_whenGetRestaurantWithId_shouldThrowMissingParameterException() {
 ////        assertThatThrownBy(() -> api.path("/restaurants/{id}/").resolveTemplate("id", validRestaurant.getId())
 ////            .request()
 ////            .get(String.class))
 ////            .isInstanceOf(ProcessingException.class);
-////
-////                assertThat(response.getStatus()).isEqualTo(400);
-////        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-////        assertTrue(responseBody.contains("Missing 'Owner' header"));
-////        assertTrue(responseBody.contains("MISSING_PARAMETER"));
-////    }
+//        var response = api.path("/restaurants/" + validRestaurant.getId())
+//                .request()
+//                .header("",OWNER_ID)
+//                .get();
+//
+//        String jsonResponse = response.readEntity(String.class);
+//
+//        System.out.println(response);
+////        assertThat(response.getStatus()).isEqualTo(400);
+////        Assertions.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+//        Assertions.assertTrue(jsonResponse.contains("Missing 'Owner' header"));
+//        Assertions.assertTrue(jsonResponse.contains("MISSING_PARAMETER"));
+//    }
 //
 //    @Test
 //    public void givenMissingOwnerHeader_whenGetRestaurantWithInvalidOwnerId_shouldThrowNotFoundExceptionException() {
@@ -197,7 +210,6 @@
 //                .hasMessageContaining("Not Found");
 //    }
 //
-//
 //    @Test
 //    public void givenValidRestaurant_whenCreateRestaurant_shouldReturn201Created() {
 //        Response response = api.path("/restaurants/")
@@ -208,7 +220,6 @@
 //
 //        assertEquals("Http Response should be 201 ", Response.Status.CREATED.getStatusCode(), response.getStatus());
 //    }
-//
 //
 //    @Test
 //    public void givenValidRestaurant_whenCreateRestaurant_shouldReturnLocationHeader() {

@@ -2,17 +2,11 @@ package ca.ulaval.glo2003.controllers;
 
 import ca.ulaval.glo2003.controllers.requests.FuzzySearchRequest;
 import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
-import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
-import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
-import ca.ulaval.glo2003.controllers.validators.HeaderValidator;
-import ca.ulaval.glo2003.controllers.validators.SearchRestaurantValidator;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
-import ca.ulaval.glo2003.domain.utils.FuzzySearch;
 import ca.ulaval.glo2003.service.RestaurantService;
-import ca.ulaval.glo2003.service.assembler.FuzzySearchAssembler;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;

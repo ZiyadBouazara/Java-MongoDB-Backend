@@ -2,11 +2,11 @@ package ca.ulaval.glo2003.injection;
 
 import ca.ulaval.glo2003.controllers.assemblers.ReservationResponseAssembler;
 import ca.ulaval.glo2003.controllers.assemblers.RestaurantResponseAssembler;
-import ca.ulaval.glo2003.controllers.validators.CreateReservationValidator;
-import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
-import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
-import ca.ulaval.glo2003.controllers.validators.HeaderValidator;
-import ca.ulaval.glo2003.controllers.validators.SearchRestaurantValidator;
+import ca.ulaval.glo2003.service.validators.CreateReservationValidator;
+import ca.ulaval.glo2003.service.validators.CreateRestaurantValidator;
+import ca.ulaval.glo2003.service.validators.GetRestaurantValidator;
+import ca.ulaval.glo2003.service.validators.HeaderValidator;
+import ca.ulaval.glo2003.service.validators.SearchRestaurantValidator;
 import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.ReservationFactory;
 import ca.ulaval.glo2003.domain.restaurant.RestaurantFactory;

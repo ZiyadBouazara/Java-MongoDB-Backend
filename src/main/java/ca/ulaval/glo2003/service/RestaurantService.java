@@ -4,10 +4,10 @@ import ca.ulaval.glo2003.controllers.assemblers.RestaurantResponseAssembler;
 import ca.ulaval.glo2003.controllers.requests.FuzzySearchRequest;
 import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
-import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
-import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
-import ca.ulaval.glo2003.controllers.validators.HeaderValidator;
-import ca.ulaval.glo2003.controllers.validators.SearchRestaurantValidator;
+import ca.ulaval.glo2003.service.validators.CreateRestaurantValidator;
+import ca.ulaval.glo2003.service.validators.GetRestaurantValidator;
+import ca.ulaval.glo2003.service.validators.HeaderValidator;
+import ca.ulaval.glo2003.service.validators.SearchRestaurantValidator;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.domain.utils.FuzzySearch;
@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class RestaurantService {
-
     private final CreateRestaurantValidator createRestaurantValidator = new CreateRestaurantValidator();
     private final GetRestaurantValidator getRestaurantValidator = new GetRestaurantValidator();
     private final HeaderValidator headerValidator = new HeaderValidator();
@@ -56,7 +55,11 @@ public class RestaurantService {
         headerValidator.verifyMissingHeader(ownerId);
         createRestaurantValidator.validate(ownerId, restaurantRequest);
 
-        Restaurant restaurant = restaurantFactory.createRestaurant(ownerId, restaurantRequest);
+        Restaurant restaurant = restaurantFactory.createRestaurant(ownerId,
+                restaurantRequest.name(),
+                restaurantRequest.capacity(),
+                restaurantRequest.hours(),
+                restaurantRequest.reservations());
         restaurantAndReservationRepository.saveRestaurant(restaurant);
         return restaurant.getId();
     }

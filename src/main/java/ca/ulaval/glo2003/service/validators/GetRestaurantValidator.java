@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.controllers.validators;
+package ca.ulaval.glo2003.service.validators;
 
 import jakarta.ws.rs.NotFoundException;
 

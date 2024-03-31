@@ -1,12 +1,5 @@
 package ca.ulaval.glo2003.domain.restaurant;
 
-import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
-import ca.ulaval.glo2003.controllers.validators.CreateRestaurantValidator;
-import ca.ulaval.glo2003.controllers.validators.GetRestaurantValidator;
-import ca.ulaval.glo2003.controllers.validators.HeaderValidator;
-import ca.ulaval.glo2003.controllers.validators.SearchRestaurantValidator;
-import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
-import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.service.assembler.HoursAssembler;
 import ca.ulaval.glo2003.service.dtos.HoursDTO;
 import ca.ulaval.glo2003.service.dtos.ReservationConfigurationDTO;
@@ -15,20 +8,24 @@ import ca.ulaval.glo2003.domain.utils.Hours;
 public class RestaurantFactory {
     private final HoursAssembler hoursAssembler = new HoursAssembler();
     public Restaurant createRestaurant(String ownerId,
-                                       RestaurantRequest restaurantRequest) {
+                                       String name,
+                                       Integer capacity,
+                                       HoursDTO hoursDTO,
+                                       ReservationConfigurationDTO reservationDuration) {
 
-        if (hasReservationConfiguration(restaurantRequest.reservations())) {
+        if (hasReservationConfiguration(reservationDuration)) {
             return createRestaurantWithReservationConfiguration(
                 ownerId,
-                restaurantRequest.name(),
-                restaurantRequest.capacity(),
-                hoursAssembler.fromDTO(restaurantRequest.hours()),
-                restaurantRequest.reservations());
+                name,
+                capacity,
+                hoursAssembler.fromDTO(hoursDTO),
+                reservationDuration);
         } else {
-            return createRestaurantWithoutReservationConfiguration(ownerId,
-                restaurantRequest.name(),
-                restaurantRequest.capacity(),
-                hoursAssembler.fromDTO(restaurantRequest.hours())
+            return createRestaurantWithoutReservationConfiguration(
+                ownerId,
+                name,
+                capacity,
+                hoursAssembler.fromDTO(hoursDTO)
                 );
         }
     }

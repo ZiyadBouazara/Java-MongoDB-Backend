@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.controllers.validators;
+package ca.ulaval.glo2003.service.validators;
 
 import ca.ulaval.glo2003.controllers.requests.FuzzySearchRequest;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
