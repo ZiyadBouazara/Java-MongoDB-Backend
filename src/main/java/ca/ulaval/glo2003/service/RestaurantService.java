@@ -1,5 +1,6 @@
 package ca.ulaval.glo2003.service;
 
+import ca.ulaval.glo2003.controllers.assemblers.FuzzySearchResponseAssembler;
 import ca.ulaval.glo2003.controllers.assemblers.RestaurantResponseAssembler;
 import ca.ulaval.glo2003.controllers.requests.FuzzySearchRequest;
 import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
@@ -36,17 +37,21 @@ public class RestaurantService {
     private final RestaurantResponseAssembler restaurantResponseAssembler;
     private final FuzzySearchAssembler fuzzySearchAssembler;
 
+    private final FuzzySearchResponseAssembler fuzzySearchResponseAssembler;
+
     @Inject
     public RestaurantService(RestaurantAndReservationRepository restaurantAndReservationRepository,
                              RestaurantFactory restaurantFactory, HoursAssembler hoursAssembler,
                              RestaurantResponseAssembler restaurantResponseAssembler,
-                             FuzzySearchAssembler fuzzySearchAssembler) {
+                             FuzzySearchAssembler fuzzySearchAssembler,
+                             FuzzySearchResponseAssembler fuzzySearchResponseAssembler) {
 
         this.restaurantAndReservationRepository = restaurantAndReservationRepository;
         this.restaurantFactory = restaurantFactory;
         this.hoursAssembler = hoursAssembler;
         this.restaurantResponseAssembler = restaurantResponseAssembler;
         this.fuzzySearchAssembler = fuzzySearchAssembler;
+        this.fuzzySearchResponseAssembler = fuzzySearchResponseAssembler;
     }
 
     public String createRestaurant(String ownerId,
@@ -113,10 +118,11 @@ public class RestaurantService {
     }
 
     public FuzzySearchResponse getFuzzySearchResponseForRestaurant(Restaurant restaurant) {
-        return new FuzzySearchResponse(
+        /*return new FuzzySearchResponse(
             restaurant.getId(),
             restaurant.getName(),
             restaurant.getCapacity(),
-            hoursAssembler.toDTO(restaurant.getHours()));
+            hoursAssembler.toDTO(restaurant.getHours()));*/
+       return fuzzySearchResponseAssembler.toDTO(restaurant);
     }
 }
