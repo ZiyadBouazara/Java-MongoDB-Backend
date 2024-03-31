@@ -10,7 +10,7 @@ import java.time.format.DateTimeParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CreateReservationValidator {
+public class ReservationValidator {
     private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("^\\d{10}$");
 
     private static final String EMAIL_LOCAL_PART_PATTERN =
@@ -39,7 +39,6 @@ public class CreateReservationValidator {
         verifyMissing("groupSize", reservationRequest.groupSize());
         verifyMissingCustomer(reservationRequest);
     }
-
     private void verifyMissing(String parameterName, Object parameterValue) throws MissingParameterException {
         if (parameterValue == null) {
             throw new MissingParameterException("Missing parameter '" + parameterName + "'");
@@ -93,5 +92,14 @@ public class CreateReservationValidator {
         Matcher matcher = EMAIL_PATTERN.matcher(email);
         return matcher.matches();
     }
+
+    /*private void verifyGetReservationValidParameters(String date, String customerName) throws InvalidParameterException, MissingParameterException
+        if(date != null){
+            verifyValidDate(date);
+        }
+        if(customerName != null){
+            verifyValidCustomerName(customerName);
+        }
+    }*/
 }
 

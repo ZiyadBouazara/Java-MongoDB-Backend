@@ -3,7 +3,6 @@ package ca.ulaval.glo2003.controllers;
 import ca.ulaval.glo2003.Main;
 import ca.ulaval.glo2003.controllers.requests.ReservationRequest;
 import ca.ulaval.glo2003.controllers.responses.ReservationResponse;
-import ca.ulaval.glo2003.service.validators.CreateReservationValidator;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.service.ReservationService;

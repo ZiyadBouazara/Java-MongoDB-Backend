@@ -6,13 +6,12 @@ import ca.ulaval.glo2003.controllers.responses.ReservationResponse;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
-import ca.ulaval.glo2003.service.dtos.CustomerDTO;
 import ca.ulaval.glo2003.domain.customer.Customer;
 import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
 import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.reservation.ReservationFactory;
-import ca.ulaval.glo2003.service.validators.CreateReservationValidator;
+import ca.ulaval.glo2003.service.validators.ReservationValidator;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 
@@ -21,19 +20,19 @@ public class ReservationService {
     private final ReservationFactory reservationFactory;
     private final CustomerAssembler customerAssembler;
     private final ReservationResponseAssembler reservationResponseAssembler;
-    private final CreateReservationValidator createReservationValidator;
+    private final ReservationValidator reservationValidator;
 
     @Inject
     public ReservationService(RestaurantAndReservationRepository restaurantAndReservationRepository,
                               ReservationFactory reservationFactory,
                               CustomerAssembler customerAssembler,
                               ReservationResponseAssembler reservationResponseAssembler,
-                              CreateReservationValidator createReservationValidator) {
+                              ReservationValidator reservationValidator) {
         this.restaurantAndReservationRepository = restaurantAndReservationRepository;
         this.reservationFactory = reservationFactory;
         this.customerAssembler = customerAssembler;
         this.reservationResponseAssembler = reservationResponseAssembler;
-        this.createReservationValidator = createReservationValidator;
+        this.reservationValidator = reservationValidator;
     }
 
     public String createReservation(
@@ -41,7 +40,7 @@ public class ReservationService {
             ReservationRequest reservationRequest)
             throws InvalidParameterException, MissingParameterException {
 
-        createReservationValidator.validateReservationRequest(reservationRequest);
+        reservationValidator.validateReservationRequest(reservationRequest);
 
         Restaurant restaurant = restaurantAndReservationRepository.findRestaurantByRestaurantId(restaurantId);
         if (restaurant.getCapacity() < reservationRequest.groupSize()) {
