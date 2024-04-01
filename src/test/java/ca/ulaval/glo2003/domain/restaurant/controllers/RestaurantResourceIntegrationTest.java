@@ -67,20 +67,20 @@
 //        Hours validHours = new Hours("11:00:00", "19:30:00");
 //        validRestaurant = new Restaurant(OWNER_ID, RESTAURANT_NAME, VALID_RESTAURANTS_CAPACITY, validHours);
 //        expectedResponse = new RestaurantResponse(validRestaurant.getId(),
-//                OWNER_ID,
-//                validRestaurant.getName(),
-//                validRestaurant.getCapacity(),
-//                hoursAssembler.toDTO(validRestaurant.getHours()),
-//                new ReservationConfigurationDTO(60));
+//            OWNER_ID,
+//            validRestaurant.getName(),
+//            validRestaurant.getCapacity(),
+//            hoursAssembler.toDTO(validRestaurant.getHours()),
+//            new ReservationConfigurationDTO(60));
 //
 //        restaurantRequest = new RestaurantRequest(
-//                validRestaurant.getName(),
-//                validRestaurant.getCapacity(),
-//                new HoursDTO("11:00:00", "19:30:00"),
-//                new ReservationConfigurationDTO(60));
+//            validRestaurant.getName(),
+//            validRestaurant.getCapacity(),
+//            new HoursDTO("11:00:00", "19:30:00"),
+//            new ReservationConfigurationDTO(60));
 //
 //        return new ResourceConfig().register(new RestaurantResource(
-//                restaurantServiceMocked));
+//            restaurantServiceMocked));
 //    }
 //
 //    @BeforeEach
@@ -93,7 +93,7 @@
 //
 //        when(restaurantServiceMocked.getRestaurant(OWNER_ID, validRestaurant.getId())).thenReturn(expectedResponse);
 //        when(restaurantServiceMocked.createRestaurant(OWNER_ID,
-//                restaurantRequest)).thenReturn(validRestaurant.getId());
+//            restaurantRequest)).thenReturn(validRestaurant.getId());
 //    }
 //
 //    @AfterEach
@@ -104,9 +104,9 @@
 //    @Test
 //    public void givenOwnerHasRestaurant_whenGetRestaurants_shouldReturn200() {
 //        var response = api.path("/restaurants/")
-//                .request()
-//                .header("Owner", OWNER_ID)
-//                .get();
+//            .request()
+//            .header("Owner", OWNER_ID)
+//            .get();
 //
 //
 //        assertThat(response.getStatus()).isEqualTo(200);
@@ -115,9 +115,9 @@
 //    @Test
 //    public void givenOwnerHasRestaurant_whenGetRestaurants_shouldReturnListOfRestaurants() {
 //        var response = api.path("/restaurants/")
-//                .request()
-//                .header("Owner", OWNER_ID)
-//                .get();
+//            .request()
+//            .header("Owner", OWNER_ID)
+//            .get();
 //
 //        var body = response.readEntity(String.class);
 //
@@ -132,9 +132,9 @@
 ////                .isInstanceOf(MissingParameterException.class);
 //
 //        var response = api.path("/restaurants/")
-//                .request()
-//                .header("", "")
-//                .get();
+//            .request()
+//            .header("", "")
+//            .get();
 //
 //        String responseBody = response.readEntity(String.class);
 //        assertThat(response.getStatus()).isEqualTo(400);
@@ -146,20 +146,20 @@
 //    @Test
 //    public void givenValidRestaurant_whenGetRestaurantWithId_shouldReturn200() {
 //        var response = api.path("/restaurants/" + validRestaurant.getId())
-//                .request()
-//                .header("Owner", OWNER_ID)
-//                .get();
+//            .request()
+//            .header("Owner", OWNER_ID)
+//            .get();
 //
 //        assertThat(response.getStatus()).isEqualTo(200);
 //    }
 //
 //    @Test
 //    public void givenValidRestaurant_whenGetRestaurantWithId_shouldReturnRestaurant()
-//            throws NotFoundException, IOException {
+//        throws NotFoundException, IOException {
 //        var response = api.path("/restaurants/" + validRestaurant.getId())
-//                .request()
-//                .header("Owner", OWNER_ID)
-//                .get();
+//            .request()
+//            .header("Owner", OWNER_ID)
+//            .get();
 //
 //        String jsonResponse = response.readEntity(String.class);
 //
@@ -177,9 +177,9 @@
 ////            .get(String.class))
 ////            .isInstanceOf(ProcessingException.class);
 //        var response = api.path("/restaurants/" + validRestaurant.getId())
-//                .request()
-//                .header("",OWNER_ID)
-//                .get();
+//            .request()
+//            .header("", OWNER_ID)
+//            .get();
 //
 //        String jsonResponse = response.readEntity(String.class);
 //
@@ -193,29 +193,29 @@
 //    @Test
 //    public void givenMissingOwnerHeader_whenGetRestaurantWithInvalidOwnerId_shouldThrowNotFoundExceptionException() {
 //        assertThatThrownBy(() -> api.path("/restaurants/{id}/").resolveTemplate("id", validRestaurant.getId())
-//                .request()
-//                .header("Owner", INVALID_OWNER_ID)
-//                .get(String.class))
-//                .isInstanceOf(NotFoundException.class)
-//                .hasMessageContaining("Not Found");
+//            .request()
+//            .header("Owner", INVALID_OWNER_ID)
+//            .get(String.class))
+//            .isInstanceOf(NotFoundException.class)
+//            .hasMessageContaining("Not Found");
 //    }
 //
 //    @Test
 //    public void givenNonExistentRestaurantId_whenGetRestaurantWithId_shouldReturn404() {
 //        assertThatThrownBy(() -> api.path("/restaurants/{id}/").resolveTemplate("id", RESTAURANT_ID)
-//                .request()
-//                .header("Owner", INVALID_OWNER_ID)
-//                .get(String.class))
-//                .isInstanceOf(NotFoundException.class)
-//                .hasMessageContaining("Not Found");
+//            .request()
+//            .header("Owner", INVALID_OWNER_ID)
+//            .get(String.class))
+//            .isInstanceOf(NotFoundException.class)
+//            .hasMessageContaining("Not Found");
 //    }
 //
 //    @Test
 //    public void givenValidRestaurant_whenCreateRestaurant_shouldReturn201Created() {
 //        Response response = api.path("/restaurants/")
-//                .request()
-//                .header("Owner", OWNER_ID)
-//                .post(Entity.json(restaurantRequest));
+//            .request()
+//            .header("Owner", OWNER_ID)
+//            .post(Entity.json(restaurantRequest));
 //
 //
 //        assertEquals("Http Response should be 201 ", Response.Status.CREATED.getStatusCode(), response.getStatus());
@@ -224,9 +224,9 @@
 //    @Test
 //    public void givenValidRestaurant_whenCreateRestaurant_shouldReturnLocationHeader() {
 //        Response response = api.path("/restaurants/")
-//                .request()
-//                .header("Owner", OWNER_ID)
-//                .post(Entity.json(restaurantRequest));
+//            .request()
+//            .header("Owner", OWNER_ID)
+//            .post(Entity.json(restaurantRequest));
 //
 //
 //        assertTrue(response.getHeaderString("Location").contains("/restaurants/"));
@@ -235,28 +235,32 @@
 //    @Test
 //    public void givenMissingParameter_whenCreateRestaurant_shouldThrowMissingParameterException() {
 //        assertThatThrownBy(() -> api.path("/restaurants/")
-//                .request()
-//                .header("Owner", OWNER_ID)
-//                .post(Entity.json("{\"name\":\"La Botega\", \"hours\":{\"open\":\"11:00:00\", \"close\":\"19:00:00\"}}")))
-//                .isInstanceOf(ProcessingException.class);
+//            .request()
+//            .header("Owner", OWNER_ID)
+//            .post(Entity.json("{\"name\":\"La Botega\", \"hours\":{\"open\":\"11:00:00\", \"close\":\"19:00:00\"}}")))
+//            .isInstanceOf(ProcessingException.class);
 //    }
 //
 //    @Test
 //    public void givenMissingOwnerHeader_whenCreateRestaurant_shouldReturnBadRequest() {
 //        assertThatThrownBy(() -> api.path("/restaurants/")
-//                .request()
-//                .post(Entity.json("{\"name\":\"La Botega\", \"capacity\":\"5\",\"hours\":{\"open\":\"11:00:00\", \"close\":\"19:00:00\"}}")))
-//                .isInstanceOf(ProcessingException.class);
+//            .request()
+//            .post(
+//                Entity.json(
+//                    "{\"name\":\"La Botega\", \"capacity\":\"5\",\"hours\":{\"open\":\"11:00:00\", \"close\":\"19:00:00\"}}")))
+//            .isInstanceOf(ProcessingException.class);
 //    }
 //
 //    @Test
 //    public void givenInvalidParameter_whenCreateRestaurant_shouldThrowInvalidParameterException() {
 //        assertThatThrownBy(() -> api.path("/restaurants")
-//                .request()
-//                .header("Owner", OWNER_ID)
-//                .post(Entity.json("{\"name\":\"La Botega\", \"capacity\":\"0\",\"hours\":{\"open\":\"11:00:00\", \"close\":\"19:00:00\"}}")))
-//                .isInstanceOf(ProcessingException.class)
-//                .hasMessageContaining("Server-side request processing failed with an error.");
+//            .request()
+//            .header("Owner", OWNER_ID)
+//            .post(
+//                Entity.json(
+//                    "{\"name\":\"La Botega\", \"capacity\":\"0\",\"hours\":{\"open\":\"11:00:00\", \"close\":\"19:00:00\"}}")))
+//            .isInstanceOf(ProcessingException.class)
+//            .hasMessageContaining("Server-side request processing failed with an error.");
 //    }
 //
 //}

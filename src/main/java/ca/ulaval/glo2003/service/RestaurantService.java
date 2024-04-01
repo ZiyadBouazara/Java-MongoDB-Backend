@@ -54,22 +54,22 @@ public class RestaurantService {
 
     public String createRestaurant(String ownerId,
                                    RestaurantRequest restaurantRequest)
-            throws InvalidParameterException, MissingParameterException {
+        throws InvalidParameterException, MissingParameterException {
 
         headerValidator.verifyMissingHeader(ownerId);
         createRestaurantValidator.validate(ownerId, restaurantRequest);
 
         Restaurant restaurant = restaurantFactory.createRestaurant(ownerId,
-                restaurantRequest.name(),
-                restaurantRequest.capacity(),
-                restaurantRequest.hours(),
-                restaurantRequest.reservations());
+            restaurantRequest.name(),
+            restaurantRequest.capacity(),
+            restaurantRequest.hours(),
+            restaurantRequest.reservations());
         restaurantAndReservationRepository.saveRestaurant(restaurant);
         return restaurant.getId();
     }
 
     public List<RestaurantResponse> getRestaurantsForOwnerId(String ownerId)
-            throws MissingParameterException {
+        throws MissingParameterException {
         headerValidator.verifyMissingHeader(ownerId);
 
         List<Restaurant> ownerRestaurants = restaurantAndReservationRepository.findRestaurantsByOwnerId(ownerId);
@@ -79,7 +79,7 @@ public class RestaurantService {
     }
 
     public RestaurantResponse getRestaurant(String ownerId, String restaurantId)
-            throws MissingParameterException {
+        throws MissingParameterException {
         headerValidator.verifyMissingHeader(ownerId);
         Restaurant restaurant = restaurantAndReservationRepository.findRestaurantByRestaurantId(restaurantId);
         if (restaurant == null) {
@@ -91,14 +91,14 @@ public class RestaurantService {
     }
 
     public List<FuzzySearchResponse> getAllRestaurantsForSearch(FuzzySearchRequest search)
-            throws InvalidParameterException {
+        throws InvalidParameterException {
         restaurantSearchValidator.verifyFuzzySearchValidParameters(search);
 
         List<FuzzySearchResponse> searchedRestaurants = new ArrayList<>();
 
         for (Restaurant restaurant : restaurantAndReservationRepository.getAllRestaurants()) {
             if (shouldMatchRestaurantName(search, restaurant) &&
-                    shouldMatchRestaurantHours(search, restaurant)) {
+                shouldMatchRestaurantHours(search, restaurant)) {
                 searchedRestaurants.add(getFuzzySearchResponseForRestaurant(restaurant));
             }
         }
@@ -116,15 +116,10 @@ public class RestaurantService {
         }
 
         return FuzzySearch.isFromTimeMatching(search.opened().from(), restaurant.getHours().getOpen()) &&
-                FuzzySearch.isToTimeMatching(search.opened().to(), restaurant.getHours().getClose());
+            FuzzySearch.isToTimeMatching(search.opened().to(), restaurant.getHours().getClose());
     }
 
     public FuzzySearchResponse getFuzzySearchResponseForRestaurant(Restaurant restaurant) {
-        /*return new FuzzySearchResponse(
-            restaurant.getId(),
-            restaurant.getName(),
-            restaurant.getCapacity(),
-            hoursAssembler.toDTO(restaurant.getHours()));*/
-       return fuzzySearchResponseAssembler.toDTO(restaurant);
+        return fuzzySearchResponseAssembler.toDTO(restaurant);
     }
 }

@@ -8,7 +8,14 @@ import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
 import ca.ulaval.glo2003.service.RestaurantService;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
@@ -37,7 +44,7 @@ public class RestaurantResource {
     @Path("restaurants")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createRestaurant(@HeaderParam("Owner") String ownerId, RestaurantRequest restaurantRequest)
-            throws NotFoundException, InvalidParameterException, MissingParameterException {
+        throws NotFoundException, InvalidParameterException, MissingParameterException {
 
         String restaurantId = restaurantService.createRestaurant(
             ownerId, restaurantRequest);
@@ -51,7 +58,7 @@ public class RestaurantResource {
     @Produces(MediaType.APPLICATION_JSON)
     public RestaurantResponse getRestaurant(@HeaderParam("Owner") String ownerId, @PathParam("id") String restaurantId)
         throws MissingParameterException, NotFoundException {
-        return restaurantService.getRestaurant(ownerId,restaurantId);
+        return restaurantService.getRestaurant(ownerId, restaurantId);
     }
 
     @POST

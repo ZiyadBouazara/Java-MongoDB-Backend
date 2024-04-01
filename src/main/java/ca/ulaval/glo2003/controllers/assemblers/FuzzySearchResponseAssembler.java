@@ -7,7 +7,9 @@ import ca.ulaval.glo2003.service.assembler.HoursAssembler;
 public class FuzzySearchResponseAssembler {
 
     HoursAssembler hoursAssembler = new HoursAssembler();
+
     public FuzzySearchResponse toDTO(Restaurant restaurant) {
-        return new FuzzySearchResponse(restaurant.getId(), restaurant.getName(), restaurant.getCapacity(), hoursAssembler.toDTO(restaurant.getHours()));
+        return new FuzzySearchResponse(restaurant.getId(), restaurant.getName(), restaurant.getCapacity(),
+            hoursAssembler.toDTO(restaurant.getHours()));
     }
 }
