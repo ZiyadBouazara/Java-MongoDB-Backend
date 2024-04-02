@@ -1,3 +1,11 @@
+package ca.ulaval.glo2003.controllers;
+
+public class RestaurantResourceIntegrationTest {
+}
+
+
+
+
 //package ca.ulaval.glo2003.domain.restaurant.controllers;
 //
 //import ca.ulaval.glo2003.controllers.RestaurantResource;

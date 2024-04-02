@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.domain.restaurant.controllers.api;
+package ca.ulaval.glo2003.controllers.api;
 
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Application;
