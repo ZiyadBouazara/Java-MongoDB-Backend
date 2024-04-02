@@ -31,9 +31,8 @@ jobs:
 
           # Tagging logic for release tag
           if [[ ${{ github.ref }} == 'refs/tags/'* ]]; then
-            TAG_NAME=${{ github.ref#[10] }}
-            docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$TAG_NAME
-            docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$TAG_NAME
+            docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+            docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
           fi
 
       - name: Cleanup Docker cache (optional)
