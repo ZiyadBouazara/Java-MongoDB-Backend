@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 public class InMemoryRestaurantAndReservationRepository implements RestaurantAndReservationRepository {
     private Map<String, Restaurant> restaurants;
+
     public InMemoryRestaurantAndReservationRepository() {
         this.restaurants = new HashMap<>();
     }
@@ -25,6 +26,7 @@ public class InMemoryRestaurantAndReservationRepository implements RestaurantAnd
 
         restaurant.addReservation(reservation);
     }
+
     @Override
     public void saveRestaurant(Restaurant restaurant) throws NotFoundException {
         restaurants.put(restaurant.getId(), restaurant);
@@ -33,8 +35,8 @@ public class InMemoryRestaurantAndReservationRepository implements RestaurantAnd
     @Override
     public List<Restaurant> findRestaurantsByOwnerId(String ownerId) {
         return restaurants.values().stream()
-                .filter(restaurant -> restaurant.getOwnerId().equals(ownerId))
-                .collect(Collectors.toList());
+            .filter(restaurant -> restaurant.getOwnerId().equals(ownerId))
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -50,6 +52,7 @@ public class InMemoryRestaurantAndReservationRepository implements RestaurantAnd
 
         return foundRestaurant.orElseThrow(NotFoundException::new);
     }
+
     @Override
     public List<Restaurant> getAllRestaurants() {
         return new ArrayList<>(restaurants.values());

@@ -8,10 +8,12 @@ import java.util.List;
 
 public class MongoRestaurantAndReservationRepository implements RestaurantAndReservationRepository {
     @Override
-    public void saveRestaurant(Restaurant restaurant) { }
+    public void saveRestaurant(Restaurant restaurant) {
+    }
 
     @Override
-    public void saveReservation(Reservation reservation) { }
+    public void saveReservation(Reservation reservation) {
+    }
 
     @Override
     public List<Restaurant> findRestaurantsByOwnerId(String ownerId) {

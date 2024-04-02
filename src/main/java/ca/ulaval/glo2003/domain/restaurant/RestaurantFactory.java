@@ -7,6 +7,7 @@ import ca.ulaval.glo2003.domain.utils.Hours;
 
 public class RestaurantFactory {
     private final HoursAssembler hoursAssembler = new HoursAssembler();
+
     public Restaurant createRestaurant(String ownerId,
                                        String name,
                                        Integer capacity,
@@ -26,7 +27,7 @@ public class RestaurantFactory {
                 name,
                 capacity,
                 hoursAssembler.fromDTO(hoursDTO)
-                );
+            );
         }
     }
 
