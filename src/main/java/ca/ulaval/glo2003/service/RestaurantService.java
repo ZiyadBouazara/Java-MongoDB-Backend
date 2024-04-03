@@ -1,10 +1,14 @@
 package ca.ulaval.glo2003.service;
 
+import ca.ulaval.glo2003.controllers.assemblers.AvailabilitiesResponseAssembler;
 import ca.ulaval.glo2003.controllers.assemblers.FuzzySearchResponseAssembler;
 import ca.ulaval.glo2003.controllers.assemblers.RestaurantResponseAssembler;
 import ca.ulaval.glo2003.controllers.requests.FuzzySearchRequest;
 import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
+import ca.ulaval.glo2003.controllers.responses.AvailabilitiesResponse;
 import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
+import ca.ulaval.glo2003.domain.utils.Availabilities;
+import ca.ulaval.glo2003.service.assembler.AvailabilitiesAssembler;
 import ca.ulaval.glo2003.service.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.service.validators.GetRestaurantValidator;
 import ca.ulaval.glo2003.service.validators.HeaderValidator;
@@ -35,6 +39,7 @@ public class RestaurantService {
     private final HoursAssembler hoursAssembler;
     private final RestaurantResponseAssembler restaurantResponseAssembler;
     private final FuzzySearchAssembler fuzzySearchAssembler;
+    private final AvailabilitiesResponseAssembler availabilitiesResponseAssembler = new AvailabilitiesResponseAssembler();
     private final FuzzySearchResponseAssembler fuzzySearchResponseAssembler;
 
     @Inject
@@ -121,5 +126,18 @@ public class RestaurantService {
 
     public FuzzySearchResponse getFuzzySearchResponseForRestaurant(Restaurant restaurant) {
         return fuzzySearchResponseAssembler.toDTO(restaurant);
+    }
+
+    public List<AvailabilitiesResponse> getAvailabilitiesForRestaurant(String restaurantId, String date) {
+
+        System.out.println(date);
+//        availabilitiesValidator.verifyAvailabilityValidParameters(search);
+        Restaurant restaurant = restaurantAndReservationRepository.findRestaurantByRestaurantId(restaurantId);
+        Availabilities availabilities = new Availabilities(date, restaurant.getCapacity());
+        List<Availabilities> availabilitiesForRestaurant = availabilities.getAvailabilitiesForRestaurant(restaurant);
+
+        return availabilitiesForRestaurant.stream()
+                .map(availabilitiesResponseAssembler::toDTO)
+                .collect(Collectors.toList());
     }
 }
