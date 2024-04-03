@@ -4,6 +4,11 @@ public class VisitTime {
     private String from;
     private String to;
 
+    public VisitTime(String from, String to) {
+        this.from = from;
+        this.to = to;
+    }
+
     public String getFrom() {
         return this.from;
     }

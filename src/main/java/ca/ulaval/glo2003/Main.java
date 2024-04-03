@@ -1,29 +1,50 @@
 package ca.ulaval.glo2003;
 
 import ca.ulaval.glo2003.controllers.HealthResource;
+import ca.ulaval.glo2003.controllers.ReservationResource;
 import ca.ulaval.glo2003.controllers.RestaurantResource;
 import ca.ulaval.glo2003.domain.exceptions.mapper.InvalidParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.MissingParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.NotFoundExceptionMapper;
-import ca.ulaval.glo2003.domain.utils.ResourcesHandler;
+import ca.ulaval.glo2003.injection.ApplicationBinder;
+import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import java.net.URI;
 
 public class Main {
-    public static final String BASE_URI = "http://0.0.0.0:8080/";
+    public static String BASE_URI = "http://0.0.0.0:";
 
-    public static void startServer() {
-        final ResourcesHandler resourcesHandler = new ResourcesHandler();
+    public static HttpServer startServer() {
+        final String port = getServerPort();
+        BASE_URI = String.format("%s%s/", BASE_URI, port);
+
         final ResourceConfig rc = new ResourceConfig()
-            .register(new HealthResource())
-            .register(new RestaurantResource(resourcesHandler))
-            .register(new InvalidParamExceptionMapper())
-            .register(new MissingParamExceptionMapper())
-            .register(new NotFoundExceptionMapper());
+            .register(new ApplicationBinder())
+            .register(HealthResource.class)
+            .register(RestaurantResource.class)
+            .register(ReservationResource.class)
+            .register(InvalidParamExceptionMapper.class)
+            .register(MissingParamExceptionMapper.class)
+            .register(NotFoundExceptionMapper.class);
 
-        GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+        return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+    }
+
+    public static String getServerPort() {
+        String portString = System.getenv("PORT");
+        int port = 8080;
+
+        if (portString != null) {
+            try {
+                port = Integer.parseInt(portString);
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid port format in environment variable PORT. Using default port 8080.");
+            }
+        }
+
+        return String.valueOf(port);
     }
 
     public static void main(String[] args) {
