@@ -1,7 +1,6 @@
 package ca.ulaval.glo2003.service;
 
 import ca.ulaval.glo2003.controllers.assemblers.ReservationResponseAssembler;
-import ca.ulaval.glo2003.controllers.requests.ReservationRequest;
 import ca.ulaval.glo2003.domain.customer.Customer;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.utils.Hours;
@@ -21,11 +20,11 @@ public class ReservationServiceTest {
     //TODO : IMPLEMENT THE SERVICE TEST
     private static final String CUSTOMER_NAME = "John Deer";
     private static final String CUSTOMER_EMAIL = "john.deer@gmail.com";
-    private static final String CUSTOMER_PHONE_NUMBER= "1234567890";
+    private static final String CUSTOMER_PHONE_NUMBER = "1234567890";
     private static final String OWNER_ID = "1";
     private static final String RESTO_NAME = "1";
     private static final Integer RESTO_CAPACITY = 10;
-    private static final Hours RESTO_HOURS = new Hours("10:00:00","21:00:00");
+    private static final Hours RESTO_HOURS = new Hours("10:00:00", "21:00:00");
     Customer customer;
     ReservationService reservationService;
     @Mock
