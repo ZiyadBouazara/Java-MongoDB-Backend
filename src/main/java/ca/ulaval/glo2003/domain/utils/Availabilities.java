@@ -1,7 +1,5 @@
 package ca.ulaval.glo2003.domain.utils;
 
-import ca.ulaval.glo2003.domain.reservation.Reservation;
-import ca.ulaval.glo2003.domain.restaurant.ReservationConfiguration;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 
 import java.time.LocalDate;
@@ -9,7 +7,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Availabilities {
     private String date;
@@ -23,38 +20,41 @@ public class Availabilities {
     }
 
     public List<Availabilities> getAvailabilitiesForRestaurant(Restaurant restaurant) {
-
-        Map<String, Reservation> reservations = restaurant.getReservationsById();
-        System.out.println(reservations);
-
-        String ouverture = restaurant.getHours().getOpen();
-        String fermeture = restaurant.getHours().getClose();
-
-        ReservationConfiguration reservationConfiguration = restaurant.getRestaurantConfiguration();
-
-
-        LocalDateTime openingTime = LocalDateTime.parse(date + "T" + ouverture, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        LocalDateTime closingTime = LocalDateTime.parse(date + "T" + fermeture, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-
+        LocalDateTime openingTime = getOpeningTime(restaurant);
+        LocalDateTime closingTime = getClosingHour(restaurant);
+        int reservationDuration = restaurant.getRestaurantConfiguration().getDuration();
 
         LocalDateTime currentTime = openingTime;
 
-        while (currentTime.plusMinutes(reservationConfiguration.getDuration()).isBefore(closingTime)) {
-            LocalDateTime finalCurrentTime = currentTime;
-            boolean reservationExist = reservations.values().stream()
-                    .anyMatch(reservation -> isReservationActive(finalCurrentTime, reservation.getStartTime(), restaurant.getRestaurantConfiguration().getDuration()));
-            int remainingPlaces;
-            if (reservationExist) {
-                remainingPlaces = calculateRemainingPlacesWithReservation(currentTime, restaurant.getCapacity());
-            } else {
-                remainingPlaces = restaurant.getCapacity();
-            }
-
-            String formattedTime = currentTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-            availabilities.add(new Availabilities(formattedTime, remainingPlaces));
+        while (currentTime.plusMinutes(reservationDuration).isBefore(closingTime)) {
+            int remainingPlaces = calculateRemainingPlace(restaurant, currentTime);
+            availabilities.add(new Availabilities(currentTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                                                remainingPlaces));
             currentTime = currentTime.plusMinutes(15);
         }
+//        else throw hour validation exception
         return availabilities;
+    }
+
+    private LocalDateTime getOpeningTime(Restaurant restaurant) {
+        return LocalDateTime.parse(date + "T" + restaurant.getHours().getOpen(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    }
+
+    private LocalDateTime getClosingHour(Restaurant restaurant) {
+        return LocalDateTime.parse(date + "T" + restaurant.getHours().getClose(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    }
+//toDo: implement the calculateRemainingPlace Logic for the case where ther is reservation
+    private int calculateRemainingPlace(Restaurant restaurant, LocalDateTime currentTime) {
+        return getExistingReservation(restaurant, currentTime)
+                ? calculateRemainingPlacesWithReservation(currentTime, restaurant.getCapacity())
+                : restaurant.getCapacity();
+    }
+
+    private boolean getExistingReservation(Restaurant restaurant, LocalDateTime currentTime) {
+        return restaurant.getReservationsById().values().stream()
+                .anyMatch(reservation -> isReservationActive(currentTime,
+                        reservation.getStartTime(),
+                        restaurant.getRestaurantConfiguration().getDuration()));
     }
 
     private boolean isReservationActive(LocalDateTime currentTime, String reservationStartTimeString, int reservationDuration) {
@@ -66,8 +66,6 @@ public class Availabilities {
 
         return !currentTime.isBefore(reservationStartTime) && !currentTime.isAfter(reservationEndTime);
     }
-
-
 
     private int calculateRemainingPlacesWithReservation(LocalDateTime currentTime, Integer capacity) {
         return (int) (Math.random() * 10);
