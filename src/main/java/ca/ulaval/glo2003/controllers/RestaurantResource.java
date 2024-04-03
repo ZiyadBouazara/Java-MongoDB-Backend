@@ -1,11 +1,13 @@
 package ca.ulaval.glo2003.controllers;
 
 import ca.ulaval.glo2003.controllers.requests.FuzzySearchRequest;
+import ca.ulaval.glo2003.controllers.responses.AvailabilitiesResponse;
 import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
+import ca.ulaval.glo2003.domain.utils.Availabilities;
 import ca.ulaval.glo2003.service.RestaurantService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -60,6 +62,14 @@ public class RestaurantResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<FuzzySearchResponse> searchRestaurants(FuzzySearchRequest search) throws InvalidParameterException {
         return restaurantService.getAllRestaurantsForSearch(search);
+    }
+
+    @GET
+    @Path("restaurants/{id}/availabilities")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<AvailabilitiesResponse> getAvailabilities(@PathParam("id") String restaurantId, @QueryParam("availabilities") String date)
+        throws MissingParameterException, InvalidParameterException, NotFoundException {
+        return restaurantService.getAvailabilitiesForRestaurant(restaurantId, date);
     }
 }
 
