@@ -15,6 +15,9 @@ import ca.ulaval.glo2003.domain.reservation.ReservationFactory;
 import ca.ulaval.glo2003.service.validators.ReservationValidator;
 import jakarta.inject.Inject;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ReservationService {
     private final RestaurantRepository restaurantRepository;
     private final ReservationRepository reservationRepository;
@@ -58,4 +61,17 @@ public class ReservationService {
         Restaurant restaurant = restaurantRepository.findRestaurantById(reservation.getRestaurantId());
         return reservationResponseAssembler.toDTO(reservation, restaurant);
     }
+
+    //TODO: remake this method after DB changes
+    /*public List<ReservationResponse> searchReservation(String ownerId, String restaurantId, String date, String customerName) {
+        List<Reservation> reservations = restaurantAndReservationRepository.getAllReservationsByRestaurant(restaurantId);
+        List<Reservation> filteredReservations = reservations.stream()
+                .filter(reservation -> reservation.getDate().equals(date))
+                .filter(reservation -> reservation.getCustomer().getName().equals(customerName))
+                .collect(Collectors.toList());
+
+        return filteredReservations.stream()
+                .map(reservation -> reservationResponseAssembler.toDTO(reservation, restaurantAndReservationRepository.findRestaurantByReservationId(reservation.getId())))
+                .collect(Collectors.toList());
+    }*/
 }

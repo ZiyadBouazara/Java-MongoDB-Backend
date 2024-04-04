@@ -1,7 +1,9 @@
 package ca.ulaval.glo2003.domain.restaurant;
 
+import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.utils.Hours;
 
+import java.util.Map;
 import java.util.UUID;
 
 public class Restaurant {
@@ -60,4 +62,13 @@ public class Restaurant {
         return reservationConfiguration;
     }
 
+    /*public Map<String, Reservation> getReservationsById() {
+        return this.reservationsById;
+    }
+
+    public void addReservation(Reservation reservation) {
+        reservationsById.put(reservation.getId(), reservation);
+    }
+    public Collection<Reservation> getAllReservations() {return reservationsById.values();
+    }*/
 }

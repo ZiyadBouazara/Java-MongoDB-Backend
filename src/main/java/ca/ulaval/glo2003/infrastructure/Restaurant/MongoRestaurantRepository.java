@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.infrastructure;
+package ca.ulaval.glo2003.infrastructure.Restaurant;
 
 import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;

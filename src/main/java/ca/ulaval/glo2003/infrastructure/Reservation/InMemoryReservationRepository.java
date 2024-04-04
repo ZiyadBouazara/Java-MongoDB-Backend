@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.infrastructure;
+package ca.ulaval.glo2003.infrastructure.Reservation;
 
 import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
@@ -27,4 +27,6 @@ public class InMemoryReservationRepository implements ReservationRepository {
         }
         throw new NotFoundException("Reservation not found with ID: " + reservationId);
     }
+
+
 }
