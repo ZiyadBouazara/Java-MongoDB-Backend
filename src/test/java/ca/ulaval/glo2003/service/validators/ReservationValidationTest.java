@@ -1,14 +1,15 @@
-package ca.ulaval.glo2003.model;
+package ca.ulaval.glo2003.service.validators;
 
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
-import ca.ulaval.glo2003.model.fixture.ReservationRequestFixture;
-import ca.ulaval.glo2003.models.ReservationRequest;
+import ca.ulaval.glo2003.controllers.api.fixture.ReservationRequestFixture;
+import ca.ulaval.glo2003.controllers.requests.ReservationRequest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ReservationRequestTest {
+public class ReservationValidationTest {
     private static final String VALID_DATE = "2024-03-05";
     private static final String INVALID_DATE = "2024/03/05";
     private static final String VALID_START_TIME = "12:00:00";
@@ -18,11 +19,17 @@ public class ReservationRequestTest {
     private static final String INVALID_EMAIL = "invalid.ca";
     private static final String INVALID_PHONE_NUMBER = "123";
 
+    ReservationValidator reservationValidator;
+    @BeforeEach
+    void setup() {
+        reservationValidator = new ReservationValidator();
+    }
+
     @Test
     void givenValidParameters_whenCreating_shouldNotThrowException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture().create();
 
-        assertDoesNotThrow(reservationRequest::verifyParameters);
+        assertDoesNotThrow(() -> reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -31,7 +38,7 @@ public class ReservationRequestTest {
                 .withGroupSize(VALID_GROUP_SIZE)
                 .create();
 
-        assertDoesNotThrow(reservationRequest::verifyParameters);
+        assertDoesNotThrow(() -> reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -40,7 +47,7 @@ public class ReservationRequestTest {
                 .withStartTime(VALID_START_TIME)
                 .create();
 
-        assertDoesNotThrow(reservationRequest::verifyParameters);
+        assertDoesNotThrow(() -> reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -49,7 +56,7 @@ public class ReservationRequestTest {
                 .withDate(VALID_DATE)
                 .create();
 
-        assertDoesNotThrow(reservationRequest::verifyParameters);
+        assertDoesNotThrow(() -> reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -57,7 +64,7 @@ public class ReservationRequestTest {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .createWithMissingDate();
 
-        assertThrows(MissingParameterException.class, reservationRequest::verifyParameters);
+        assertThrows(MissingParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -65,7 +72,7 @@ public class ReservationRequestTest {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .createWithMissingStartTime();
 
-        assertThrows(MissingParameterException.class, reservationRequest::verifyParameters);
+        assertThrows(MissingParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -73,7 +80,7 @@ public class ReservationRequestTest {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .createWithMissingGroupSize();
 
-        assertThrows(MissingParameterException.class, reservationRequest::verifyParameters);
+        assertThrows(MissingParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -81,52 +88,52 @@ public class ReservationRequestTest {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .createWithMissingCustomer();
 
-        assertThrows(MissingParameterException.class, reservationRequest::verifyParameters);
+        assertThrows(MissingParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
     void givenInvalidCustomerEmail_whenCreating_shouldThrowInvalidParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
+                .withCustomerEmail(INVALID_EMAIL)
                 .create();
-        reservationRequest.getCustomer().setEmail(INVALID_EMAIL);
 
-        assertThrows(InvalidParameterException.class, reservationRequest::verifyParameters);
+        assertThrows(InvalidParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
     void givenInvalidCustomerPhoneNumber_whenCreating_shouldThrowInvalidParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
+                .withCustomerPhoneNumber(INVALID_PHONE_NUMBER)
                 .create();
-        reservationRequest.getCustomer().setPhoneNumber(INVALID_PHONE_NUMBER);
 
-        assertThrows(InvalidParameterException.class, reservationRequest::verifyParameters);
+        assertThrows(InvalidParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
     void givenMissingCustomerName_whenCreating_shouldThrowMissingParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
+                .withCustomerName(null)
                 .create();
-        reservationRequest.getCustomer().setName(null);
 
-        assertThrows(MissingParameterException.class, reservationRequest::verifyParameters);
+        assertThrows(MissingParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
     void givenMissingCustomerEmail_whenCreating_shouldThrowMissingParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
+                .withCustomerEmail(null)
                 .create();
-        reservationRequest.getCustomer().setEmail(null);
 
-        assertThrows(MissingParameterException.class, reservationRequest::verifyParameters);
+        assertThrows(MissingParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
     void givenMissingCustomerPhoneNumber_whenCreating_shouldThrowMissingParameterException() {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
+                .withCustomerPhoneNumber(null)
                 .create();
-        reservationRequest.getCustomer().setPhoneNumber(null);
 
-        assertThrows(MissingParameterException.class, reservationRequest::verifyParameters);
+        assertThrows(MissingParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -135,7 +142,7 @@ public class ReservationRequestTest {
                 .withGroupSize(INVALID_GROUP_SIZE)
                 .create();
 
-        assertThrows(InvalidParameterException.class, reservationRequest::verifyParameters);
+        assertThrows(InvalidParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -144,7 +151,7 @@ public class ReservationRequestTest {
                 .withStartTime(INVALID_START_TIME)
                 .create();
 
-        assertThrows(InvalidParameterException.class, reservationRequest::verifyParameters);
+        assertThrows(InvalidParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -153,6 +160,6 @@ public class ReservationRequestTest {
                 .withDate(INVALID_DATE)
                 .create();
 
-        assertThrows(InvalidParameterException.class, reservationRequest::verifyParameters);
+        assertThrows(InvalidParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
     }
 }
