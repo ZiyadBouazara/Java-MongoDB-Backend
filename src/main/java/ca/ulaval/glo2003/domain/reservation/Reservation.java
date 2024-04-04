@@ -1,11 +1,15 @@
 package ca.ulaval.glo2003.domain.reservation;
 
 import ca.ulaval.glo2003.domain.customer.Customer;
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
 
 import java.util.UUID;
 
+@Entity("reservations")
 public class Reservation {
     private String restaurantId;
+    @Id
     private String id;
     private String date;
     private String startTime;
