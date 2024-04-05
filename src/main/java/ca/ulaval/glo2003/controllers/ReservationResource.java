@@ -8,6 +8,7 @@ import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.service.ReservationService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
@@ -51,5 +52,13 @@ public class ReservationResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ReservationResponse getReservation(@PathParam("id") String reservationId) throws NotFoundException {
         return reservationService.getReservation(reservationId);
+    }
+
+    @DELETE
+    @Path("reservations/{id}")
+    public Response deleteReservation(@PathParam("id") String reservationId)
+        throws NotFoundException {
+        reservationService.deleteReservation(reservationId);
+        return Response.noContent().build();
     }
 }

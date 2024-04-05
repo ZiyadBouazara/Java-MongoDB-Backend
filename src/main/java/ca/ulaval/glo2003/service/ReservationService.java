@@ -14,6 +14,7 @@ import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.reservation.ReservationFactory;
 import ca.ulaval.glo2003.service.validators.ReservationValidator;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 
 public class ReservationService {
     private final RestaurantRepository restaurantRepository;
@@ -51,6 +52,10 @@ public class ReservationService {
                 reservationRequest.groupSize(), customer);
         reservationRepository.saveReservation(reservation);
         return reservation.getId();
+    }
+
+    public void deleteReservation(String reservationId) throws NotFoundException {
+        reservationRepository.deleteReservation(reservationId);
     }
 
     public ReservationResponse getReservation(String reservationId) {

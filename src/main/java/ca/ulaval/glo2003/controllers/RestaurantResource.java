@@ -9,6 +9,7 @@ import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
 import ca.ulaval.glo2003.service.RestaurantService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.NotFoundException;
@@ -67,6 +68,14 @@ public class RestaurantResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<FuzzySearchResponse> searchRestaurants(FuzzySearchRequest search) throws InvalidParameterException {
         return restaurantService.getAllRestaurantsForSearch(search);
+    }
+
+    @DELETE
+    @Path("restaurants/{id}")
+    public Response deleteRestaurant(@HeaderParam("Owner") String ownerId, @PathParam("id") String restaurantId)
+        throws NotFoundException, MissingParameterException {
+        restaurantService.deleteRestaurant(ownerId, restaurantId);
+        return Response.noContent().build();
     }
 }
 

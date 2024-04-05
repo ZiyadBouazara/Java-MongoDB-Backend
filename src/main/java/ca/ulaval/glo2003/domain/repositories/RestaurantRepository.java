@@ -7,7 +7,12 @@ import java.util.List;
 
 public interface RestaurantRepository {
     void saveRestaurant(Restaurant restaurant);
+
+    void deleteRestaurant(String ownerId, String restaurantId) throws NotFoundException;
+
     List<Restaurant> findRestaurantsByOwnerId(String ownerId);
+
     Restaurant findRestaurantById(String restaurantId) throws NotFoundException;
+
     List<Restaurant> getAllRestaurants();
 }
