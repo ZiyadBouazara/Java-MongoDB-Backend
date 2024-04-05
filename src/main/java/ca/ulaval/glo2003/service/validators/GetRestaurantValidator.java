@@ -6,7 +6,7 @@ public class GetRestaurantValidator {
 
     public void validateRestaurantOwnership(String expectedOwnerId, String returnedRestaurantOwnerId) throws NotFoundException {
         if (!expectedOwnerId.equals(returnedRestaurantOwnerId)) {
-            throw new NotFoundException();
+            throw new NotFoundException("Cannot delete a restaurant if you are not the owner");
         }
     }
 }
