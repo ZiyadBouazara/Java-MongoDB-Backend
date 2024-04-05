@@ -8,7 +8,6 @@ import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.responses.AvailabilitiesResponse;
 import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
 import ca.ulaval.glo2003.domain.utils.Availabilities;
-import ca.ulaval.glo2003.service.assembler.AvailabilitiesAssembler;
 import ca.ulaval.glo2003.service.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.service.validators.GetRestaurantValidator;
 import ca.ulaval.glo2003.service.validators.HeaderValidator;

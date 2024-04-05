@@ -7,10 +7,17 @@ import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
-import ca.ulaval.glo2003.domain.utils.Availabilities;
 import ca.ulaval.glo2003.service.RestaurantService;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
@@ -67,7 +74,8 @@ public class RestaurantResource {
     @GET
     @Path("restaurants/{id}/availabilities")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<AvailabilitiesResponse> getAvailabilities(@PathParam("id") String restaurantId, @QueryParam("availabilities") String date)
+    public List<AvailabilitiesResponse> getAvailabilities(@PathParam("id") String restaurantId,
+                                                          @QueryParam("availabilities") String date)
         throws MissingParameterException, InvalidParameterException, NotFoundException {
         return restaurantService.getAvailabilitiesForRestaurant(restaurantId, date);
     }
