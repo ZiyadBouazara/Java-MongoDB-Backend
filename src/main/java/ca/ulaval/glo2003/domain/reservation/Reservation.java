@@ -1,11 +1,15 @@
 package ca.ulaval.glo2003.domain.reservation;
 
 import ca.ulaval.glo2003.domain.customer.Customer;
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
 
 import java.util.UUID;
 
+@Entity("reservations")
 public class Reservation {
     private String restaurantId;
+    @Id
     private String id;
     private String date;
     private String startTime;
@@ -20,21 +24,27 @@ public class Reservation {
         this.groupSize = groupSize;
         this.customer = customer;
     }
+
     public String getRestaurantId() {
         return this.restaurantId;
     }
+
     public String getId() {
         return this.id;
     }
+
     public String getDate() {
         return this.date;
     }
+
     public String getStartTime() {
         return this.startTime;
     }
+
     public int getGroupSize() {
         return this.groupSize;
     }
+
     public Customer getCustomer() {
         return this.customer;
     }

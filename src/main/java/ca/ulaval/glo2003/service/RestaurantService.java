@@ -8,7 +8,7 @@ import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.responses.AvailabilitiesResponse;
 import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
 import ca.ulaval.glo2003.domain.utils.Availabilities;
-import ca.ulaval.glo2003.service.assembler.AvailabilitiesAssembler;
+import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
 import ca.ulaval.glo2003.service.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.service.validators.GetRestaurantValidator;
 import ca.ulaval.glo2003.service.validators.HeaderValidator;
@@ -19,11 +19,9 @@ import ca.ulaval.glo2003.domain.utils.FuzzySearch;
 import ca.ulaval.glo2003.service.assembler.FuzzySearchAssembler;
 import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
 import ca.ulaval.glo2003.service.assembler.HoursAssembler;
-import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.restaurant.RestaurantFactory;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +32,7 @@ public class RestaurantService {
     private final GetRestaurantValidator getRestaurantValidator = new GetRestaurantValidator();
     private final HeaderValidator headerValidator = new HeaderValidator();
     private final SearchRestaurantValidator restaurantSearchValidator = new SearchRestaurantValidator();
-    private final RestaurantAndReservationRepository restaurantAndReservationRepository;
+    private final RestaurantRepository restaurantRepository;
     private final RestaurantFactory restaurantFactory;
     private final HoursAssembler hoursAssembler;
     private final RestaurantResponseAssembler restaurantResponseAssembler;
@@ -43,13 +41,10 @@ public class RestaurantService {
     private final FuzzySearchResponseAssembler fuzzySearchResponseAssembler;
 
     @Inject
-    public RestaurantService(RestaurantAndReservationRepository restaurantAndReservationRepository,
-                             RestaurantFactory restaurantFactory, HoursAssembler hoursAssembler,
-                             RestaurantResponseAssembler restaurantResponseAssembler,
-                             FuzzySearchAssembler fuzzySearchAssembler,
-                             FuzzySearchResponseAssembler fuzzySearchResponseAssembler) {
-
-        this.restaurantAndReservationRepository = restaurantAndReservationRepository;
+    public RestaurantService(RestaurantRepository restaurantRepository, RestaurantFactory restaurantFactory,
+                             HoursAssembler hoursAssembler, RestaurantResponseAssembler restaurantResponseAssembler,
+                             FuzzySearchAssembler fuzzySearchAssembler, FuzzySearchResponseAssembler fuzzySearchResponseAssembler) {
+        this.restaurantRepository = restaurantRepository;
         this.restaurantFactory = restaurantFactory;
         this.hoursAssembler = hoursAssembler;
         this.restaurantResponseAssembler = restaurantResponseAssembler;
@@ -57,53 +52,39 @@ public class RestaurantService {
         this.fuzzySearchResponseAssembler = fuzzySearchResponseAssembler;
     }
 
-    public String createRestaurant(String ownerId,
-                                   RestaurantRequest restaurantRequest)
+    public String createRestaurant(String ownerId, RestaurantRequest restaurantRequest)
         throws InvalidParameterException, MissingParameterException {
 
         headerValidator.verifyMissingHeader(ownerId);
         createRestaurantValidator.validate(ownerId, restaurantRequest);
 
-        Restaurant restaurant = restaurantFactory.createRestaurant(ownerId,
-            restaurantRequest.name(),
-            restaurantRequest.capacity(),
-            restaurantRequest.hours(),
-            restaurantRequest.reservations());
-        restaurantAndReservationRepository.saveRestaurant(restaurant);
+        Restaurant restaurant = restaurantFactory.createRestaurant(ownerId, restaurantRequest.name(), restaurantRequest.capacity(),
+            restaurantRequest.hours(), restaurantRequest.reservations());
+        restaurantRepository.saveRestaurant(restaurant);
         return restaurant.getId();
     }
 
-    public List<RestaurantResponse> getRestaurantsForOwnerId(String ownerId)
-        throws MissingParameterException {
+    public List<RestaurantResponse> getRestaurantsForOwnerId(String ownerId) throws MissingParameterException {
         headerValidator.verifyMissingHeader(ownerId);
 
-        List<Restaurant> ownerRestaurants = restaurantAndReservationRepository.findRestaurantsByOwnerId(ownerId);
-        return ownerRestaurants.stream()
-            .map(restaurantResponseAssembler::toDTO)
-            .collect(Collectors.toList());
+        List<Restaurant> ownerRestaurants = restaurantRepository.findRestaurantsByOwnerId(ownerId);
+        return ownerRestaurants.stream().map(restaurantResponseAssembler::toDTO).collect(Collectors.toList());
     }
 
-    public RestaurantResponse getRestaurant(String ownerId, String restaurantId)
-        throws MissingParameterException {
+    public RestaurantResponse getRestaurant(String ownerId, String restaurantId) throws MissingParameterException {
         headerValidator.verifyMissingHeader(ownerId);
-        Restaurant restaurant = restaurantAndReservationRepository.findRestaurantByRestaurantId(restaurantId);
-        if (restaurant == null) {
-            throw new NotFoundException("Restaurant with ID " + restaurantId + " not found");
-        }
-
+        Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
         getRestaurantValidator.validateRestaurantOwnership(ownerId, restaurant.getOwnerId());
         return restaurantResponseAssembler.toDTO(restaurant);
     }
 
-    public List<FuzzySearchResponse> getAllRestaurantsForSearch(FuzzySearchRequest search)
-        throws InvalidParameterException {
+    public List<FuzzySearchResponse> getAllRestaurantsForSearch(FuzzySearchRequest search) throws InvalidParameterException {
         restaurantSearchValidator.verifyFuzzySearchValidParameters(search);
 
         List<FuzzySearchResponse> searchedRestaurants = new ArrayList<>();
 
-        for (Restaurant restaurant : restaurantAndReservationRepository.getAllRestaurants()) {
-            if (shouldMatchRestaurantName(search, restaurant) &&
-                shouldMatchRestaurantHours(search, restaurant)) {
+        for (Restaurant restaurant : restaurantRepository.getAllRestaurants()) {
+            if (shouldMatchRestaurantName(search, restaurant) && shouldMatchRestaurantHours(search, restaurant)) {
                 searchedRestaurants.add(getFuzzySearchResponseForRestaurant(restaurant));
             }
         }
