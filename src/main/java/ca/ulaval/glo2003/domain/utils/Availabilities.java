@@ -52,7 +52,8 @@ public class Availabilities {
                 : restaurant.getCapacity();
     }
 
-    private boolean getExistingReservation(Restaurant restaurant, LocalDateTime currentTime, ReservationRepository reservationRepository) {
+    private boolean getExistingReservation(Restaurant restaurant, LocalDateTime currentTime,
+                                           ReservationRepository reservationRepository) {
         List<Reservation> reservations = reservationRepository.findReservationByRestaurant(restaurant.getId());
         return reservations.stream().anyMatch(reservation -> isReservationActive(currentTime,
                 reservation.getStartTime(),

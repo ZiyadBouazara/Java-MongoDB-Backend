@@ -115,12 +115,11 @@ public class RestaurantService {
     }
 
     public List<AvailabilitiesResponse> getAvailabilitiesForRestaurant(String restaurantId, String date) {
-
-        System.out.println(date);
-//        availabilitiesValidator.verifyAvailabilityValidParameters(search);
+//      availabilitiesValidator.verifyAvailabilityValidParameters(search);
         Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
         Availabilities availabilities = new Availabilities(date, restaurant.getCapacity());
-        List<Availabilities> availabilitiesForRestaurant = availabilities.getAvailabilitiesForRestaurant(restaurant, reservationRepository);
+        List<Availabilities> availabilitiesForRestaurant = availabilities.
+                getAvailabilitiesForRestaurant(restaurant, reservationRepository);
 
         return availabilitiesForRestaurant.stream()
                 .map(availabilitiesResponseAssembler::toDTO)
