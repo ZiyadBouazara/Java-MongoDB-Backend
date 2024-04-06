@@ -2,12 +2,10 @@ package ca.ulaval.glo2003.infrastructure.Reservation;
 
 import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
-import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 public class InMemoryReservationRepository implements ReservationRepository {

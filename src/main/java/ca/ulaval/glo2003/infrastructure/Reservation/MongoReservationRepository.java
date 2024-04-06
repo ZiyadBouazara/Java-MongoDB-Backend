@@ -43,7 +43,7 @@ public class MongoReservationRepository implements ReservationRepository {
         if (reservationsMongo.isEmpty()) {
             throw new NotFoundException("No reservations found for restaurant with ID: " + restaurantId);
         }
-        for(ReservationMongo reservation : reservationsMongo){
+        for (ReservationMongo reservation : reservationsMongo) {
             reservations.add(ReservationAssembler.fromReservationMongo(reservation));
         }
         return reservations;

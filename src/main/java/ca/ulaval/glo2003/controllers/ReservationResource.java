@@ -29,16 +29,16 @@ public class ReservationResource {
     @Path("restaurants/{id}/reservations")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest)
-        throws InvalidParameterException, MissingParameterException {
+            throws InvalidParameterException, MissingParameterException {
 
         String createdReservationId = reservationService.createReservation(
-            restaurantId,
-            reservationRequest);
+                restaurantId,
+                reservationRequest);
 
         URI newReservationURI = UriBuilder.fromPath(Main.BASE_URI)
-            .path("reservations")
-            .path(createdReservationId)
-            .build();
+                .path("reservations")
+                .path(createdReservationId)
+                .build();
         return Response.created(newReservationURI).build();
     }
 
@@ -52,7 +52,7 @@ public class ReservationResource {
     @GET
     @Path("restaurants/{id}/reservations")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ReservationGeneralResponse> searchReservation(@HeaderParam("Owner")String ownerId, @PathParam("id") String restaurantId, @QueryParam("date") String date, @QueryParam("customerName") String customerName) throws MissingParameterException, InvalidParameterException{
+    public List<ReservationGeneralResponse> searchReservation(@HeaderParam("Owner") String ownerId, @PathParam("id") String restaurantId, @QueryParam("date") String date, @QueryParam("customerName") String customerName) throws MissingParameterException, InvalidParameterException {
         return reservationService.searchReservations(ownerId, restaurantId, date, customerName);
     }
 }

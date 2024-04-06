@@ -11,7 +11,6 @@ import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.customer.Customer;
-import ca.ulaval.glo2003.domain.utils.PrefixSearch;
 import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.reservation.ReservationFactory;
@@ -20,7 +19,6 @@ import jakarta.inject.Inject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ReservationService {
     private final RestaurantRepository restaurantRepository;
@@ -48,7 +46,7 @@ public class ReservationService {
     }
 
     public String createReservation(String restaurantId, ReservationRequest reservationRequest)
-        throws InvalidParameterException, MissingParameterException {
+            throws InvalidParameterException, MissingParameterException {
 
         reservationValidator.validateReservationRequest(reservationRequest);
 
@@ -59,8 +57,8 @@ public class ReservationService {
 
         Customer customer = customerAssembler.fromDTO(reservationRequest.customer());
         Reservation reservation =
-            reservationFactory.createReservation(restaurantId, reservationRequest.date(), reservationRequest.startTime(),
-                reservationRequest.groupSize(), customer);
+                reservationFactory.createReservation(restaurantId, reservationRequest.date(), reservationRequest.startTime(),
+                        reservationRequest.groupSize(), customer);
         reservationRepository.saveReservation(reservation);
         return reservation.getId();
     }
@@ -71,21 +69,22 @@ public class ReservationService {
         return reservationResponseAssembler.toDTO(reservation, restaurant);
     }
 
-    //TODO: remake this method after DB changes
     public List<ReservationGeneralResponse> searchReservations(String ownerId, String restaurantId, String date, String customerName) {
         //TODO: Implement these validators
         //reservationValidator.validateSearchReservationRequest(ownerId, restaurantId, date, customerName);
         List<Reservation> reservations = reservationRepository.getAllReservations(restaurantId);
         List<ReservationGeneralResponse> searchedReservations = new ArrayList<>();
-        for(Reservation reservation: reservations){
-            if(isMatchingCustomerName(reservation.getCustomer().getName(), customerName) && isMatchingDate(reservation.getDate(), date)){
-                searchedReservations.add(reservationGeneralResponseAssembler.toDTO(reservation, restaurantRepository.findRestaurantById(reservation.getRestaurantId())));
+        for (Reservation reservation : reservations) {
+            if (isMatchingCustomerName(reservation.getCustomer().getName(), customerName)
+                    && isMatchingDate(reservation.getDate(), date)) {
+                searchedReservations.add(reservationGeneralResponseAssembler
+                        .toDTO(reservation, restaurantRepository.findRestaurantById(reservation.getRestaurantId())));
             }
         }
         return searchedReservations;
     }
 
-    public Boolean isMatchingCustomerName(String reservationCustomerName, String searchCustomerName){
+    public Boolean isMatchingCustomerName(String reservationCustomerName, String searchCustomerName) {
         if (searchCustomerName != null) {
             String cleanedSearchingElement = searchCustomerName.replaceAll("\\s", "").toLowerCase();
             String cleanedReservationCustomerName = reservationCustomerName.replaceAll("\\s", "").toLowerCase();
@@ -95,8 +94,8 @@ public class ReservationService {
         return true;
     }
 
-    public Boolean isMatchingDate(String reservationDate, String searchDate){
-        if(searchDate != null){
+    public Boolean isMatchingDate(String reservationDate, String searchDate) {
+        if (searchDate != null) {
             return reservationDate.equals(searchDate);
         }
         return true;
