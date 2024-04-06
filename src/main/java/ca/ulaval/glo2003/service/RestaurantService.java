@@ -7,6 +7,7 @@ import ca.ulaval.glo2003.controllers.requests.FuzzySearchRequest;
 import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.responses.AvailabilitiesResponse;
 import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
+import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 import ca.ulaval.glo2003.domain.utils.Availabilities;
 import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
 import ca.ulaval.glo2003.service.validators.CreateRestaurantValidator;
@@ -33,6 +34,8 @@ public class RestaurantService {
     private final HeaderValidator headerValidator = new HeaderValidator();
     private final SearchRestaurantValidator restaurantSearchValidator = new SearchRestaurantValidator();
     private final RestaurantRepository restaurantRepository;
+    private final ReservationRepository reservationRepository;
+
     private final RestaurantFactory restaurantFactory;
     private final HoursAssembler hoursAssembler;
     private final RestaurantResponseAssembler restaurantResponseAssembler;
@@ -43,13 +46,15 @@ public class RestaurantService {
     @Inject
     public RestaurantService(RestaurantRepository restaurantRepository, RestaurantFactory restaurantFactory,
                              HoursAssembler hoursAssembler, RestaurantResponseAssembler restaurantResponseAssembler,
-                             FuzzySearchAssembler fuzzySearchAssembler, FuzzySearchResponseAssembler fuzzySearchResponseAssembler) {
+                             FuzzySearchAssembler fuzzySearchAssembler, FuzzySearchResponseAssembler fuzzySearchResponseAssembler,
+                             ReservationRepository reservationRepository) {
         this.restaurantRepository = restaurantRepository;
         this.restaurantFactory = restaurantFactory;
         this.hoursAssembler = hoursAssembler;
         this.restaurantResponseAssembler = restaurantResponseAssembler;
         this.fuzzySearchAssembler = fuzzySearchAssembler;
         this.fuzzySearchResponseAssembler = fuzzySearchResponseAssembler;
+        this.reservationRepository = reservationRepository;
     }
 
     public String createRestaurant(String ownerId, RestaurantRequest restaurantRequest)
@@ -113,9 +118,9 @@ public class RestaurantService {
 
         System.out.println(date);
 //        availabilitiesValidator.verifyAvailabilityValidParameters(search);
-        Restaurant restaurant = restaurantAndReservationRepository.findRestaurantByRestaurantId(restaurantId);
+        Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
         Availabilities availabilities = new Availabilities(date, restaurant.getCapacity());
-        List<Availabilities> availabilitiesForRestaurant = availabilities.getAvailabilitiesForRestaurant(restaurant);
+        List<Availabilities> availabilitiesForRestaurant = availabilities.getAvailabilitiesForRestaurant(restaurant, reservationRepository);
 
         return availabilitiesForRestaurant.stream()
                 .map(availabilitiesResponseAssembler::toDTO)

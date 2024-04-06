@@ -2,6 +2,7 @@ package ca.ulaval.glo2003.infrastructure;
 
 import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
+import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.ArrayList;
@@ -26,5 +27,18 @@ public class InMemoryReservationRepository implements ReservationRepository {
             }
         }
         throw new NotFoundException("Reservation not found with ID: " + reservationId);
+    }
+
+    public List<Reservation> findReservationByRestaurant(String restaurantID) throws NotFoundException {
+        List<Reservation> matchingReservations = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            if (reservation.getRestaurantId().equals(restaurantID)) {
+                matchingReservations.add(reservation);
+            }
+        }
+        if (matchingReservations.isEmpty()) {
+            throw new NotFoundException("Reservation not found with restaurantID: " + restaurantID);
+        }
+        return matchingReservations;
     }
 }
