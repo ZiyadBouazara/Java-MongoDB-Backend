@@ -4,6 +4,9 @@ import ca.ulaval.glo2003.domain.customer.Customer;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.reservation.ReservationMongo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ReservationAssembler {
 
     public static ReservationMongo toReservationMongo(Reservation reservation) {
@@ -27,5 +30,13 @@ public class ReservationAssembler {
             reservationMongo.getGroupSize(),
             new Customer(reservationMongo.getCustomerName(), reservationMongo.getCustomerEmail(), reservationMongo.getCustomerPhone())
         );
+    }
+
+    public static List<Reservation> fromReservationMongoList(List<ReservationMongo> reservationMongoList) {
+        List<Reservation> reservations = new ArrayList<>();
+        for (ReservationMongo reservationMongo : reservationMongoList) {
+            reservations.add(fromReservationMongo(reservationMongo));
+        }
+        return reservations;
     }
 }
