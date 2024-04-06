@@ -30,8 +30,6 @@ public class Availabilities {
 
         while (currentTime.plusMinutes(reservationDuration).isBefore(closingTime)) {
             int remainingPlaces = calculateRemainingPlace(restaurant, currentTime, reservationRepository);
-            System.out.println("bite" + remainingPlaces);
-
             availabilities.add(new Availabilities(currentTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
                                                 remainingPlaces));
             currentTime = currentTime.plusMinutes(15);
@@ -56,7 +54,6 @@ public class Availabilities {
 
     private boolean getExistingReservation(Restaurant restaurant, LocalDateTime currentTime, ReservationRepository reservationRepository) {
         List<Reservation> reservations = reservationRepository.findReservationByRestaurant(restaurant.getId());
-        System.out.println("kokokok" + reservations);
         return reservations.stream().anyMatch(reservation -> isReservationActive(currentTime,
                 reservation.getStartTime(),
                 restaurant.getRestaurantConfiguration().getDuration()));
