@@ -38,13 +38,14 @@ public class MongoReservationRepository implements ReservationRepository {
     @Override
     public List<Reservation> getAllReservations(String restaurantId) throws NotFoundException {
         List<Reservation> reservations = new ArrayList<>();
-        Query<ReservationMongo> query = datastore.find(ReservationMongo.class).filter(Filters.eq("id", restaurantId));
+        Query<ReservationMongo> query = datastore.find(ReservationMongo.class)
+                .filter(Filters.eq("restaurantId", restaurantId));
         List<ReservationMongo> reservationsMongo = query.iterator().toList();
-        if (reservationsMongo.isEmpty()) {
-            throw new NotFoundException("No reservations found for restaurant with ID: " + restaurantId);
-        }
         for (ReservationMongo reservation : reservationsMongo) {
             reservations.add(ReservationAssembler.fromReservationMongo(reservation));
+        }
+        if (reservations.isEmpty()) {
+            throw new NotFoundException("No reservations found for restaurant with ID: " + restaurantId);
         }
         return reservations;
     }

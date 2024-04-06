@@ -14,8 +14,12 @@ import ca.ulaval.glo2003.domain.customer.Customer;
 import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.reservation.ReservationFactory;
+import ca.ulaval.glo2003.service.helpers.ReservationHelper;
+import ca.ulaval.glo2003.service.validators.GetRestaurantValidator;
+import ca.ulaval.glo2003.service.validators.HeaderValidator;
 import ca.ulaval.glo2003.service.validators.ReservationValidator;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +30,10 @@ public class ReservationService {
     private final ReservationFactory reservationFactory;
     private final CustomerAssembler customerAssembler;
     private final ReservationResponseAssembler reservationResponseAssembler;
-
     private final ReservationGeneralResponseAssembler reservationGeneralResponseAssembler;
     private final ReservationValidator reservationValidator;
+    private final HeaderValidator headerValidator = new HeaderValidator();
+    private final GetRestaurantValidator getRestaurantValidator = new GetRestaurantValidator();
 
 
     @Inject
@@ -69,35 +74,28 @@ public class ReservationService {
         return reservationResponseAssembler.toDTO(reservation, restaurant);
     }
 
-    public List<ReservationGeneralResponse> searchReservations(String ownerId, String restaurantId, String date, String customerName) {
-        //TODO: Implement these validators
-        //reservationValidator.validateSearchReservationRequest(ownerId, restaurantId, date, customerName);
+    public List<ReservationGeneralResponse> searchReservations(String ownerId,
+                                                               String restaurantId,
+                                                               String date,
+                                                               String customerName)
+            throws InvalidParameterException, MissingParameterException {
+        headerValidator.verifyMissingHeader(ownerId);
+        reservationValidator.validateSearchReservationRequest(restaurantId, date);
         List<Reservation> reservations = reservationRepository.getAllReservations(restaurantId);
         List<ReservationGeneralResponse> searchedReservations = new ArrayList<>();
         for (Reservation reservation : reservations) {
-            if (isMatchingCustomerName(reservation.getCustomer().getName(), customerName)
-                    && isMatchingDate(reservation.getDate(), date)) {
-                searchedReservations.add(reservationGeneralResponseAssembler
-                        .toDTO(reservation, restaurantRepository.findRestaurantById(reservation.getRestaurantId())));
+            Restaurant restaurant = restaurantRepository.findRestaurantById(reservation.getRestaurantId());
+            if (restaurant != null) {
+                if (ReservationHelper.isMatchingCustomerName(reservation.getCustomer().getName(), customerName)
+                        && ReservationHelper.isMatchingDate(reservation.getDate(), date)) {
+                    getRestaurantValidator.validateRestaurantOwnership(ownerId, restaurant.getOwnerId());
+                    searchedReservations.add(reservationGeneralResponseAssembler
+                            .toDTO(reservation, restaurant));
+                }
+            } else {
+                throw new NotFoundException("Restaurant not found for reservation with ID: " + reservation.getId());
             }
         }
         return searchedReservations;
-    }
-
-    public Boolean isMatchingCustomerName(String reservationCustomerName, String searchCustomerName) {
-        if (searchCustomerName != null) {
-            String cleanedSearchingElement = searchCustomerName.replaceAll("\\s", "").toLowerCase();
-            String cleanedReservationCustomerName = reservationCustomerName.replaceAll("\\s", "").toLowerCase();
-
-            return cleanedReservationCustomerName.startsWith(cleanedSearchingElement);
-        }
-        return true;
-    }
-
-    public Boolean isMatchingDate(String reservationDate, String searchDate) {
-        if (searchDate != null) {
-            return reservationDate.equals(searchDate);
-        }
-        return true;
     }
 }
