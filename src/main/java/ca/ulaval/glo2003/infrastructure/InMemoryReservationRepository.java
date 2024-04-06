@@ -29,15 +29,12 @@ public class InMemoryReservationRepository implements ReservationRepository {
         throw new NotFoundException("Reservation not found with ID: " + reservationId);
     }
 
-    public List<Reservation> findReservationByRestaurant(String restaurantID) throws NotFoundException {
+    public List<Reservation> findReservationByRestaurant(String restaurantID) {
         List<Reservation> matchingReservations = new ArrayList<>();
         for (Reservation reservation : reservations) {
             if (reservation.getRestaurantId().equals(restaurantID)) {
                 matchingReservations.add(reservation);
             }
-        }
-        if (matchingReservations.isEmpty()) {
-            throw new NotFoundException("Reservation not found with restaurantID: " + restaurantID);
         }
         return matchingReservations;
     }

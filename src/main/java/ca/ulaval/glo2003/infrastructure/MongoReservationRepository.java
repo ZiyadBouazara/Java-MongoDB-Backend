@@ -38,17 +38,13 @@ public class MongoReservationRepository implements ReservationRepository {
     }
 
     @Override
-    public List<Reservation> findReservationByRestaurant(String restaurantID) throws NotFoundException {
+    public List<Reservation> findReservationByRestaurant(String restaurantID) {
         Query<ReservationMongo> query = datastore.find(ReservationMongo.class)
                 .filter(Filters.eq("restaurantId", restaurantID));
 
         Iterator<ReservationMongo> iterator = query.iterator();
         List<ReservationMongo> reservationMongo = new ArrayList<>();
         iterator.forEachRemaining(reservationMongo::add);
-
-        if (reservationMongo.isEmpty()) {
-            throw new NotFoundException("Reservation not found with restaurantID: " + restaurantID);
-        }
 
         return reservationMongo.stream()
                 .map(ReservationAssembler::fromReservationMongo)
