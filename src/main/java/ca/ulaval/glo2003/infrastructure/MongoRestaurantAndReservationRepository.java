@@ -1,3 +1,4 @@
+/*
 package ca.ulaval.glo2003.infrastructure;
 
 import ca.ulaval.glo2003.domain.repositories.RestaurantAndReservationRepository;
@@ -40,3 +41,4 @@ public class MongoRestaurantAndReservationRepository implements RestaurantAndRes
     }
 
 }
+*/

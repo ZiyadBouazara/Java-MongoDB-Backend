@@ -2,6 +2,7 @@ package ca.ulaval.glo2003.controllers;
 
 import ca.ulaval.glo2003.Main;
 import ca.ulaval.glo2003.controllers.requests.ReservationRequest;
+import ca.ulaval.glo2003.controllers.responses.ReservationGeneralResponse;
 import ca.ulaval.glo2003.controllers.responses.ReservationResponse;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
@@ -51,7 +52,7 @@ public class ReservationResource {
     @GET
     @Path("restaurants/{id}/reservations")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ReservationResponse> searchReservation(@HeaderParam("Owner")String ownerId, @PathParam("id") String restaurantId, @QueryParam("date") String date, @QueryParam("customerName") String customerName) throws MissingParameterException, InvalidParameterException{
-        return reservationService.searchReservation(ownerId, restaurantId, date, customerName);
+    public List<ReservationGeneralResponse> searchReservation(@HeaderParam("Owner")String ownerId, @PathParam("id") String restaurantId, @QueryParam("date") String date, @QueryParam("customerName") String customerName) throws MissingParameterException, InvalidParameterException{
+        return reservationService.searchReservations(ownerId, restaurantId, date, customerName);
     }
 }

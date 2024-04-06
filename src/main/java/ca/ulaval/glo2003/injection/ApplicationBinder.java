@@ -1,6 +1,7 @@
 package ca.ulaval.glo2003.injection;
 
 import ca.ulaval.glo2003.controllers.assemblers.FuzzySearchResponseAssembler;
+import ca.ulaval.glo2003.controllers.assemblers.ReservationGeneralResponseAssembler;
 import ca.ulaval.glo2003.controllers.assemblers.ReservationResponseAssembler;
 import ca.ulaval.glo2003.controllers.assemblers.RestaurantResponseAssembler;
 import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
@@ -41,14 +42,15 @@ public class ApplicationBinder extends AbstractBinder {
         bind(GetRestaurantValidator.class).to(GetRestaurantValidator.class);
         bind(SearchRestaurantValidator.class).to(SearchRestaurantValidator.class);
         bind(RestaurantFactory.class).to(RestaurantFactory.class);
+        bind(ReservationFactory.class).to(ReservationFactory.class);
         bind(HoursAssembler.class).to(HoursAssembler.class);
         bind(FuzzySearchResponseAssembler.class).to(FuzzySearchResponseAssembler.class);
         bind(FuzzySearchAssembler.class).to(FuzzySearchAssembler.class);
         bind(VisitTimeAssembler.class).to(VisitTimeAssembler.class);
         bind(CustomerAssembler.class).to(CustomerAssembler.class);
-        bind(ReservationFactory.class).to(ReservationFactory.class);
         bind(RestaurantResponseAssembler.class).to(RestaurantResponseAssembler.class);
         bind(ReservationResponseAssembler.class).to(ReservationResponseAssembler.class);
+        bind(ReservationGeneralResponseAssembler.class).to(ReservationGeneralResponseAssembler.class);
     }
 
     private void choosePersistenceType() {

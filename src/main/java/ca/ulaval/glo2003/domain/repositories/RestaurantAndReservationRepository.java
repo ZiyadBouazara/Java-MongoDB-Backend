@@ -1,3 +1,4 @@
+/*
 package ca.ulaval.glo2003.domain.repositories;
 
 import ca.ulaval.glo2003.domain.reservation.Reservation;
@@ -14,3 +15,4 @@ public interface RestaurantAndReservationRepository {
     List<Reservation> getAllReservationsByRestaurant(String restaurantId);
     List<Restaurant> getAllRestaurants();
 }
+*/

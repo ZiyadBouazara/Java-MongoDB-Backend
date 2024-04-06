@@ -1,7 +1,9 @@
 package ca.ulaval.glo2003.service;
 
+import ca.ulaval.glo2003.controllers.assemblers.ReservationGeneralResponseAssembler;
 import ca.ulaval.glo2003.controllers.assemblers.ReservationResponseAssembler;
 import ca.ulaval.glo2003.controllers.requests.ReservationRequest;
+import ca.ulaval.glo2003.controllers.responses.ReservationGeneralResponse;
 import ca.ulaval.glo2003.controllers.responses.ReservationResponse;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
@@ -9,12 +11,14 @@ import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.customer.Customer;
+import ca.ulaval.glo2003.domain.utils.PrefixSearch;
 import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.reservation.ReservationFactory;
 import ca.ulaval.glo2003.service.validators.ReservationValidator;
 import jakarta.inject.Inject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,18 +28,23 @@ public class ReservationService {
     private final ReservationFactory reservationFactory;
     private final CustomerAssembler customerAssembler;
     private final ReservationResponseAssembler reservationResponseAssembler;
+
+    private final ReservationGeneralResponseAssembler reservationGeneralResponseAssembler;
     private final ReservationValidator reservationValidator;
+
 
     @Inject
     public ReservationService(RestaurantRepository restaurantRepository, ReservationRepository reservationRepository,
                               ReservationFactory reservationFactory, CustomerAssembler customerAssembler,
-                              ReservationResponseAssembler reservationResponseAssembler, ReservationValidator reservationValidator) {
+                              ReservationResponseAssembler reservationResponseAssembler, ReservationValidator reservationValidator,
+                              ReservationGeneralResponseAssembler reservationGeneralResponseAssembler) {
         this.restaurantRepository = restaurantRepository;
         this.reservationRepository = reservationRepository;
         this.reservationFactory = reservationFactory;
         this.customerAssembler = customerAssembler;
         this.reservationResponseAssembler = reservationResponseAssembler;
         this.reservationValidator = reservationValidator;
+        this.reservationGeneralResponseAssembler = reservationGeneralResponseAssembler;
     }
 
     public String createReservation(String restaurantId, ReservationRequest reservationRequest)
@@ -63,15 +72,33 @@ public class ReservationService {
     }
 
     //TODO: remake this method after DB changes
-    /*public List<ReservationResponse> searchReservation(String ownerId, String restaurantId, String date, String customerName) {
-        List<Reservation> reservations = restaurantAndReservationRepository.getAllReservationsByRestaurant(restaurantId);
-        List<Reservation> filteredReservations = reservations.stream()
-                .filter(reservation -> reservation.getDate().equals(date))
-                .filter(reservation -> reservation.getCustomer().getName().equals(customerName))
-                .collect(Collectors.toList());
+    public List<ReservationGeneralResponse> searchReservations(String ownerId, String restaurantId, String date, String customerName) {
+        //TODO: Implement these validators
+        //reservationValidator.validateSearchReservationRequest(ownerId, restaurantId, date, customerName);
+        List<Reservation> reservations = reservationRepository.getAllReservations(restaurantId);
+        List<ReservationGeneralResponse> searchedReservations = new ArrayList<>();
+        for(Reservation reservation: reservations){
+            if(isMatchingCustomerName(reservation.getCustomer().getName(), customerName) && isMatchingDate(reservation.getDate(), date)){
+                searchedReservations.add(reservationGeneralResponseAssembler.toDTO(reservation, restaurantRepository.findRestaurantById(reservation.getRestaurantId())));
+            }
+        }
+        return searchedReservations;
+    }
 
-        return filteredReservations.stream()
-                .map(reservation -> reservationResponseAssembler.toDTO(reservation, restaurantAndReservationRepository.findRestaurantByReservationId(reservation.getId())))
-                .collect(Collectors.toList());
-    }*/
+    public Boolean isMatchingCustomerName(String reservationCustomerName, String searchCustomerName){
+        if (searchCustomerName != null) {
+            String cleanedSearchingElement = searchCustomerName.replaceAll("\\s", "").toLowerCase();
+            String cleanedReservationCustomerName = reservationCustomerName.replaceAll("\\s", "").toLowerCase();
+
+            return cleanedReservationCustomerName.startsWith(cleanedSearchingElement);
+        }
+        return true;
+    }
+
+    public Boolean isMatchingDate(String reservationDate, String searchDate){
+        if(searchDate != null){
+            return reservationDate.equals(searchDate);
+        }
+        return true;
+    }
 }
