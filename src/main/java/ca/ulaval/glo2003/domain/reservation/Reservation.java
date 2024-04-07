@@ -6,10 +6,8 @@ import dev.morphia.annotations.Id;
 
 import java.util.UUID;
 
-@Entity("reservations")
 public class Reservation {
     private String restaurantId;
-    @Id
     private String id;
     private String date;
     private String startTime;
