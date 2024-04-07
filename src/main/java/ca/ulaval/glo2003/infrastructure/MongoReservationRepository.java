@@ -35,8 +35,8 @@ public class MongoReservationRepository implements ReservationRepository {
     }
 
     @Override
-    public List<Reservation> findReservationByRestaurant(String restaurantID) {
-        Query<ReservationMongo> query = datastore.find(ReservationMongo.class).filter(Filters.eq("restaurantId", restaurantID));
+    public List<Reservation> findReservationsByRestaurantId(String restaurantId) {
+        Query<ReservationMongo> query = datastore.find(ReservationMongo.class).filter(Filters.eq("restaurantId", restaurantId));
         List<ReservationMongo> reservationMongoList = query.iterator().toList();
         return ReservationAssembler.fromReservationMongoList(reservationMongoList);
     }

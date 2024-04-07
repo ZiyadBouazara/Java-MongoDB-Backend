@@ -76,7 +76,7 @@ public class RestaurantResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<AvailabilitiesResponse> getAvailabilities(@PathParam("id") String restaurantId,
                                                           @QueryParam("availabilities") String date)
-        throws MissingParameterException, InvalidParameterException, NotFoundException {
+        throws NotFoundException {
         return restaurantService.getAvailabilitiesForRestaurant(restaurantId, date);
     }
 }

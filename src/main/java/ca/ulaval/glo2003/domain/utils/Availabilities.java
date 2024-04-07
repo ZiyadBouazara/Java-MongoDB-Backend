@@ -21,7 +21,7 @@ public class Availabilities {
         this.remainingPlace = remainingPlace;
     }
 
-    public List<Availabilities> getAvailabilitiesForRestaurant(Restaurant restaurant, ReservationRepository reservationRepository) {
+    public List<Availabilities> getAvailabilitiesForRestaurant(Restaurant restaurant, List<Reservation> reservationList) {
         LocalDateTime openingTime = getOpeningTime(restaurant);
         LocalDateTime closingTime = getClosingHour(restaurant);
         int reservationDuration = restaurant.getRestaurantConfiguration().getDuration();
@@ -29,7 +29,7 @@ public class Availabilities {
         LocalDateTime currentTime = openingTime;
 
         while (currentTime.plusMinutes(reservationDuration).isBefore(closingTime)) {
-            int remainingPlaces = calculateRemainingPlace(restaurant, currentTime, reservationRepository);
+            int remainingPlaces = calculateRemainingPlace(restaurant, currentTime, reservationList);
             availabilities.add(new Availabilities(currentTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
                                                 remainingPlaces));
             currentTime = currentTime.plusMinutes(15);
@@ -38,16 +38,15 @@ public class Availabilities {
         return availabilities;
     }
 
-    private int calculateRemainingPlace(Restaurant restaurant, LocalDateTime currentTime, ReservationRepository reservationRepository) {
-        return getExistingReservation(restaurant, currentTime, reservationRepository)
+    private int calculateRemainingPlace(Restaurant restaurant, LocalDateTime currentTime, List<Reservation> reservationList) {
+        return getExistingReservation(restaurant, currentTime, reservationList)
                 ? calculateRemainingPlacesWithReservation(currentTime, restaurant.getCapacity())
                 : restaurant.getCapacity();
     }
 
     private boolean getExistingReservation(Restaurant restaurant, LocalDateTime currentTime,
-                                           ReservationRepository reservationRepository) {
-        List<Reservation> reservations = reservationRepository.findReservationByRestaurant(restaurant.getId());
-        return reservations.stream().anyMatch(reservation -> isReservationActive(currentTime,
+                                           List<Reservation> reservationList) {
+        return reservationList.stream().anyMatch(reservation -> isReservationActive(currentTime,
                 reservation.getStartTime(),
                 restaurant.getRestaurantConfiguration().getDuration()));
     }

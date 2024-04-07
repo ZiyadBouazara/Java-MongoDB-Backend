@@ -8,6 +8,7 @@ import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.responses.AvailabilitiesResponse;
 import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
 import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
+import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.utils.Availabilities;
 import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
 import ca.ulaval.glo2003.service.validators.CreateRestaurantValidator;
@@ -118,8 +119,9 @@ public class RestaurantService {
 //      availabilitiesValidator.verifyAvailabilityValidParameters(search);
         Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
         Availabilities availabilities = new Availabilities(date, restaurant.getCapacity());
+        List<Reservation> restaurantReservationList = reservationRepository.findReservationsByRestaurantId(restaurantId);
         List<Availabilities> availabilitiesForRestaurant = availabilities.
-                getAvailabilitiesForRestaurant(restaurant, reservationRepository);
+                getAvailabilitiesForRestaurant(restaurant, restaurantReservationList);
 
         return availabilitiesForRestaurant.stream()
                 .map(availabilitiesResponseAssembler::toDTO)

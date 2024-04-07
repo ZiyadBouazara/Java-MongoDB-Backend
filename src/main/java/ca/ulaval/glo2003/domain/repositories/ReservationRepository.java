@@ -8,6 +8,6 @@ import java.util.List;
 public interface ReservationRepository {
     void saveReservation(Reservation reservation);
     Reservation findReservationById(String reservationId) throws NotFoundException;
-    List<Reservation> findReservationByRestaurant(String restaurantID);
+    List<Reservation> findReservationsByRestaurantId(String restaurantId);
 
 }
