@@ -39,7 +39,7 @@ public class Availabilities {
 
     private int calculateRemainingPlace(Restaurant restaurant, LocalDateTime currentTime, List<Reservation> reservationList) {
         return getExistingReservation(restaurant, currentTime, reservationList)
-                ? calculateRemainingPlacesWithReservation(restaurant,currentTime, reservationList)
+                ? calculateRemainingPlacesWithReservation(restaurant, currentTime, reservationList)
                 : restaurant.getCapacity();
     }
 
@@ -63,7 +63,9 @@ public class Availabilities {
     private int calculateRemainingPlacesWithReservation(Restaurant restaurant, LocalDateTime currentTime,
                                                         List<Reservation> reservationList) {
         return reservationList.stream()
-                .filter(reservation -> isReservationActive(currentTime, reservation.getStartTime(), restaurant.getRestaurantConfiguration().getDuration()))
+                .filter(reservation -> isReservationActive(currentTime,
+                        reservation.getStartTime(),
+                        restaurant.getRestaurantConfiguration().getDuration()))
                 .findFirst()
                 .map(reservation -> restaurant.getCapacity() - reservation.getGroupSize())
                 .orElse(0);
