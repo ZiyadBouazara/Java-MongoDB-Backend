@@ -38,6 +38,9 @@ public class InMemoryReservationRepository implements ReservationRepository {
                 restaurantReservations.add(reservation);
             }
         }
+        if (restaurantReservations.isEmpty()) {
+            throw new NotFoundException("No reservations found for restaurant with ID: " + restaurantId);
+        }
         return restaurantReservations;
     }
 

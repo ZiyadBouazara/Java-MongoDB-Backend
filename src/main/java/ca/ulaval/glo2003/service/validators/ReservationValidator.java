@@ -102,13 +102,13 @@ public class ReservationValidator {
         verifyValidSearchDate(date);
     }
 
-    private void validateRestaurantId(String restaurantId) throws MissingParameterException {
+    public void validateRestaurantId(String restaurantId) throws MissingParameterException {
         if (restaurantId == null || restaurantId.isEmpty()) {
             throw new MissingParameterException("Restaurant ID is missing.");
         }
     }
 
-    private void verifyValidSearchDate(String date) throws InvalidParameterException {
+    public void verifyValidSearchDate(String date) throws InvalidParameterException {
         if (date != null) {
             if (!DATE_PATTERN.matcher(date).matches()) {
                 throw new InvalidParameterException("Invalid parameter 'date', it must be a valid date in the format YYYY-MM-DD");
