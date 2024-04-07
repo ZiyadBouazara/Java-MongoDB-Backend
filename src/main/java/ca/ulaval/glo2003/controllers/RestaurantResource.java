@@ -79,5 +79,6 @@ public class RestaurantResource {
         throws NotFoundException {
         return restaurantService.getAvailabilitiesForRestaurant(restaurantId, date);
     }
+
 }
 
