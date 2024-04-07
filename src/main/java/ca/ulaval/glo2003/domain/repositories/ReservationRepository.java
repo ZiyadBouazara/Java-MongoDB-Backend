@@ -13,6 +13,7 @@ public interface ReservationRepository {
     void deleteReservationsWithRestaurantId(String restaurantId);
 
     Reservation findReservationById(String reservationId) throws NotFoundException;
+
     List<Reservation> findReservationsByRestaurantId(String restaurantId);
 
 }
