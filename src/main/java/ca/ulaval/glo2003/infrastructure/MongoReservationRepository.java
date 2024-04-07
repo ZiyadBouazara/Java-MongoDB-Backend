@@ -11,6 +11,8 @@ import dev.morphia.query.Query;
 import dev.morphia.query.filters.Filters;
 import jakarta.ws.rs.NotFoundException;
 
+import java.util.List;
+
 
 public class MongoReservationRepository implements ReservationRepository {
     private final Datastore datastore;
@@ -50,5 +52,12 @@ public class MongoReservationRepository implements ReservationRepository {
             throw new NotFoundException("No restaurant found for restaurant with ID: " + reservationId);
         }
         return ReservationAssembler.fromReservationMongo(reservationMongo);
+    }
+
+    @Override
+    public List<Reservation> findReservationsByRestaurantId(String restaurantId) {
+        Query<ReservationMongo> query = datastore.find(ReservationMongo.class).filter(Filters.eq("restaurantId", restaurantId));
+        List<ReservationMongo> reservationMongoList = query.iterator().toList();
+        return ReservationAssembler.fromReservationMongoList(reservationMongoList);
     }
 }
