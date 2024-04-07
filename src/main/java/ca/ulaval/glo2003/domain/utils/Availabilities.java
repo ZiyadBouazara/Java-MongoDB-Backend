@@ -38,14 +38,6 @@ public class Availabilities {
         return availabilities;
     }
 
-    private LocalDateTime getOpeningTime(Restaurant restaurant) {
-        return LocalDateTime.parse(date + "T" + restaurant.getHours().getOpen(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-    }
-
-    private LocalDateTime getClosingHour(Restaurant restaurant) {
-        return LocalDateTime.parse(date + "T" + restaurant.getHours().getClose(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-    }
-
     private int calculateRemainingPlace(Restaurant restaurant, LocalDateTime currentTime, ReservationRepository reservationRepository) {
         return getExistingReservation(restaurant, currentTime, reservationRepository)
                 ? calculateRemainingPlacesWithReservation(currentTime, restaurant.getCapacity())
@@ -72,6 +64,14 @@ public class Availabilities {
 
     private int calculateRemainingPlacesWithReservation(LocalDateTime currentTime, Integer capacity) {
         return (int) (Math.random() * 10);
+    }
+
+    private LocalDateTime getOpeningTime(Restaurant restaurant) {
+        return LocalDateTime.parse(date + "T" + restaurant.getHours().getOpen(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    }
+
+    private LocalDateTime getClosingHour(Restaurant restaurant) {
+        return LocalDateTime.parse(date + "T" + restaurant.getHours().getClose(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
     public String getDate() {
