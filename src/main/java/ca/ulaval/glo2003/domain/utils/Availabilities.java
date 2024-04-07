@@ -2,7 +2,6 @@ package ca.ulaval.glo2003.domain.utils;
 
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
-import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
