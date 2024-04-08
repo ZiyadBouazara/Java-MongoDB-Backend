@@ -58,14 +58,4 @@ public class Restaurant {
     public ReservationConfiguration getRestaurantConfiguration() {
         return reservationConfiguration;
     }
-
-    /*public Map<String, Reservation> getReservationsById() {
-        return this.reservationsById;
-    }
-
-    public void addReservation(Reservation reservation) {
-        reservationsById.put(reservation.getId(), reservation);
-    }
-    public Collection<Reservation> getAllReservations() {return reservationsById.values();
-    }*/
 }

@@ -1,7 +1,6 @@
 package ca.ulaval.glo2003.service.helpers;
 
 public class ReservationHelper {
-
     public static Boolean isMatchingCustomerName(String reservationCustomerName, String searchCustomerName) {
         if (searchCustomerName != null) {
             String cleanedSearchingElement = searchCustomerName.replaceAll("\\s", "").toLowerCase();
@@ -18,4 +17,5 @@ public class ReservationHelper {
         }
         return true;
     }
+
 }
