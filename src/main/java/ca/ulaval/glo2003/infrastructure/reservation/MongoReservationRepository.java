@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.infrastructure;
+package ca.ulaval.glo2003.infrastructure.reservation;
 
 import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
@@ -10,6 +10,7 @@ import dev.morphia.DeleteOptions;
 import dev.morphia.query.Query;
 import dev.morphia.query.filters.Filters;
 import jakarta.ws.rs.NotFoundException;
+
 
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class MongoReservationRepository implements ReservationRepository {
     }
 
     @Override
-    public List<Reservation> findReservationsByRestaurantId(String restaurantId) {
+    public List<Reservation> getAllRestaurantReservations(String restaurantId) {
         Query<ReservationMongo> query = datastore.find(ReservationMongo.class).filter(Filters.eq("restaurantId", restaurantId));
         List<ReservationMongo> reservationMongoList = query.iterator().toList();
         return ReservationAssembler.fromReservationMongoList(reservationMongoList);

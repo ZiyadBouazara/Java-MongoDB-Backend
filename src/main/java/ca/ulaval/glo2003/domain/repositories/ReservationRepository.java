@@ -14,6 +14,6 @@ public interface ReservationRepository {
 
     Reservation findReservationById(String reservationId) throws NotFoundException;
 
-    List<Reservation> findReservationsByRestaurantId(String restaurantId);
+    List<Reservation> getAllRestaurantReservations(String restaurantId);
 
 }

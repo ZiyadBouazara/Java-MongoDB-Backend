@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.infrastructure;
+package ca.ulaval.glo2003.infrastructure.reservation;
 
 import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 import ca.ulaval.glo2003.domain.repositories.ReservationRepositoryTest;

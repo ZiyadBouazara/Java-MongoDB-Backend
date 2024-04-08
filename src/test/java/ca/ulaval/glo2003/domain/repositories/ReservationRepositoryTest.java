@@ -42,7 +42,7 @@ public abstract class ReservationRepositoryTest {
         Reservation reservation2 = createAndSaveReservation();
 
         reservationRepository.deleteReservationsWithRestaurantId(RESTAURANT_ID);
-        var foundReservations = reservationRepository.findReservationsByRestaurantId(RESTAURANT_ID);
+        var foundReservations = reservationRepository.getAllRestaurantReservations(RESTAURANT_ID);
 
         Assertions.assertThat(foundReservations).isEmpty();
     }
@@ -81,11 +81,11 @@ public abstract class ReservationRepositoryTest {
     }
 
     @Test
-    public void givenSavedReservation_whenFindingReservationsByRestaurantId_shouldReturnSavedReservation() {
+    public void givenSavedReservation_whenGettingAllRestaurantReservations_shouldReturnSavedReservation() {
         Reservation reservation1 = createAndSaveReservation();
         Reservation reservation2 = createAndSaveReservation();
 
-        List<Reservation> foundReservations = reservationRepository.findReservationsByRestaurantId(restaurant.getId());
+        List<Reservation> foundReservations = reservationRepository.getAllRestaurantReservations(restaurant.getId());
 
         Assertions.assertThat(foundReservations)
             .extracting(Reservation::getId)
@@ -93,8 +93,8 @@ public abstract class ReservationRepositoryTest {
     }
 
     @Test
-    public void givenNoSavedReservationsForRestaurant_whenFindingReservationsByRestaurantId_shouldReturnEmptyList() {
-        List<Reservation> foundReservations = reservationRepository.findReservationsByRestaurantId(restaurant.getId());
+    public void givenNoSavedReservationsForRestaurant_whenGettingAllRestaurantReservations_shouldReturnEmptyList() {
+        List<Reservation> foundReservations = reservationRepository.getAllRestaurantReservations(restaurant.getId());
 
         Assertions.assertThat(foundReservations).isEmpty();
     }

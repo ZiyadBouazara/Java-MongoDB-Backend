@@ -1,7 +1,7 @@
-package ca.ulaval.glo2003.infrastructure;
+package ca.ulaval.glo2003.infrastructure.reservation;
 
-import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
-import ca.ulaval.glo2003.domain.repositories.RestaurantRepositoryTest;
+import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
+import ca.ulaval.glo2003.domain.repositories.ReservationRepositoryTest;
 import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
@@ -10,15 +10,16 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
-class MongoRestaurantRepositoryTest extends RestaurantRepositoryTest {
+class MongoReservationRepositoryTest extends ReservationRepositoryTest {
     @Container
     private final MongoDBContainer mongoInstance = new MongoDBContainer("mongo:7.0");
 
     @Override
-    protected RestaurantRepository createRepository() {
+    protected ReservationRepository createRepository() {
         System.out.println(mongoInstance.getConnectionString());
         var mongoUrl = MongoClients.create(mongoInstance.getConnectionString());
         Datastore datastore = Morphia.createDatastore(mongoUrl, "tests");
-        return new MongoRestaurantRepository(datastore);
+        return new MongoReservationRepository(datastore);
     }
+
 }
