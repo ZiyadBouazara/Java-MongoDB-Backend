@@ -34,7 +34,7 @@ jobs:
         run: mvn compile
 
       - name: Test
-        run: mvn test
+        run: docker run -it --rm -v $PWD:$PWD -w $PWD -v /var/run/docker.sock:/var/run/docker.sock maven:3 mvn test
 
       - name: Build
         run: mvn -B package --file pom.xml
