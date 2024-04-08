@@ -95,7 +95,7 @@ public class ReservationValidator {
     }
 
     public void verifySearchAvailabilities(String date)
-            throws InvalidParameterException, MissingParameterException{
+            throws InvalidParameterException, MissingParameterException {
         verifyMissing("date", date);
         verifyValidDate(date);
 
