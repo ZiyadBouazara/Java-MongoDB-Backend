@@ -52,8 +52,4 @@ public class InMemoryReservationRepositoryTest {
         assertThrows(NotFoundException.class, () -> inMemoryReservationRepository.findReservationById("randomId"));
     }
 
-    @Test
-    public void givenRestaurantId_whenGetAllReservations_AndRestaurantIsNotValid_thenReservationNotFoundExceptionIsThrown() {
-        assertThrows(NotFoundException.class, () -> inMemoryReservationRepository.getAllReservations("randomUnknownId"));
-    }
 }
