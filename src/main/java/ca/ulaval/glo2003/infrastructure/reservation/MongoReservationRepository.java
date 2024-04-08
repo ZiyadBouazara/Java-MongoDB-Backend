@@ -4,7 +4,9 @@ import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.reservation.ReservationMongo;
 import ca.ulaval.glo2003.infrastructure.assemblers.ReservationAssembler;
+import com.mongodb.client.result.DeleteResult;
 import dev.morphia.Datastore;
+import dev.morphia.DeleteOptions;
 import dev.morphia.query.Query;
 import dev.morphia.query.filters.Filters;
 import jakarta.ws.rs.NotFoundException;
@@ -23,6 +25,24 @@ public class MongoReservationRepository implements ReservationRepository {
     @Override
     public void saveReservation(Reservation reservation) throws NotFoundException {
         datastore.save(ReservationAssembler.toReservationMongo(reservation));
+    }
+
+    @Override
+    public void deleteReservation(String reservationId) throws NotFoundException {
+        DeleteResult deleteResult = datastore.find(ReservationMongo.class)
+            .filter(Filters.eq("id", reservationId))
+            .delete(new DeleteOptions());
+
+        if (deleteResult.getDeletedCount() == 0) {
+            throw new NotFoundException("Reservation to delete not found with reservationId: " + reservationId);
+        }
+    }
+
+    @Override
+    public void deleteReservationsWithRestaurantId(String restaurantId) {
+        datastore.find(ReservationMongo.class)
+            .filter(Filters.eq("restaurantId", restaurantId))
+            .delete(new DeleteOptions().multi(true));
     }
 
     @Override

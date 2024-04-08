@@ -20,6 +20,16 @@ public class Restaurant {
         this.reservationConfiguration = new ReservationConfiguration();
     }
 
+    public Restaurant(String id, String ownerId, String name, Integer capacity, Hours hours,
+                      ReservationConfiguration reservationConfiguration) {
+        this.id = id;
+        this.ownerId = ownerId;
+        this.name = name;
+        this.capacity = capacity;
+        this.hours = hours;
+        this.reservationConfiguration = reservationConfiguration;
+    }
+
     public Restaurant(String ownerId, String name, Integer capacity, Hours hours, ReservationConfiguration reservationConfiguration) {
         this.id = UUID.randomUUID().toString();
         this.ownerId = ownerId;

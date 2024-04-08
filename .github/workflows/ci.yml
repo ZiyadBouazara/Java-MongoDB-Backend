@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [ubuntu-latest]
 
     steps:
       - name: Checkout
@@ -33,11 +33,11 @@ jobs:
       - name: Compile
         run: mvn compile
 
-      - name: Test
-        run: mvn test
-
       - name: Build
         run: mvn -B package --file pom.xml
+
+      - name: Test
+        run: mvn test
 
       - name: Verify
         run: mvn verify

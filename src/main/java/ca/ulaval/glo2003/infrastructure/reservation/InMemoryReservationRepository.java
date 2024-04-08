@@ -6,6 +6,7 @@ import jakarta.ws.rs.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class InMemoryReservationRepository implements ReservationRepository {
@@ -18,6 +19,23 @@ public class InMemoryReservationRepository implements ReservationRepository {
     @Override
     public void saveReservation(Reservation reservation) {
         reservations.add(reservation);
+    }
+
+    @Override
+    public void deleteReservation(String reservationId) throws NotFoundException {
+        Optional<Reservation> reservationOptional = reservations.stream()
+            .filter(reservation -> reservation.getId().equals(reservationId)).findFirst();
+
+        if (reservationOptional.isPresent()) {
+            reservations.remove(reservationOptional.get());
+        } else {
+            throw new NotFoundException("Reservation not found with ID: " + reservationId);
+        }
+    }
+
+    @Override
+    public void deleteReservationsWithRestaurantId(String restaurantId) {
+        reservations.removeIf(reservation -> reservation.getRestaurantId().equals(restaurantId));
     }
 
     @Override

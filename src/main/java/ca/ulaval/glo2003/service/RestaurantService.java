@@ -24,6 +24,7 @@ import ca.ulaval.glo2003.service.assembler.HoursAssembler;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.restaurant.RestaurantFactory;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,6 @@ public class RestaurantService {
     private final SearchRestaurantValidator restaurantSearchValidator = new SearchRestaurantValidator();
     private final RestaurantRepository restaurantRepository;
     private final ReservationRepository reservationRepository;
-
     private final RestaurantFactory restaurantFactory;
     private final HoursAssembler hoursAssembler;
     private final RestaurantResponseAssembler restaurantResponseAssembler;
@@ -45,17 +45,17 @@ public class RestaurantService {
     private final FuzzySearchResponseAssembler fuzzySearchResponseAssembler;
 
     @Inject
-    public RestaurantService(RestaurantRepository restaurantRepository, RestaurantFactory restaurantFactory,
+    public RestaurantService(RestaurantRepository restaurantRepository, ReservationRepository reservationRepository,
+                             RestaurantFactory restaurantFactory,
                              HoursAssembler hoursAssembler, RestaurantResponseAssembler restaurantResponseAssembler,
-                             FuzzySearchAssembler fuzzySearchAssembler, FuzzySearchResponseAssembler fuzzySearchResponseAssembler,
-                             ReservationRepository reservationRepository) {
+                             FuzzySearchAssembler fuzzySearchAssembler, FuzzySearchResponseAssembler fuzzySearchResponseAssembler)  {
         this.restaurantRepository = restaurantRepository;
+        this.reservationRepository = reservationRepository;
         this.restaurantFactory = restaurantFactory;
         this.hoursAssembler = hoursAssembler;
         this.restaurantResponseAssembler = restaurantResponseAssembler;
         this.fuzzySearchAssembler = fuzzySearchAssembler;
         this.fuzzySearchResponseAssembler = fuzzySearchResponseAssembler;
-        this.reservationRepository = reservationRepository;
     }
 
     public String createRestaurant(String ownerId, RestaurantRequest restaurantRequest)
@@ -68,6 +68,14 @@ public class RestaurantService {
             restaurantRequest.hours(), restaurantRequest.reservations());
         restaurantRepository.saveRestaurant(restaurant);
         return restaurant.getId();
+    }
+
+    public void deleteRestaurant(String ownerId, String restaurantId) throws MissingParameterException, NotFoundException {
+        headerValidator.verifyMissingHeader(ownerId);
+        Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
+        getRestaurantValidator.validateRestaurantOwnership(ownerId, restaurant.getOwnerId());
+        restaurantRepository.deleteRestaurant(ownerId, restaurantId);
+        reservationRepository.deleteReservationsWithRestaurantId(restaurantId);
     }
 
     public List<RestaurantResponse> getRestaurantsForOwnerId(String ownerId) throws MissingParameterException {
@@ -96,6 +104,7 @@ public class RestaurantService {
         }
         return searchedRestaurants;
     }
+
 
     //TODO: (possibility to move these elsewhere in utils of service layer)
     public boolean shouldMatchRestaurantName(FuzzySearchRequest search, Restaurant restaurant) {

@@ -8,15 +8,16 @@ import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.service.ReservationService;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
@@ -37,16 +38,16 @@ public class ReservationResource {
     @Path("restaurants/{id}/reservations")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createReservation(@PathParam("id") String restaurantId, ReservationRequest reservationRequest)
-            throws InvalidParameterException, MissingParameterException {
+        throws InvalidParameterException, MissingParameterException {
 
         String createdReservationId = reservationService.createReservation(
-                restaurantId,
-                reservationRequest);
+            restaurantId,
+            reservationRequest);
 
         URI newReservationURI = UriBuilder.fromPath(Main.BASE_URI)
-                .path("reservations")
-                .path(createdReservationId)
-                .build();
+            .path("reservations")
+            .path(createdReservationId)
+            .build();
         return Response.created(newReservationURI).build();
     }
 
@@ -57,6 +58,14 @@ public class ReservationResource {
         return reservationService.getReservation(reservationId);
     }
 
+    @DELETE
+    @Path("reservations/{id}")
+    public Response deleteReservation(@PathParam("id") String reservationId)
+        throws NotFoundException {
+        reservationService.deleteReservation(reservationId);
+        return Response.noContent().build();
+    }
+
     @GET
     @Path("restaurants/{id}/reservations")
     @Produces(MediaType.APPLICATION_JSON)
@@ -64,7 +73,7 @@ public class ReservationResource {
                                                               @PathParam("id") String restaurantId,
                                                               @QueryParam("date") String date,
                                                               @QueryParam("customerName") String customerName)
-            throws MissingParameterException, InvalidParameterException {
+        throws MissingParameterException, InvalidParameterException {
         return reservationService.searchReservations(ownerId, restaurantId, date, customerName);
     }
 }
