@@ -119,7 +119,7 @@ public class RestaurantService {
 //      availabilitiesValidator.verifyAvailabilityValidParameters(search);
         Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
         Availabilities availabilities = new Availabilities(date, restaurant.getCapacity());
-        List<Reservation> restaurantReservationList = reservationRepository.findReservationsByRestaurantId(restaurantId);
+        List<Reservation> restaurantReservationList = reservationRepository.getAllRestaurantReservations(restaurantId);
         List<Availabilities> availabilitiesForRestaurant = availabilities.
                 getAvailabilitiesForRestaurant(restaurant, restaurantReservationList);
 

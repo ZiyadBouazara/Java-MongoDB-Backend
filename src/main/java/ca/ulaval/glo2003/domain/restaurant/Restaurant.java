@@ -1,7 +1,6 @@
 package ca.ulaval.glo2003.domain.restaurant;
 
 import ca.ulaval.glo2003.domain.utils.Hours;
-
 import java.util.UUID;
 
 public class Restaurant {
@@ -59,5 +58,4 @@ public class Restaurant {
     public ReservationConfiguration getRestaurantConfiguration() {
         return reservationConfiguration;
     }
-
 }

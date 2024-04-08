@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.infrastructure;
+package ca.ulaval.glo2003.infrastructure.reservation;
 
 import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
@@ -15,10 +15,12 @@ public class InMemoryReservationRepository implements ReservationRepository {
         this.reservations = new ArrayList<>();
     }
 
+    @Override
     public void saveReservation(Reservation reservation) {
         reservations.add(reservation);
     }
 
+    @Override
     public Reservation findReservationById(String reservationId) throws NotFoundException {
         for (Reservation reservation : reservations) {
             if (reservation.getId().equals(reservationId)) {
@@ -28,7 +30,8 @@ public class InMemoryReservationRepository implements ReservationRepository {
         throw new NotFoundException("Reservation not found with ID: " + reservationId);
     }
 
-    public List<Reservation> findReservationsByRestaurantId(String restaurantId) {
+    @Override
+    public List<Reservation> getAllRestaurantReservations(String restaurantId) {
         List<Reservation> matchingReservations = new ArrayList<>();
         for (Reservation reservation : reservations) {
             if (reservation.getRestaurantId().equals(restaurantId)) {
