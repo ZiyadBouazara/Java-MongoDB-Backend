@@ -31,18 +31,13 @@ public class InMemoryReservationRepository implements ReservationRepository {
     }
 
     @Override
-    public List<Reservation> getAllReservations(String restaurantId) throws NotFoundException {
-        List<Reservation> restaurantReservations = new ArrayList<>();
+    public List<Reservation> getAllRestaurantReservations(String restaurantId) {
+        List<Reservation> matchingReservations = new ArrayList<>();
         for (Reservation reservation : reservations) {
             if (reservation.getRestaurantId().equals(restaurantId)) {
-                restaurantReservations.add(reservation);
+                matchingReservations.add(reservation);
             }
         }
-        if (restaurantReservations.isEmpty()) {
-            throw new NotFoundException("No reservations found for restaurant with ID: " + restaurantId);
-        }
-        return restaurantReservations;
+        return matchingReservations;
     }
-
-
 }

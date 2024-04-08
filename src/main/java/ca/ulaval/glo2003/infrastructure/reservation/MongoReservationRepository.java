@@ -9,7 +9,7 @@ import dev.morphia.query.Query;
 import dev.morphia.query.filters.Filters;
 import jakarta.ws.rs.NotFoundException;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 
@@ -36,17 +36,9 @@ public class MongoReservationRepository implements ReservationRepository {
     }
 
     @Override
-    public List<Reservation> getAllReservations(String restaurantId) throws NotFoundException {
-        List<Reservation> reservations = new ArrayList<>();
-        Query<ReservationMongo> query = datastore.find(ReservationMongo.class)
-                .filter(Filters.eq("restaurantId", restaurantId));
-        List<ReservationMongo> reservationsMongo = query.iterator().toList();
-        for (ReservationMongo reservation : reservationsMongo) {
-            reservations.add(ReservationAssembler.fromReservationMongo(reservation));
-        }
-        if (reservations.isEmpty()) {
-            throw new NotFoundException("No reservations found for restaurant with ID: " + restaurantId);
-        }
-        return reservations;
+    public List<Reservation> getAllRestaurantReservations(String restaurantId) {
+        Query<ReservationMongo> query = datastore.find(ReservationMongo.class).filter(Filters.eq("restaurantId", restaurantId));
+        List<ReservationMongo> reservationMongoList = query.iterator().toList();
+        return ReservationAssembler.fromReservationMongoList(reservationMongoList);
     }
 }

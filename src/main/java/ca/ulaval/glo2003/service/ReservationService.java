@@ -81,7 +81,7 @@ public class ReservationService {
             throws InvalidParameterException, MissingParameterException {
         headerValidator.verifyMissingHeader(ownerId);
         reservationValidator.validateSearchReservationRequest(restaurantId, date);
-        List<Reservation> reservations = reservationRepository.getAllReservations(restaurantId);
+        List<Reservation> reservations = reservationRepository.getAllRestaurantReservations(restaurantId);
         List<ReservationGeneralResponse> searchedReservations = new ArrayList<>();
         for (Reservation reservation : reservations) {
             Restaurant restaurant = restaurantRepository.findRestaurantById(reservation.getRestaurantId());
