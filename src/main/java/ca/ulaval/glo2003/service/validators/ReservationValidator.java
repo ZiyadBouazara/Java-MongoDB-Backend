@@ -100,7 +100,6 @@ public class ReservationValidator {
             throws InvalidParameterException, MissingParameterException {
         verifyMissing("date", date);
         verifyValidDate(date);
-
     }
 
     public void validateSearchReservationRequest(String restaurantId, String date)
