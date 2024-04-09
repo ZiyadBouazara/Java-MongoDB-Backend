@@ -374,16 +374,16 @@ aucun ouvert à 3h du matin. Je saisis, donc seulement l'heure à laquelle je co
 Le système me retourne alors une liste de restaurants qui seront ouverts à cette heure-là, me permettant de choisir un 
 endroit où dîner tardivement.
 
-### Story: Rechercher des disponibilité de réservation
+### Story: Rechercher des disponibilités de réservation
 
-En tant que client, je doit avoir la possiblité de recherché les disponibilité des restaurants,
-ce qu'on veut dire ici par disponibilité ce sont les place reservable dans une plage horaire donnée. 
-En spécifiant la date voulue, je veux être capable de filtrer les disponibilité de la journée afin de
-verifier s'il y'a des places libre à l'heure à laquelle je prévois reserver et/ou repartir. Cela me 
-permettra de trouver facilement une place libre en fonction de mes préférences d'heure et de journée.
+En tant que client, je dois avoir la possibilité de rechercher les disponibilités des restaurants.
+Ce qu'on veut dire ici par disponibilité, ce sont les places réservables dans une plage horaire donnée.
+En spécifiant la date voulue, je veux être capable de filtrer les disponibilités de la journée afin de vérifier s'il y a 
+des places libres à l'heure à laquelle je prévois de réserver et/ou de repartir.
+Cela me permettra de trouver facilement une place libre en fonction de mes préférences d'heure et de journée.
 
 ***Critères d'acceptation:***
-1. Le paramètre de date est obligatoire, dans le cas ou l'utilisateur oublie de spécifier une date, une erreur sera déclenché.
+1. Le paramètre de date est obligatoire, dans le cas où l'utilisateur oublie de spécifier une date, une erreur sera déclenché.
 
 2. Même les disponibilités à 0 place doivent être affichées.
 
@@ -401,14 +401,12 @@ moins la durée des réservations configurée.
 7. Dans le cas où aucune disponibilité n'est trouvée (le nombre d'heures d'ouverture ne le permet pas), 
 le système doit renvoyer une liste vide.
 
-***Exemple d'utilisation:***
-En tant qu'utilisateur, je souhaite voir les disponibilités d'un restaurant pour planifier ma réservation. La demande de 
-disponibilité doit concerner une journée spécifique que l'utilisateur doit spécifier dans sa requête.
+***Exemple d'utilisation :***
 
 #### 1. Recherche de disponibilité par date :
 
 - **Requête :** `GET /restaurants/availabilities?date=2024-04-09`
-- **Réponse :** La requête retourne toutes les disponibilité pour la date spécifiée, par exemple le 09 avril 2024.
+- **Réponse :** La requête retourne toutes les disponibilités pour la date spécifiée, par exemple le 09 avril 2024.
   Cela permet de voir toutes les disponibilités libres et occupées pour cette journée spécifique, ce qui est utile pour planifier
   une visite et choisir une plage horaire convenable.
 
