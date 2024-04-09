@@ -240,3 +240,95 @@ Certaines opérations sur une entité nécessitent l'accès à l'autre entité:
 - Définir des événements de domaine pour les modifications des entités Restaurant et Réservation.
 - Enregistrer les événements de domaine dans un journal d'événements.
 - Les services écoutent les événements de domaine et effectuent les mises à jour nécessaires.
+
+# Stories
+
+### Story 1: Créer une réservation à un restaurant
+
+En tant que propriétaire d'un restaurant, je veux pouvoir créer une réservation pour mon restaurant 
+afin de gérer les disponibilités et d'organiser les services.
+
+***Critères d'acceptation:***
+1. En tant que propriétaire, lorsque je veux créer une réservation, je dois spécifier les informations
+suivantes:
+   - Le id du restaurant
+   - La date de la réservation
+   - L'heure de début de la réservation
+   - Le nombre de personnes du groupe à venir
+   - Le nom de la personne qui fait la réservation
+   - Le numéro de téléphone de la personne qui fait la réservation
+   - L'adresse email de la personne qui fait la réservation
+
+2. Une fois les informations saisies, le système doit vérifier si tous les paramètres suivent le bon
+format et sont valides. Si un paramètre est invalide, une exception InvalidParamException doit être
+renvoyée au propriétaire.
+
+3. Si tous les paramètres sont valides, le système doit créer une réservation pour le restaurant.
+
+4. Le système doit renvoyer un identifiant unique de la réservation au propriétaire.
+
+***Exemple d'utilisation:***
+
+En tant que propriétaire du restaurant "La Petite Boulangerie" (id=1234), je souhaite créer une réservation pour 
+une table de quatre personnes le samedi 15 mai à 19h00 pour M. Dupont. Celui-ci me donne son numéro et mail et 
+je les saisis dans le système. Ensuite je reçois un identifiant unique de réservation ce qui me confirme que la 
+réservation est bien passée.
+
+
+### Story 2: Rechercher une réservation
+
+En tant que propriétaire d'un restaurant, je veux pouvoir effectuer une recherche par préfixe du nom de la personne 
+qui réserve, ou par date de toutes les réservations à mes restaurants, afin de confirmer qu'un client a bien une 
+réservation.
+
+***Critères d'acceptation:***
+1. En tant que propriétaire, lorsqu'un client se présente et me donne son nom ou sa date de réservation, je
+dois pouvoir effectuer une recherche pour retrouver sa réservation pour chaque lettre de plus qui se rajoute
+à la recherche du nom du client.
+
+2. La recherche par nom doit être une recherche de préfixe, ce qui signifie que le système retourne toutes les 
+réservations pour lesquelles le nom de la personne commence par le préfixe spécifié.
+
+3. La recherche par date doit retourner toutes les réservations pour la date spécifiée.
+
+4. Si aucun paramètre de recherche n'est fourni, le système retourne toutes les réservations pour tous les restaurants.
+
+5. Si la date et le nom du client sont donnés, le système doit effectuer une recherche combinée et retourner les
+réservations correspondant aux deux critères.
+
+6. Le système doit renvoyer une liste de réservations correspondant aux critères de recherche.
+
+7. Dans le cas où aucune reservation n'est trouvée, le système doit renvoyer une liste vide.
+
+***Exemple d'utilisation:***
+En tant que propriétaire du restaurant "Le Petit Bistro", je souhaite rechercher les réservations pour 
+confirmer celles effectuées par mes clients.
+
+#### 1. Recherche par préfixe du nom :
+
+- **Requête :** `GET /restaurants/reservations?namePrefix=John`
+- **Réponse :** La requête retourne toutes les réservations pour lesquelles le nom du client commence par "John". Cela 
+permet de trouver rapidement toutes les réservations effectuées par les clients dont le nom commence par "John", 
+comme "John Doe" ou "Johnny Cash".
+
+#### 2. Recherche par date :
+
+- **Requête :** `GET /restaurants/reservations?date=2024-04-15`
+- **Réponse :** La requête retourne toutes les réservations pour la date spécifiée, par exemple le 15 avril 2024. 
+Cela permet de voir toutes les réservations effectuées pour cette journée spécifique, ce qui est utile pour planifier 
+le personnel et les fournitures en conséquence.
+
+#### 3. Recherche sans paramètres :
+
+- **Requête :** `GET /restaurants/reservations`
+- **Réponse :** La requête retourne toutes les réservations pour tous les restaurants. Cela permet de consulter 
+l'ensemble des réservations effectuées dans mon restaurant et de s'assurer que rien n'a été manqué.
+
+
+
+
+
+
+
+
+
