@@ -2,12 +2,15 @@ package ca.ulaval.glo2003.infrastructure.reservation;
 
 import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 import ca.ulaval.glo2003.domain.repositories.ReservationRepositoryTest;
+import ca.ulaval.glo2003.infrastructure.DatastoreProvider;
 import com.mongodb.client.MongoClients;
-import dev.morphia.Datastore;
-import dev.morphia.Morphia;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
+import static dev.morphia.Morphia.createDatastore;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @Testcontainers
 class MongoReservationRepositoryTest extends ReservationRepositoryTest {
@@ -16,10 +19,16 @@ class MongoReservationRepositoryTest extends ReservationRepositoryTest {
 
     @Override
     protected ReservationRepository createRepository() {
-        System.out.println(mongoInstance.getConnectionString());
-        var mongoUrl = MongoClients.create(mongoInstance.getConnectionString());
-        Datastore datastore = Morphia.createDatastore(mongoUrl, "tests");
-        return new MongoReservationRepository(datastore);
+        DatastoreProvider mockProvider = configureTestDataStoreProvider();
+        return new MongoReservationRepository(mockProvider);
+    }
+
+    private DatastoreProvider configureTestDataStoreProvider() {
+        String connectionString = mongoInstance.getConnectionString();
+        DatastoreProvider mockProvider = mock(DatastoreProvider.class);
+        var mongoUrl = MongoClients.create(connectionString);
+        when(mockProvider.provide()).thenReturn(createDatastore(mongoUrl, "tests"));
+        return mockProvider;
     }
 
 }

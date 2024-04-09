@@ -35,7 +35,6 @@ public abstract class ReservationRepositoryTest {
         restaurant = new Restaurant(OWNER_ID, NAME, CAPACITY, HOURS);
     }
 
-
     @Test
     public void givenSavedReservations_whenDeletingWithRestaurantId_shouldDeleteAllForRestaurant() {
         Reservation reservation1 = createAndSaveReservation();
