@@ -251,3 +251,175 @@ Certaines opérations sur une entité nécessitent l'accès à l'autre entité:
 - Définir des événements de domaine pour les modifications des entités Restaurant et Réservation.
 - Enregistrer les événements de domaine dans un journal d'événements.
 - Les services écoutent les événements de domaine et effectuent les mises à jour nécessaires.
+
+# Stories
+[How To Write A User Story For An API Product](https://sameera17w.medium.com/how-to-write-a-user-story-for-an-api-product-7af6abd4ad2e)
+
+[My Secrets of writing great User Stories](https://blogs.infomentum.com/user-stories-for-api-projects)
+
+### Story: Créer une réservation à un restaurant
+
+En tant que propriétaire d'un restaurant, je veux pouvoir créer une réservation pour mon restaurant 
+afin de gérer les disponibilités et d'organiser les services.
+
+***Critères d'acceptation:***
+1. En tant que propriétaire, lorsque je veux créer une réservation, je dois spécifier les informations
+suivantes:
+   - Le id du restaurant
+   - La date de la réservation
+   - L'heure de début de la réservation
+   - Le nombre de personnes du groupe à venir
+   - Le nom de la personne qui fait la réservation
+   - Le numéro de téléphone de la personne qui fait la réservation
+   - L'adresse email de la personne qui fait la réservation
+
+2. Une fois les informations saisies, le système doit vérifier si tous les paramètres suivent le bon
+format et sont valides. Si un paramètre est invalide, une exception InvalidParamException doit être
+renvoyée au propriétaire.
+
+3. Si tous les paramètres sont valides, le système doit créer une réservation pour le restaurant.
+
+4. Le système doit renvoyer un identifiant unique de la réservation au propriétaire.
+
+***Exemple d'utilisation:***
+
+En tant que propriétaire du restaurant "La Petite Boulangerie" (id=1234), je souhaite créer une réservation pour 
+une table de quatre personnes le samedi 15 mai à 19h00 pour M. Dupont. Celui-ci me donne son numéro et mail et 
+je les saisis dans le système. Ensuite je reçois un identifiant unique de réservation ce qui me confirme que la 
+réservation est bien passée.
+
+
+### Story: Rechercher une réservation
+
+En tant que propriétaire d'un restaurant, je veux pouvoir effectuer une recherche par préfixe du nom de la personne 
+qui réserve, ou par date de toutes les réservations à mes restaurants, afin de confirmer qu'un client a bien une 
+réservation.
+
+***Critères d'acceptation:***
+1. En tant que propriétaire, lorsqu'un client se présente et me donne son nom ou sa date de réservation, je
+dois pouvoir effectuer une recherche pour retrouver sa réservation pour chaque lettre de plus qui se rajoute
+à la recherche du nom du client.
+
+2. La recherche par nom doit être une recherche de préfixe, ce qui signifie que le système retourne toutes les 
+réservations pour lesquelles le nom de la personne commence par le préfixe spécifié.
+
+3. La recherche par date doit retourner toutes les réservations pour la date spécifiée.
+
+4. Si aucun paramètre de recherche n'est fourni, le système retourne toutes les réservations pour tous les restaurants.
+
+5. Si la date et le nom du client sont donnés, le système doit effectuer une recherche combinée et retourner les
+réservations correspondant aux deux critères.
+
+6. Le système doit renvoyer une liste de réservations correspondant aux critères de recherche.
+
+7. Dans le cas où aucune reservation n'est trouvée, le système doit renvoyer une liste vide.
+
+***Exemple d'utilisation:***
+En tant que propriétaire du restaurant "Le Petit Bistro", je souhaite rechercher les réservations pour 
+confirmer celles effectuées par mes clients.
+
+#### 1. Recherche par préfixe du nom :
+
+- **Requête :** `GET /restaurants/reservations?customerName=John`
+- **Réponse :** La requête retourne toutes les réservations pour lesquelles le nom du client commence par "John". Cela 
+permet de trouver rapidement toutes les réservations effectuées par les clients dont le nom commence par "John", 
+comme "John Doe" ou "Johnny Cash" ou même "J O H n Wick", car les majuscules et les espaces ne sont pas censés avoir un
+impact sur la recherche.
+
+#### 2. Recherche par date :
+
+- **Requête :** `GET /restaurants/reservations?date=2024-04-15`
+- **Réponse :** La requête retourne toutes les réservations pour la date spécifiée, par exemple le 15 avril 2024. 
+Cela permet de voir toutes les réservations effectuées pour cette journée spécifique, ce qui est utile pour planifier 
+le personnel et les fournitures en conséquence.
+
+#### 3. Recherche sans paramètres :
+
+- **Requête :** `GET /restaurants/reservations`
+- **Réponse :** La requête retourne toutes les réservations pour tous les restaurants. Cela permet de consulter 
+l'ensemble des réservations effectuées dans mon restaurant et de s'assurer que rien n'a été manqué.
+
+
+### Story: Rechercher des restaurants
+
+En tant que client, je veux pouvoir rechercher des restaurants par leur nom en utilisant une correspondance partielle, 
+tout en ignorant la casse et les espaces. De plus, je veux être capable de filtrer les restaurants en fonction de 
+l'heure à laquelle je prévois d'y aller ou de repartir. Cela me permettra de trouver facilement un restaurant en 
+fonction de mes préférences de nom et d'heure.
+
+***Critères d'acceptation:***
+1. En tant que client, je dois pouvoir rechercher un restaurant par son nom en utilisant une correspondance partielle. 
+La recherche doit être insensible à la casse et aux espaces, garantissant ainsi que la recherche retourne tous les 
+restaurants dont le nom contient les caractères saisis.
+
+2. En tant que client, je dois pouvoir filtrer les restaurants en fonction de l'heure à laquelle je prévois d'y aller. 
+La recherche doit me retourner les restaurants qui ont été ouverts avant ou à l'heure exacte spécifiée.
+
+3. En tant que client, je dois pouvoir filtrer les restaurants en fonction de l'heure à laquelle je prévois de repartir.
+La recherche doit me retourner les restaurants qui sont et seront ouverts jusqu'à l'heure spécifiée.
+
+4. En tant que client, je dois pouvoir combiner les critères d'heures de recherche. Cela me permettra de trouver un 
+restaurant qui est ouvert entre l'heure à laquelle je veux y aller et celle à laquelle je veux repartir.
+
+5. En tant que client, je dois pouvoir combiner les critères de recherche par nom et par heure. Cela me permettra de 
+trouver un restaurant spécifique qui correspond à mes critères de nom et d'heure.
+
+6. En tant que client, je peux choisir de ne fournir aucun critère de recherche. Dans ce cas, le système doit me 
+retourner tous les restaurants disponibles.
+
+7. Le système doit renvoyer une liste de restaurants correspondant aux critères de recherche.
+
+8. Dans le cas où aucun restaurant n'est trouvé, le système doit renvoyer une liste vide.
+
+***Exemple d'utilisation:***
+
+***Exemple1***
+Je suis un client qui a un restaurant préféré appelé "Le Petit Bistro". Je veux trouver ce restaurant en utilisant une
+correspondance partielle de son nom. De plus, je veux m'assurer qu'il est ouvert entre 18h00 et 21h00 pour pouvoir y
+aller dîner. Je saisis "bistro" dans la barre de recherche et spécifie les heures de 18h00 à 21h00. Le système me
+retourne "Le Petit Bistro" parmi les résultats de recherche, confirmant qu'il est ouvert à l'heure souhaitée.
+
+***Exemple2***
+Je suis un client qui a beaucoup tardé au travail, et j'aimerais aller manger à un restaurant, mais je n'en connait
+aucun ouvert à 3h du matin. Je saisis, donc seulement l'heure à laquelle je compte manger, soit 03:00 à 04:00. 
+Le système me retourne alors une liste de restaurants qui seront ouverts à cette heure-là, me permettant de choisir un 
+endroit où dîner tardivement.
+
+### Story: Rechercher des disponibilités de réservation
+
+En tant que client, je dois avoir la possibilité de rechercher les disponibilités des restaurants.
+Ce qu'on veut dire ici par disponibilité, ce sont les places réservables dans une plage horaire donnée.
+En spécifiant la date voulue, je veux être capable de filtrer les disponibilités de la journée afin de vérifier s'il y a 
+des places libres à l'heure à laquelle je prévois de réserver et/ou de repartir.
+Cela me permettra de trouver facilement une place libre en fonction de mes préférences d'heure et de journée.
+
+***Critères d'acceptation:***
+1. Le paramètre de date est obligatoire, dans le cas où l'utilisateur oublie de spécifier une date, une erreur sera déclenché.
+
+2. Même les disponibilités à 0 place doivent être affichées.
+
+3. Les disponibilités doivent toujours être affichées par intervalles de 15 minutes fixes.
+
+4. Les intervalles commencent à la prochaine heure fixe de 15 minutes de l'heure d'ouverture,
+indépendamment de la durée configurée des réservations.
+
+5. Les intervalles se terminent à la précédente heure fixe de 15 minutes de l'heure de fermeture du restaurant, 
+moins la durée des réservations configurée.
+
+6. Chaque disponibilité affichée doit garantir d'être réservable au moment de l'affichage 
+(disponible si le nombre de places restantes est supérieur à 0).
+
+7. Dans le cas où aucune disponibilité n'est trouvée (le nombre d'heures d'ouverture ne le permet pas), 
+le système doit renvoyer une liste vide.
+
+***Exemple d'utilisation :***
+
+#### 1. Recherche de disponibilité par date :
+
+- **Requête :** `GET /restaurants/availabilities?date=2024-04-09`
+- **Réponse :** La requête retourne toutes les disponibilités pour la date spécifiée, par exemple le 09 avril 2024.
+  Cela permet de voir toutes les disponibilités libres et occupées pour cette journée spécifique, ce qui est utile pour planifier
+  une visite et choisir une plage horaire convenable.
+
+  
+
