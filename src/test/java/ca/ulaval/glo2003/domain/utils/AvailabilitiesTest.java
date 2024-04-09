@@ -56,65 +56,65 @@ public class AvailabilitiesTest {
     }
 
     @Test
-    public void givenInvalidHours_WhenGettingTheAvailabilitiesList_ShouldReturnEmptyList() {
+    public void givenInvalidHours_whenGetAvailabilitiesForRestaurant_ShouldReturnEmptyList() {
         setUp();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
-                availabilitiesInstance.getAvailabilitiesForRestaurant(invalidRestaurantMocked, reservationList);
+                availabilitiesInstance.getAvailabilitiesForRestaurant(invalidRestaurantMocked, reservationList, VALID_DATE);
         assertThat(availabilities).isEmpty();
     }
 
     @Test
-    public void givenValidHours_WhenGettingTheAvailabilitiesList_ShouldReturnListFull() {
+    public void givenValidHours_WhenGetAvailabilitiesForRestaurant_ShouldReturnListFull() {
         setUp();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
-                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList);
+                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList, VALID_DATE);
         assertThat(availabilities).isNotEmpty();
     }
 
     @Test
-    public void givenSevenHoursOfOpening_whenGettingAvailabilitiesListShouldReturn_SevenMultipliedByNumberOfAvailabilitiesInOneHour() {
+    public void whenGetAvailabilitiesForRestaurant_ShouldReturn_SevenMultipliedByNumberOfAvailabilitiesInOneHour() {
         setUp();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
-                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList);
+                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList, VALID_DATE);
         assertEquals(AVAILABILITIES, availabilities.size());
     }
 
     @Test
-    public void givenValidAvailabilitiesList_FirstElementShouldReturnParsedLocalDateTime() {
+    public void whenGetAvailabilitiesForRestaurant_FirstElementShouldReturnParsedLocalDateTime() {
         setUp();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
-                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList);
+                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList, VALID_DATE);
         assertEquals("2024-04-08T11:00:00", availabilities.get(0).getDate());
     }
 
     @Test
-    public void givenValidAvailabilitiesList_WithNoReservation_FirstElementShouldReturnValidRestaurantCapacity() {
+    public void whenGetAvailabilitiesForRestaurant_WithNoReservation_FirstElementShouldReturnValidRestaurantCapacity() {
         setUp();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
-                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList);
+                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList, VALID_DATE);
         assertEquals(validRestaurantMocked.getCapacity(), availabilities.get(0).getRemainingPlace());
     }
 
     @Test
-    public void givenValidAvailabilitiesList_WithNoReservation_FirstElementShouldNotReturnValidRestaurantCapacity() {
+    public void whenGetAvailabilitiesForRestaurant_WithNoReservation_FirstElementShouldNotReturnValidRestaurantCapacity() {
         setUpWithReservationInList();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
-                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList);
+                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList, VALID_DATE);
         assertNotEquals(VALID_RESTAURANTS_CAPACITY, availabilities.get(0).getRemainingPlace());
     }
 
     @Test
-    public void givenAvailabList_WithActiveReservation_FirstElemShouldReturn_ValidRestaurantCapacityMinusReservationGroupSize() {
+    public void whenGetAvailabilitiesForRestaurant_WithReservation_ShouldReturn_ValidRestaurantCapacityMinusGroupSize() {
         setUpWithReservationInList();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
-                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList);
+                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList, VALID_DATE);
         assertEquals(restaurantCapacityWithActiveReservation, availabilities.get(0).getRemainingPlace());
     }
 }

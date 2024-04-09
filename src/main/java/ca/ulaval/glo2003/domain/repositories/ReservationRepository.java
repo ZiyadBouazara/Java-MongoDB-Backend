@@ -16,4 +16,6 @@ public interface ReservationRepository {
 
     List<Reservation> getAllRestaurantReservations(String restaurantId);
 
+    List<Reservation> getReservationsByDate(String restaurantId, String date);
+
 }
