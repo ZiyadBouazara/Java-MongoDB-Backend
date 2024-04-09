@@ -242,6 +242,7 @@ Certaines opérations sur une entité nécessitent l'accès à l'autre entité:
 - Les services écoutent les événements de domaine et effectuent les mises à jour nécessaires.
 
 # Stories
+[How To Write A User Story For An API Product](https://sameera17w.medium.com/how-to-write-a-user-story-for-an-api-product-7af6abd4ad2e)
 
 ### Story: Créer une réservation à un restaurant
 
