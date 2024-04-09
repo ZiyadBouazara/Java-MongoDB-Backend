@@ -53,16 +53,12 @@ public class ReservationService {
             throws InvalidParameterException, MissingParameterException {
 
         reservationValidator.validateReservationRequest(reservationRequest);
-
         Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
-        if (restaurant.getCapacity() < reservationRequest.groupSize()) {
-            throw new InvalidParameterException("The reservation groupSize cannot exceed the restaurant's capacity");
-        }
+        reservationValidator.validateGroupSizeWithinRestaurantLimit(reservationRequest, restaurant);
 
         Customer customer = customerAssembler.fromDTO(reservationRequest.customer());
-        Reservation reservation =
-                reservationFactory.createReservation(restaurantId, reservationRequest.date(), reservationRequest.startTime(),
-                        reservationRequest.groupSize(), customer);
+        Reservation reservation = reservationFactory.createReservation(restaurantId, reservationRequest.date(),
+                reservationRequest.startTime(), reservationRequest.groupSize(), customer);
         reservationRepository.saveReservation(reservation);
         return reservation.getId();
     }
