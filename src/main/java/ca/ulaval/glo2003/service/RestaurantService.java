@@ -38,6 +38,7 @@ public class RestaurantService {
     private final ReservationValidator reservationValidator = new ReservationValidator();
     private final RestaurantRepository restaurantRepository;
     private final ReservationRepository reservationRepository;
+    Availabilities availabilities = new Availabilities();
 
     private final RestaurantFactory restaurantFactory;
     private final HoursAssembler hoursAssembler;
@@ -123,7 +124,6 @@ public class RestaurantService {
         reservationValidator.verifySearchAvailabilities(date);
 
         Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
-        Availabilities availabilities = new Availabilities(date, restaurant.getCapacity());
         List<Reservation> restaurantReservationList = reservationRepository.findReservationsByRestaurantId(restaurantId);
         List<Availabilities> availabilitiesForRestaurant = availabilities.
                 getAvailabilitiesForRestaurant(restaurant, restaurantReservationList);
