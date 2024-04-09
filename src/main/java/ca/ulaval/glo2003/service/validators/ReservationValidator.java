@@ -27,6 +27,8 @@ public class ReservationValidator {
 
     private static final Pattern TIME_PATTERN = Pattern.compile("^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$");
 
+    private static final Pattern DATE_PATTERN = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
+
     public void validateReservationRequest(ReservationRequest reservationRequest)
         throws InvalidParameterException, MissingParameterException {
         verifyMissingParameters(reservationRequest);
@@ -98,6 +100,26 @@ public class ReservationValidator {
             throws InvalidParameterException, MissingParameterException {
         verifyMissing("date", date);
         verifyValidDate(date);
+    }
+
+    public void validateSearchReservationRequest(String restaurantId, String date)
+            throws InvalidParameterException, MissingParameterException {
+        validateRestaurantId(restaurantId);
+        verifyValidSearchDate(date);
+    }
+
+    public void validateRestaurantId(String restaurantId) throws MissingParameterException {
+        if (restaurantId == null || restaurantId.isEmpty()) {
+            throw new MissingParameterException("Restaurant ID is missing.");
+        }
+    }
+
+    public void verifyValidSearchDate(String date) throws InvalidParameterException {
+        if (date != null) {
+            if (!DATE_PATTERN.matcher(date).matches()) {
+                throw new InvalidParameterException("Invalid parameter 'date', it must be a valid date in the format YYYY-MM-DD");
+            }
+        }
     }
 
 }
