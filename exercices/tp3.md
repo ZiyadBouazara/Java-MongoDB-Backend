@@ -243,7 +243,7 @@ Certaines opérations sur une entité nécessitent l'accès à l'autre entité:
 
 # Stories
 
-### Story 1: Créer une réservation à un restaurant
+### Story: Créer une réservation à un restaurant
 
 En tant que propriétaire d'un restaurant, je veux pouvoir créer une réservation pour mon restaurant 
 afin de gérer les disponibilités et d'organiser les services.
@@ -275,7 +275,7 @@ je les saisis dans le système. Ensuite je reçois un identifiant unique de rés
 réservation est bien passée.
 
 
-### Story 2: Rechercher une réservation
+### Story: Rechercher une réservation
 
 En tant que propriétaire d'un restaurant, je veux pouvoir effectuer une recherche par préfixe du nom de la personne 
 qui réserve, ou par date de toutes les réservations à mes restaurants, afin de confirmer qu'un client a bien une 
@@ -306,10 +306,11 @@ confirmer celles effectuées par mes clients.
 
 #### 1. Recherche par préfixe du nom :
 
-- **Requête :** `GET /restaurants/reservations?namePrefix=John`
+- **Requête :** `GET /restaurants/reservations?customerName=John`
 - **Réponse :** La requête retourne toutes les réservations pour lesquelles le nom du client commence par "John". Cela 
 permet de trouver rapidement toutes les réservations effectuées par les clients dont le nom commence par "John", 
-comme "John Doe" ou "Johnny Cash".
+comme "John Doe" ou "Johnny Cash" ou même "J O H n Wick", car les majuscules et les espaces ne sont pas censés avoir un
+impact sur la recherche.
 
 #### 2. Recherche par date :
 
@@ -323,6 +324,54 @@ le personnel et les fournitures en conséquence.
 - **Requête :** `GET /restaurants/reservations`
 - **Réponse :** La requête retourne toutes les réservations pour tous les restaurants. Cela permet de consulter 
 l'ensemble des réservations effectuées dans mon restaurant et de s'assurer que rien n'a été manqué.
+
+
+# Story: Rechercher des restaurants
+
+En tant que client, je veux pouvoir rechercher des restaurants par leur nom en utilisant une correspondance partielle, 
+tout en ignorant la casse et les espaces. De plus, je veux être capable de filtrer les restaurants en fonction de 
+l'heure à laquelle je prévois d'y aller ou de repartir. Cela me permettra de trouver facilement un restaurant en 
+fonction de mes préférences de nom et d'heure.
+
+### Critères d'acceptation:
+
+1. En tant que client, je dois pouvoir rechercher un restaurant par son nom en utilisant une correspondance partielle. 
+La recherche doit être insensible à la casse et aux espaces, garantissant ainsi que la recherche retourne tous les 
+restaurants dont le nom contient les caractères saisis.
+
+2. En tant que client, je dois pouvoir filtrer les restaurants en fonction de l'heure à laquelle je prévois d'y aller. 
+La recherche doit me retourner les restaurants qui ont été ouverts avant ou à l'heure exacte spécifiée.
+
+3. En tant que client, je dois pouvoir filtrer les restaurants en fonction de l'heure à laquelle je prévois de repartir.
+La recherche doit me retourner les restaurants qui sont et seront ouverts jusqu'à l'heure spécifiée.
+
+4. En tant que client, je dois pouvoir combiner les critères d'heures de recherche. Cela me permettra de trouver un 
+restaurant qui est ouvert entre l'heure à laquelle je veux y aller et celle à laquelle je veux repartir.
+
+5. En tant que client, je dois pouvoir combiner les critères de recherche par nom et par heure. Cela me permettra de 
+trouver un restaurant spécifique qui correspond à mes critères de nom et d'heure.
+
+6. En tant que client, je peux choisir de ne fournir aucun critère de recherche. Dans ce cas, le système doit me 
+retourner tous les restaurants disponibles.
+
+7. Le système doit renvoyer une liste de restaurants correspondant aux critères de recherche.
+
+8. Dans le cas où aucun restaurant n'est trouvé, le système doit renvoyer une liste vide.
+
+### Exemples d'utilisation:
+
+**Exemple1**
+Je suis un client qui a un restaurant préféré appelé "Le Petit Bistro". Je veux trouver ce restaurant en utilisant une
+correspondance partielle de son nom. De plus, je veux m'assurer qu'il est ouvert entre 18h00 et 21h00 pour pouvoir y
+aller dîner. Je saisis "bistro" dans la barre de recherche et spécifie les heures de 18h00 à 21h00. Le système me
+retourne "Le Petit Bistro" parmi les résultats de recherche, confirmant qu'il est ouvert à l'heure souhaitée.
+
+**Exemple2**
+Je suis un client qui a beaucoup tardé au travail, et j'aimerais aller manger à un restaurant, mais je n'en connait
+aucun ouvert à 3h du matin. Je saisis, donc seulement l'heure à laquelle je compte manger, soit 03:00 à 04:00. 
+Le système me retourne alors une liste de restaurants qui seront ouverts à cette heure-là, me permettant de choisir un 
+endroit où dîner tardivement.
+
 
 
 
