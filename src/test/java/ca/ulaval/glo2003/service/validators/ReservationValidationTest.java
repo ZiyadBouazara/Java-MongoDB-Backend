@@ -20,6 +20,7 @@ public class ReservationValidationTest {
     private static final String INVALID_PHONE_NUMBER = "123";
 
     ReservationValidator reservationValidator;
+
     @BeforeEach
     void setup() {
         reservationValidator = new ReservationValidator();
@@ -56,7 +57,8 @@ public class ReservationValidationTest {
                 .withDate(VALID_DATE)
                 .create();
 
-        assertDoesNotThrow(() -> reservationValidator.validateReservationRequest(reservationRequest));
+        assertDoesNotThrow(() ->
+                reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -64,7 +66,8 @@ public class ReservationValidationTest {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .createWithMissingDate();
 
-        assertThrows(MissingParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
+        assertThrows(MissingParameterException.class, () ->
+                reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -72,7 +75,8 @@ public class ReservationValidationTest {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .createWithMissingStartTime();
 
-        assertThrows(MissingParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
+        assertThrows(MissingParameterException.class, () ->
+                reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -80,7 +84,8 @@ public class ReservationValidationTest {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .createWithMissingGroupSize();
 
-        assertThrows(MissingParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
+        assertThrows(MissingParameterException.class, () ->
+                reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -88,7 +93,8 @@ public class ReservationValidationTest {
         ReservationRequest reservationRequest = new ReservationRequestFixture()
                 .createWithMissingCustomer();
 
-        assertThrows(MissingParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
+        assertThrows(MissingParameterException.class, () ->
+                reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -97,7 +103,8 @@ public class ReservationValidationTest {
                 .withCustomerEmail(INVALID_EMAIL)
                 .create();
 
-        assertThrows(InvalidParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
+        assertThrows(InvalidParameterException.class, () ->
+                reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -106,7 +113,8 @@ public class ReservationValidationTest {
                 .withCustomerPhoneNumber(INVALID_PHONE_NUMBER)
                 .create();
 
-        assertThrows(InvalidParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
+        assertThrows(InvalidParameterException.class, () ->
+                reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -115,7 +123,8 @@ public class ReservationValidationTest {
                 .withCustomerName(null)
                 .create();
 
-        assertThrows(MissingParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
+        assertThrows(MissingParameterException.class, () ->
+                reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -124,7 +133,8 @@ public class ReservationValidationTest {
                 .withCustomerEmail(null)
                 .create();
 
-        assertThrows(MissingParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
+        assertThrows(MissingParameterException.class, () ->
+                reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -133,7 +143,8 @@ public class ReservationValidationTest {
                 .withCustomerPhoneNumber(null)
                 .create();
 
-        assertThrows(MissingParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
+        assertThrows(MissingParameterException.class, () ->
+                reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -142,7 +153,8 @@ public class ReservationValidationTest {
                 .withGroupSize(INVALID_GROUP_SIZE)
                 .create();
 
-        assertThrows(InvalidParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
+        assertThrows(InvalidParameterException.class, () ->
+                reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -151,7 +163,8 @@ public class ReservationValidationTest {
                 .withStartTime(INVALID_START_TIME)
                 .create();
 
-        assertThrows(InvalidParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
+        assertThrows(InvalidParameterException.class, () ->
+                reservationValidator.validateReservationRequest(reservationRequest));
     }
 
     @Test
@@ -160,6 +173,61 @@ public class ReservationValidationTest {
                 .withDate(INVALID_DATE)
                 .create();
 
-        assertThrows(InvalidParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
+        assertThrows(InvalidParameterException.class, () ->
+                reservationValidator.validateReservationRequest(reservationRequest));
+    }
+
+    @Test
+    void givenValidDate_whenSearchingReservation_shouldNotThrowException() {
+        assertDoesNotThrow(() ->
+                reservationValidator.validateSearchReservationRequest("restaurantId", VALID_DATE));
+    }
+
+    @Test
+    void givenInvalidDate_whenSearchingReservation_shouldThrowInvalidParameterException() {
+        assertThrows(InvalidParameterException.class, () ->
+                reservationValidator.validateSearchReservationRequest("restaurantId", INVALID_DATE));
+    }
+
+    @Test
+    void givenMissingRestaurantId_whenSearchingReservation_shouldThrowMissingParameterException() {
+        assertThrows(MissingParameterException.class, () ->
+                reservationValidator.validateSearchReservationRequest(null, VALID_DATE));
+    }
+
+    @Test
+    void givenEmptyRestaurantId_whenSearchingReservation_shouldThrowMissingParameterException() {
+        assertThrows(MissingParameterException.class, () ->
+                reservationValidator.validateSearchReservationRequest("", VALID_DATE));
+    }
+
+    @Test
+    void givenNullRestaurantId_whenSearchingReservation_shouldThrowMissingParameterException() {
+        assertThrows(MissingParameterException.class, () ->
+                reservationValidator.validateSearchReservationRequest(null, VALID_DATE));
+    }
+
+    @Test
+    void givenNullDate_whenSearchingReservation_shouldNotThrowException() {
+        assertDoesNotThrow(() ->
+                reservationValidator.validateSearchReservationRequest("restaurantId", null));
+    }
+
+    @Test
+    void givenEmptyDate_whenSearchingReservation_shouldThrowException() {
+        assertThrows(InvalidParameterException.class, () ->
+                reservationValidator.validateSearchReservationRequest("restaurantId", ""));
+    }
+
+    @Test
+    void givenInvalidSearchReservationRequest_whenSearchingReservation_shouldThrowException() {
+        assertThrows(InvalidParameterException.class, () ->
+                reservationValidator.validateSearchReservationRequest("restaurantId", "2024/03/05"));
+    }
+
+    @Test
+    void givenValidSearchReservationRequest_whenSearchingReservation_shouldNotThrowException() {
+        assertDoesNotThrow(() ->
+                reservationValidator.validateSearchReservationRequest("restaurantId", "2024-03-05"));
     }
 }

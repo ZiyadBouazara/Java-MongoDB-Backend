@@ -15,11 +15,9 @@ public class Customer {
     public String getName() {
         return this.name;
     }
-
     public String getEmail() {
         return this.email;
     }
-
     public String getPhoneNumber() {
         return this.phoneNumber;
     }

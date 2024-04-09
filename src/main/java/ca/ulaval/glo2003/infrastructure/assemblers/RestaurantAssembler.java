@@ -19,7 +19,8 @@ public class RestaurantAssembler {
 
     public static Restaurant fromRestaurantMongo(RestaurantMongo restaurantMongo) {
 
-        return new Restaurant(restaurantMongo.getOwnerId(), restaurantMongo.getName(), restaurantMongo.getCapacity(),
+        return new Restaurant(restaurantMongo.getId(), restaurantMongo.getOwnerId(), restaurantMongo.getName(),
+            restaurantMongo.getCapacity(),
             new Hours(restaurantMongo.getOpenHour(), restaurantMongo.getCloseHour()),
             new ReservationConfiguration(restaurantMongo.getDuration()));
     }
