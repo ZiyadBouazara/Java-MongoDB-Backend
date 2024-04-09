@@ -80,21 +80,30 @@ public class ReservationService {
             throws InvalidParameterException, MissingParameterException {
         headerValidator.verifyMissingHeader(ownerId);
         reservationValidator.validateSearchReservationRequest(restaurantId, date);
+
         List<Reservation> reservations = reservationRepository.getAllRestaurantReservations(restaurantId);
         List<ReservationGeneralResponse> searchedReservations = new ArrayList<>();
+
         for (Reservation reservation : reservations) {
-            Restaurant restaurant = restaurantRepository.findRestaurantById(reservation.getRestaurantId());
-            if (restaurant != null) {
-                if (ReservationHelper.isMatchingCustomerName(reservation.getCustomer().getName(), customerName)
-                        && ReservationHelper.isMatchingDate(reservation.getDate(), date)) {
-                    getRestaurantValidator.validateRestaurantOwnership(ownerId, restaurant.getOwnerId());
-                    searchedReservations.add(reservationGeneralResponseAssembler
-                            .toDTO(reservation, restaurant));
-                }
-            } else {
-                throw new NotFoundException("Restaurant not found for reservation with ID: " + reservation.getId());
+            Restaurant restaurant = findAndValidateRestaurant(reservation);
+            if (matchesSearchCriteria(reservation, customerName, date)) {
+                searchedReservations.add(reservationGeneralResponseAssembler
+                        .toDTO(reservation, restaurant));
             }
         }
         return searchedReservations;
+    }
+
+    private Restaurant findAndValidateRestaurant(Reservation reservation) throws NotFoundException {
+        Restaurant restaurant = restaurantRepository.findRestaurantById(reservation.getRestaurantId());
+        if (restaurant == null) {
+            throw new NotFoundException("Restaurant not found for reservation with ID: " + reservation.getId());
+        }
+        return restaurant;
+    }
+
+    private boolean matchesSearchCriteria(Reservation reservation, String customerName, String date) {
+        return ReservationHelper.isMatchingCustomerName(reservation.getCustomer().getName(), customerName)
+                && ReservationHelper.isMatchingDate(reservation.getDate(), date);
     }
 }
