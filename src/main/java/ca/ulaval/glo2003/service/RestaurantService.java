@@ -15,6 +15,7 @@ import ca.ulaval.glo2003.service.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.service.validators.GetRestaurantValidator;
 import ca.ulaval.glo2003.service.validators.HeaderValidator;
 import ca.ulaval.glo2003.service.validators.SearchRestaurantValidator;
+import ca.ulaval.glo2003.service.validators.ReservationValidator;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.domain.utils.FuzzySearch;
@@ -34,6 +35,7 @@ public class RestaurantService {
     private final GetRestaurantValidator getRestaurantValidator = new GetRestaurantValidator();
     private final HeaderValidator headerValidator = new HeaderValidator();
     private final SearchRestaurantValidator restaurantSearchValidator = new SearchRestaurantValidator();
+    private final ReservationValidator reservationValidator = new ReservationValidator();
     private final RestaurantRepository restaurantRepository;
     private final ReservationRepository reservationRepository;
 
@@ -115,8 +117,11 @@ public class RestaurantService {
         return fuzzySearchResponseAssembler.toDTO(restaurant);
     }
 
-    public List<AvailabilitiesResponse> getAvailabilitiesForRestaurant(String restaurantId, String date) {
-//      availabilitiesValidator.verifyAvailabilityValidParameters(search);
+    public List<AvailabilitiesResponse> getAvailabilitiesForRestaurant(String ownerId, String restaurantId, String date)
+            throws InvalidParameterException, MissingParameterException {
+        headerValidator.verifyMissingHeader(ownerId);
+        reservationValidator.verifySearchAvailabilities(date);
+
         Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
         Availabilities availabilities = new Availabilities(date, restaurant.getCapacity());
         List<Reservation> restaurantReservationList = reservationRepository.findReservationsByRestaurantId(restaurantId);

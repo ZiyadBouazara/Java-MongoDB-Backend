@@ -94,6 +94,12 @@ public class ReservationValidator {
         return matcher.matches();
     }
 
+    public void verifySearchAvailabilities(String date)
+            throws InvalidParameterException, MissingParameterException {
+        verifyMissing("date", date);
+        verifyValidDate(date);
+    }
+
 //    private void verifyGetReservationValidParameters(String date, String customerName)
 //        throws InvalidParameterException, MissingParameterException {
 //        if (date != null) {

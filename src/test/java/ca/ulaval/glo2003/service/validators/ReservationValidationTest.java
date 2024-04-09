@@ -162,4 +162,19 @@ public class ReservationValidationTest {
 
         assertThrows(InvalidParameterException.class, () -> reservationValidator.validateReservationRequest(reservationRequest));
     }
+
+    @Test
+    public void givenMissingDate_whenVerifyingSearchAvailabilities_ShouldThrowMissingParameterException() {
+        assertThrows(MissingParameterException.class, () -> reservationValidator.verifySearchAvailabilities(null));
+    }
+
+    @Test
+    public void givenInvalidDate_whenVerifyingSearchAvailabilities_ShouldThrowInvalidParameterException() {
+        assertThrows(InvalidParameterException.class, () -> reservationValidator.verifySearchAvailabilities(INVALID_DATE));
+    }
+
+    @Test
+    public void givenValidDate_whenVerifyingSearchAvailabilities_ShouldNotThrowParameterException() {
+        assertDoesNotThrow(() -> reservationValidator.verifySearchAvailabilities(VALID_DATE));
+    }
 }
