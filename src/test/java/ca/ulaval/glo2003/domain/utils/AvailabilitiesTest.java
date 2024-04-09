@@ -74,7 +74,7 @@ public class AvailabilitiesTest {
     }
 
     @Test
-    public void givenSevenHoursOfOpening_whenGetAvailabilitiesForRestaurant_ShouldReturn_SevenMultipliedByNumberOfAvailabilitiesInOneHour() {
+    public void whenGetAvailabilitiesForRestaurant_ShouldReturn_SevenMultipliedByNumberOfAvailabilitiesInOneHour() {
         setUp();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
@@ -83,7 +83,7 @@ public class AvailabilitiesTest {
     }
 
     @Test
-    public void givenValidAvailabilitiesList_whenGetAvailabilitiesForRestaurant_FirstElementShouldReturnParsedLocalDateTime() {
+    public void whenGetAvailabilitiesForRestaurant_FirstElementShouldReturnParsedLocalDateTime() {
         setUp();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
@@ -92,7 +92,7 @@ public class AvailabilitiesTest {
     }
 
     @Test
-    public void givenValidAvailabilitiesList_whenGetAvailabilitiesForRestaurant_WithNoReservation_FirstElementShouldReturnValidRestaurantCapacity() {
+    public void whenGetAvailabilitiesForRestaurant_WithNoReservation_FirstElementShouldReturnValidRestaurantCapacity() {
         setUp();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
@@ -101,7 +101,7 @@ public class AvailabilitiesTest {
     }
 
     @Test
-    public void givenValidAvailabilitiesList_whenGetAvailabilitiesForRestaurant_WithNoReservation_FirstElementShouldNotReturnValidRestaurantCapacity() {
+    public void whenGetAvailabilitiesForRestaurant_WithNoReservation_FirstElementShouldNotReturnValidRestaurantCapacity() {
         setUpWithReservationInList();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
@@ -110,7 +110,7 @@ public class AvailabilitiesTest {
     }
 
     @Test
-    public void givenValidAvailabilitiesList_whenGetAvailabilitiesForRestaurant_WithActiveReservation_FirstElemShouldReturn_ValidRestaurantCapacityMinusReservationGroupSize() {
+    public void whenGetAvailabilitiesForRestaurant_WithReservation_ShouldReturn_ValidRestaurantCapacityMinusGroupSize() {
         setUpWithReservationInList();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
