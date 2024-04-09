@@ -30,5 +30,4 @@ class MongoReservationRepositoryTest extends ReservationRepositoryTest {
         when(mockProvider.provide()).thenReturn(createDatastore(mongoUrl, "tests"));
         return mockProvider;
     }
-
 }
