@@ -96,6 +96,13 @@ public class ReservationValidator {
         return matcher.matches();
     }
 
+    public void verifySearchAvailabilities(String date)
+            throws InvalidParameterException, MissingParameterException {
+        verifyMissing("date", date);
+        verifyValidDate(date);
+
+    }
+
     public void validateSearchReservationRequest(String restaurantId, String date)
             throws InvalidParameterException, MissingParameterException {
         validateRestaurantId(restaurantId);
@@ -116,4 +123,3 @@ public class ReservationValidator {
         }
     }
 }
-

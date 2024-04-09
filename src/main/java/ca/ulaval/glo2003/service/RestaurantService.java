@@ -11,9 +11,10 @@ import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.utils.Availabilities;
 import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
-import ca.ulaval.glo2003.service.validators.CreateRestaurantValidator;
-import ca.ulaval.glo2003.service.validators.GetRestaurantValidator;
+import ca.ulaval.glo2003.service.validators.ReservationValidator;
 import ca.ulaval.glo2003.service.validators.HeaderValidator;
+import ca.ulaval.glo2003.service.validators.GetRestaurantValidator;
+import ca.ulaval.glo2003.service.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.service.validators.SearchRestaurantValidator;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
@@ -34,6 +35,7 @@ public class RestaurantService {
     private final CreateRestaurantValidator createRestaurantValidator = new CreateRestaurantValidator();
     private final GetRestaurantValidator getRestaurantValidator = new GetRestaurantValidator();
     private final HeaderValidator headerValidator = new HeaderValidator();
+    private final ReservationValidator reservationValidator;
     private final SearchRestaurantValidator restaurantSearchValidator = new SearchRestaurantValidator();
     private final RestaurantRepository restaurantRepository;
     private final ReservationRepository reservationRepository;
@@ -48,7 +50,8 @@ public class RestaurantService {
     public RestaurantService(RestaurantRepository restaurantRepository, ReservationRepository reservationRepository,
                              RestaurantFactory restaurantFactory,
                              HoursAssembler hoursAssembler, RestaurantResponseAssembler restaurantResponseAssembler,
-                             FuzzySearchAssembler fuzzySearchAssembler, FuzzySearchResponseAssembler fuzzySearchResponseAssembler)  {
+                             FuzzySearchAssembler fuzzySearchAssembler, FuzzySearchResponseAssembler fuzzySearchResponseAssembler,
+                             ReservationRepository reservationRepository, ReservationValidator reservationValidator) {
         this.restaurantRepository = restaurantRepository;
         this.reservationRepository = reservationRepository;
         this.restaurantFactory = restaurantFactory;
@@ -56,6 +59,8 @@ public class RestaurantService {
         this.restaurantResponseAssembler = restaurantResponseAssembler;
         this.fuzzySearchAssembler = fuzzySearchAssembler;
         this.fuzzySearchResponseAssembler = fuzzySearchResponseAssembler;
+        this.reservationRepository = reservationRepository;
+        this.reservationValidator = reservationValidator;
     }
 
     public String createRestaurant(String ownerId, RestaurantRequest restaurantRequest)
@@ -124,8 +129,11 @@ public class RestaurantService {
         return fuzzySearchResponseAssembler.toDTO(restaurant);
     }
 
-    public List<AvailabilitiesResponse> getAvailabilitiesForRestaurant(String restaurantId, String date) {
-//      availabilitiesValidator.verifyAvailabilityValidParameters(search);
+    public List<AvailabilitiesResponse> getAvailabilitiesForRestaurant(String ownerId, String restaurantId, String date)
+            throws MissingParameterException, InvalidParameterException {
+        headerValidator.verifyMissingHeader(ownerId);
+        reservationValidator.verifySearchAvailabilities(date);
+
         Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
         Availabilities availabilities = new Availabilities(date, restaurant.getCapacity());
         List<Reservation> restaurantReservationList = reservationRepository.getAllRestaurantReservations(restaurantId);
