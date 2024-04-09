@@ -20,7 +20,8 @@ public class Availabilities {
         this.remainingPlace = remainingPlace;
     }
 
-    public Availabilities(){}
+    public Availabilities() {
+    }
 
     public List<Availabilities> getAvailabilitiesForRestaurant(Restaurant restaurant, List<Reservation> reservationList) {
         LocalDateTime openingTime = getOpeningTime(restaurant);
@@ -32,7 +33,7 @@ public class Availabilities {
         while (currentTime.plusMinutes(reservationDuration).isBefore(closingTime)) {
             int remainingPlaces = calculateRemainingPlace(restaurant, currentTime, reservationList);
             availabilities.add(new Availabilities(currentTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                                                remainingPlaces));
+                    remainingPlaces));
             currentTime = currentTime.plusMinutes(15);
         }
         return availabilities;

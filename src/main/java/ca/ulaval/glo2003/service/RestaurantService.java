@@ -16,7 +16,6 @@ import ca.ulaval.glo2003.service.validators.HeaderValidator;
 import ca.ulaval.glo2003.service.validators.GetRestaurantValidator;
 import ca.ulaval.glo2003.service.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.service.validators.SearchRestaurantValidator;
-import ca.ulaval.glo2003.service.validators.ReservationValidator;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.domain.utils.FuzzySearch;
@@ -38,7 +37,6 @@ public class RestaurantService {
     private final HeaderValidator headerValidator = new HeaderValidator();
     private final ReservationValidator reservationValidator;
     private final SearchRestaurantValidator restaurantSearchValidator = new SearchRestaurantValidator();
-    private final ReservationValidator reservationValidator = new ReservationValidator();
     private final RestaurantRepository restaurantRepository;
     private final ReservationRepository reservationRepository;
     private final RestaurantFactory restaurantFactory;
