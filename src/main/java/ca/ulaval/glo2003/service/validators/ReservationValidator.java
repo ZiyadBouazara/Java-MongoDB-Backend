@@ -100,14 +100,4 @@ public class ReservationValidator {
         verifyValidDate(date);
     }
 
-//    private void verifyGetReservationValidParameters(String date, String customerName)
-//        throws InvalidParameterException, MissingParameterException {
-//        if (date != null) {
-//            verifyValidDate(date);
-//        }
-//        if (customerName != null) {
-//            verifyValidCustomerName(customerName);
-//        }
-//    }
 }
-

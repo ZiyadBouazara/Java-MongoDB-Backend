@@ -77,7 +77,7 @@ public class RestaurantResource {
     public List<AvailabilitiesResponse> getAvailabilities(@HeaderParam("Owner") String ownerId,
                                                           @PathParam("id") String restaurantId,
                                                           @QueryParam("date") String date)
-            throws NotFoundException, InvalidParameterException, MissingParameterException {
+            throws NotFoundException, MissingParameterException, InvalidParameterException {
         return restaurantService.getAvailabilitiesForRestaurant(ownerId, restaurantId, date);
     }
 
