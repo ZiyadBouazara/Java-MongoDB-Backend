@@ -60,7 +60,8 @@ public class Availabilities {
                 restaurant.getRestaurantConfiguration().getDuration(), providedDate));
     }
 
-    private boolean isReservationActive(LocalDateTime currentTime, String reservationStartTimeString, int reservationDuration, String providedDate) {
+    private boolean isReservationActive(LocalDateTime currentTime, String reservationStartTimeString,
+                                        int reservationDuration, String providedDate) {
         LocalDate currentDate = LocalDate.parse(providedDate);
         String fullStartTimeString = currentDate + "T" + reservationStartTimeString;
         LocalDateTime reservationStartTime = LocalDateTime.parse(fullStartTimeString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
