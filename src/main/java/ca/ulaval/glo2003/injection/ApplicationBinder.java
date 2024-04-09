@@ -7,6 +7,8 @@ import ca.ulaval.glo2003.controllers.assemblers.RestaurantResponseAssembler;
 import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
 import ca.ulaval.glo2003.infrastructure.DatastoreProvider;
+import ca.ulaval.glo2003.infrastructure.EnvironmentReader;
+import ca.ulaval.glo2003.infrastructure.SystemEnvReader;
 import ca.ulaval.glo2003.infrastructure.reservation.InMemoryReservationRepository;
 import ca.ulaval.glo2003.infrastructure.restaurant.InMemoryRestaurantRepository;
 import ca.ulaval.glo2003.infrastructure.reservation.MongoReservationRepository;
@@ -24,7 +26,6 @@ import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
 import ca.ulaval.glo2003.service.assembler.FuzzySearchAssembler;
 import ca.ulaval.glo2003.service.assembler.HoursAssembler;
 import ca.ulaval.glo2003.service.assembler.VisitTimeAssembler;
-import dev.morphia.Datastore;
 import jakarta.inject.Singleton;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 
@@ -51,16 +52,15 @@ public class ApplicationBinder extends AbstractBinder {
         bind(RestaurantResponseAssembler.class).to(RestaurantResponseAssembler.class);
         bind(ReservationResponseAssembler.class).to(ReservationResponseAssembler.class);
         bind(ReservationGeneralResponseAssembler.class).to(ReservationGeneralResponseAssembler.class);
+        bind(SystemEnvReader.class).to(EnvironmentReader.class);
     }
 
     private void choosePersistenceType() {
         String persistence = System.getProperty("persistence");
         if (persistence != null && persistence.equals("mongo")) {
-            DatastoreProvider provider = new DatastoreProvider();
-            Datastore datastore = provider.provide();
-
-            bind(new MongoRestaurantRepository(datastore)).to(RestaurantRepository.class).in(Singleton.class);
-            bind(new MongoReservationRepository(datastore)).to(ReservationRepository.class).in(Singleton.class);
+            bind(DatastoreProvider.class).to(DatastoreProvider.class);
+            bind(MongoRestaurantRepository.class).to(RestaurantRepository.class).in(Singleton.class);
+            bind(MongoReservationRepository.class).to(ReservationRepository.class).in(Singleton.class);
         } else {
             bind(InMemoryRestaurantRepository.class).to(RestaurantRepository.class).in(Singleton.class);
             bind(InMemoryReservationRepository.class).to(ReservationRepository.class).in(Singleton.class);

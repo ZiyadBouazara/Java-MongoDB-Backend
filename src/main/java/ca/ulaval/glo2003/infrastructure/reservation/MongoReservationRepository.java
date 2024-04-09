@@ -3,12 +3,14 @@ package ca.ulaval.glo2003.infrastructure.reservation;
 import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.reservation.ReservationMongo;
+import ca.ulaval.glo2003.infrastructure.DatastoreProvider;
 import ca.ulaval.glo2003.infrastructure.assemblers.ReservationAssembler;
 import com.mongodb.client.result.DeleteResult;
 import dev.morphia.Datastore;
 import dev.morphia.DeleteOptions;
 import dev.morphia.query.Query;
 import dev.morphia.query.filters.Filters;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 
 
@@ -18,8 +20,9 @@ import java.util.List;
 public class MongoReservationRepository implements ReservationRepository {
     private final Datastore datastore;
 
-    public MongoReservationRepository(Datastore datastore) {
-        this.datastore = datastore;
+    @Inject
+    public MongoReservationRepository(DatastoreProvider datastoreProvider) {
+        this.datastore = datastoreProvider.provide();
     }
 
     @Override
