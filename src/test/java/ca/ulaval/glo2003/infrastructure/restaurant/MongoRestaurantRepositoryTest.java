@@ -4,13 +4,10 @@ import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
 import ca.ulaval.glo2003.domain.repositories.RestaurantRepositoryTest;
 import ca.ulaval.glo2003.infrastructure.DatastoreProvider;
 import com.mongodb.client.MongoClients;
-import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-
-import static dev.morphia.Morphia.createDatastore;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
