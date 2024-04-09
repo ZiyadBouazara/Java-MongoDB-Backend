@@ -243,6 +243,7 @@ Certaines opérations sur une entité nécessitent l'accès à l'autre entité:
 
 # Stories
 [How To Write A User Story For An API Product](https://sameera17w.medium.com/how-to-write-a-user-story-for-an-api-product-7af6abd4ad2e)
+[My Secrets of writing great User Stories](https://blogs.infomentum.com/user-stories-for-api-projects)
 
 ### Story: Créer une réservation à un restaurant
 
