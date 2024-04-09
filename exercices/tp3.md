@@ -152,14 +152,16 @@ code est moins susceptible de causer des problèmes.
 
 ### Rôles des classes principales
 
-![Local Image](../images/tp2/architecture.png)
+![Local Image](../images/tp3/architecture.png)
 
 - ReservationConfiguration : Permet de configurer une réservation pour un restaurant. Cela permet de définir le nombre
   de places disponibles, le temps de réservation minimum et le temps de réservation maximum.
 - ReservationRequest : Permet de faire une requête pour la réservation d'un restaurant.
 - RestaurantRequest : Permet de faire une requête pour la création d'un restaurant.
-- RestaurantService/ReservationService : Fait le pont entre les Resources et le Domaine en utilisant les Factories,
-  Assemblers et Validators pour Sauvegarder et Rechercher.
+- ...Response : Copie d'un objet complexe qui est retourné à l'utilisateur (DTO)
+- RestaurantService/ReservationService : Font le pont entre les Resources et le Domaine en utilisant les Factories,
+  Repositories,
+  Assemblers et Validators pour Sauvegarder, Rechercher et Supprimer.
 - Restaurant : Permet de créer un restaurant et d'avoir accès à ses attributs.
 - Reservation : Permet de créer une réservation et d'avoir accès à ses attributs.
 - RestaurantMongo : Objet desérializable de Restaurant qui est stocké dans la MongoDB.
@@ -175,29 +177,38 @@ code est moins susceptible de causer des problèmes.
 - Availabilities: Disponibilités d'un restaurant
 - VisitTime: Représente le temps auquel un client peut aller au restaurant et en repartir. C'est pour cette raison que
   cette classe contient un from et un to.
-- ...Response : Copie d'un objet complexe qui est retourné à l'utilisateur (DTO)
+- Customer: client qui effectue une Reservation.
+- ...Repository: Interface pour Restaurant ou Reservation de la persistance.
+- inMemory...Respository: Persistence de Restaurant ou Reservation au runtime.
+- Mongo...Repository: Persistence MongoDB de Restaurant ou Reservation qui implémente l'interface ...Repository.
 
 ### Nos choix
 
 Notre architecture repose sur deux entités principales : Restaurant et Réservation. Ce choix est motivé par les raisons
 suivantes :
 
-Centralité des concepts: Les restaurants et les réservations sont les deux concepts centraux de notre application. La
-plupart des fonctionnalités de l'application tournent autour de ces deux concepts.
-Cohésion: Chaque entité regroupe des fonctionnalités et des données qui lui sont propres. Cela permet d'assurer une
-meilleure cohésion et une meilleure modularité du code.
-Simplicité: Cette architecture est simple et facile à comprendre. Cela facilite la maintenance et l'évolution de l'
-application.
+- Centralité des concepts: Les restaurants et les réservations sont les deux concepts centraux de notre application. La
+  plupart des fonctionnalités de l'application tournent autour de ces deux concepts.
+- Cohésion: Chaque entité regroupe des fonctionnalités et des données qui lui sont propres. Cela permet d'assurer une
+  meilleure cohésion et une meilleure modularité du code.
+- Simplicité: Cette architecture est simple et facile à comprendre. Cela facilite la maintenance et l'évolution de l'
+  application.
 
 **Structure des packages:**
 
 L'architecture est divisée en quatre packages :
 
-- Controllers: Ce package contient les contrôleurs qui gèrent les interactions avec l'interface utilisateur.
-- Service: Ce package contient les services qui implémentent la logique métier.
-- Domain: Ce package contient les modèles de domaine qui représentent les données de l'application.
-- Infrastructure: Ce package contient les classes qui dépendent de l'environnement d'exécution, telles que les accès aux
-  bases de données.
+- Controllers: Ce package contient les contrôleurs qui gèrent les interactions avec l'interface utilisateur. Les
+  contrôleurs reçoivent les requêtes de l'utilisateur, effectuent des opérations nécessaires en utilisant les services
+  appropriés, puis renvoient les réponses à l'interface utilisateur.
+- Service: Ce package contient les services qui encapsulent la logique métier de l'application. Les services agissent
+  comme une couche intermédiaire entre les contrôleurs et le domaine, fournissant des fonctionnalités spécifiques à
+  l'application.
+- Domain: Ce package contient les modèles de domaine qui représentent les données de l'application et la logique métier.
+  Le domaine encapsule la connaissance et les règles métier de l'application. Il ne devrait pas s'occuper des détails de
+  stockage ou d'accès aux données.
+- Infrastructure: Ce package représente la persistance de l'application. Elle possède deux types de persistance:
+  inMemory et MongoDB.
 
 Avantages de cette architecture:
 
