@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Availabilities {
+
     private String date;
     private Integer remainingPlace;
-    List<Availabilities> availabilities = new ArrayList<>();
+    private List<Availabilities> availabilities = new ArrayList<>();
 
 
     public Availabilities(String date, Integer remainingPlace) {
@@ -23,37 +24,40 @@ public class Availabilities {
     public Availabilities() {
     }
 
-    public List<Availabilities> getAvailabilitiesForRestaurant(Restaurant restaurant, List<Reservation> reservationList) {
-        LocalDateTime openingTime = getOpeningTime(restaurant);
-        LocalDateTime closingTime = getClosingHour(restaurant);
+    public List<Availabilities> getAvailabilitiesForRestaurant(Restaurant restaurant, List<Reservation> reservationList, String providedDate) {
+        LocalDateTime openingTime = getOpeningTime(restaurant, providedDate);
+        LocalDateTime closingTime = getClosingHour(restaurant, providedDate);
         int reservationDuration = restaurant.getRestaurantConfiguration().getDuration();
 
         LocalDateTime currentTime = openingTime;
 
         while (currentTime.plusMinutes(reservationDuration).isBefore(closingTime)) {
-            int remainingPlaces = calculateRemainingPlace(restaurant, currentTime, reservationList);
-            availabilities.add(new Availabilities(currentTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                    remainingPlaces));
+            int remainingPlaces = calculateRemainingPlace(restaurant, currentTime, reservationList, providedDate);
+            // Check if there are remaining places before creating Availabilities object
+            if (remainingPlaces >= 0) {
+                availabilities.add(new Availabilities(currentTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                        remainingPlaces));
+            }
             currentTime = currentTime.plusMinutes(15);
         }
         return availabilities;
     }
 
-    private int calculateRemainingPlace(Restaurant restaurant, LocalDateTime currentTime, List<Reservation> reservationList) {
-        return getExistingReservation(restaurant, currentTime, reservationList)
-                ? calculateRemainingPlacesWithReservation(restaurant, currentTime, reservationList)
+    private int calculateRemainingPlace(Restaurant restaurant, LocalDateTime currentTime, List<Reservation> reservationList, String providedDate) {
+        return getExistingReservation(restaurant, currentTime, reservationList, providedDate)
+                ? calculateRemainingPlacesWithReservation(restaurant, currentTime, reservationList, providedDate)
                 : restaurant.getCapacity();
     }
 
     private boolean getExistingReservation(Restaurant restaurant, LocalDateTime currentTime,
-                                           List<Reservation> reservationList) {
+                                           List<Reservation> reservationList, String providedDate) {
         return reservationList.stream().anyMatch(reservation -> isReservationActive(currentTime,
                 reservation.getStartTime(),
-                restaurant.getRestaurantConfiguration().getDuration()));
+                restaurant.getRestaurantConfiguration().getDuration(), providedDate));
     }
 
-    private boolean isReservationActive(LocalDateTime currentTime, String reservationStartTimeString, int reservationDuration) {
-        LocalDate currentDate = LocalDate.from(currentTime);
+    private boolean isReservationActive(LocalDateTime currentTime, String reservationStartTimeString, int reservationDuration, String providedDate) {
+        LocalDate currentDate = LocalDate.parse(providedDate);
         String fullStartTimeString = currentDate + "T" + reservationStartTimeString;
         LocalDateTime reservationStartTime = LocalDateTime.parse(fullStartTimeString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
@@ -63,22 +67,22 @@ public class Availabilities {
     }
 
     private int calculateRemainingPlacesWithReservation(Restaurant restaurant, LocalDateTime currentTime,
-                                                        List<Reservation> reservationList) {
+                                                        List<Reservation> reservationList, String providedDate) {
         return reservationList.stream()
                 .filter(reservation -> isReservationActive(currentTime,
                         reservation.getStartTime(),
-                        restaurant.getRestaurantConfiguration().getDuration()))
+                        restaurant.getRestaurantConfiguration().getDuration(), providedDate))
                 .findFirst()
                 .map(reservation -> restaurant.getCapacity() - reservation.getGroupSize())
                 .orElse(0);
     }
 
-    private LocalDateTime getOpeningTime(Restaurant restaurant) {
-        return LocalDateTime.parse(date + "T" + restaurant.getHours().getOpen(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    private LocalDateTime getOpeningTime(Restaurant restaurant, String providedDate) {
+        return LocalDateTime.parse(providedDate + "T" + restaurant.getHours().getOpen(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
-    private LocalDateTime getClosingHour(Restaurant restaurant) {
-        return LocalDateTime.parse(date + "T" + restaurant.getHours().getClose(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    private LocalDateTime getClosingHour(Restaurant restaurant, String providedDate) {
+        return LocalDateTime.parse(providedDate + "T" + restaurant.getHours().getClose(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
     public String getDate() {
@@ -89,3 +93,4 @@ public class Availabilities {
         return this.remainingPlace;
     }
 }
+

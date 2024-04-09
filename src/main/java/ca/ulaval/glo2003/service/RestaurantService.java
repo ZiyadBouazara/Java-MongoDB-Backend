@@ -134,10 +134,10 @@ public class RestaurantService {
         reservationValidator.verifySearchAvailabilities(date);
 
         Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
-        Availabilities availabilities = new Availabilities(date, restaurant.getCapacity());
-        List<Reservation> restaurantReservationList = reservationRepository.getAllRestaurantReservations(restaurantId);
+        Availabilities availabilities = new Availabilities();
+        List<Reservation> restaurantReservationList = reservationRepository.getReservationsByDate(restaurantId, date);
         List<Availabilities> availabilitiesForRestaurant = availabilities.
-                getAvailabilitiesForRestaurant(restaurant, restaurantReservationList);
+                getAvailabilitiesForRestaurant(restaurant, restaurantReservationList, date);
 
         return availabilitiesForRestaurant.stream()
                 .map(availabilitiesResponseAssembler::toDTO)

@@ -58,4 +58,14 @@ public class InMemoryReservationRepository implements ReservationRepository {
         }
         return matchingReservations;
     }
+
+    public List<Reservation> getReservationsByDate(String restaurantId, String date) {
+        List<Reservation> matchingReservations = new ArrayList<>();
+        for (Reservation reservation : getAllRestaurantReservations(restaurantId)) {
+            if (reservation.getDate().equals(date)) {
+                matchingReservations.add(reservation);
+            }
+        }
+        return matchingReservations;
+    }
 }

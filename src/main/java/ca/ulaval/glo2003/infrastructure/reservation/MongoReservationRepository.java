@@ -12,6 +12,7 @@ import dev.morphia.query.filters.Filters;
 import jakarta.ws.rs.NotFoundException;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -58,6 +59,15 @@ public class MongoReservationRepository implements ReservationRepository {
     @Override
     public List<Reservation> getAllRestaurantReservations(String restaurantId) {
         Query<ReservationMongo> query = datastore.find(ReservationMongo.class).filter(Filters.eq("restaurantId", restaurantId));
+        List<ReservationMongo> reservationMongoList = query.iterator().toList();
+        return ReservationAssembler.fromReservationMongoList(reservationMongoList);
+    }
+
+    @Override
+    public List<Reservation> getReservationsByDate(String restaurantId, String date) {
+        Query<ReservationMongo> query = datastore.find(ReservationMongo.class)
+                .filter(Filters.eq("restaurantId", restaurantId))
+                .filter(Filters.eq("date", date));
         List<ReservationMongo> reservationMongoList = query.iterator().toList();
         return ReservationAssembler.fromReservationMongoList(reservationMongoList);
     }
