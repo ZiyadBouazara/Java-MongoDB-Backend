@@ -60,7 +60,7 @@ public class AvailabilitiesTest {
         setUp();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
-                availabilitiesInstance.getAvailabilitiesForRestaurant(invalidRestaurantMocked, reservationList);
+                availabilitiesInstance.getAvailabilitiesForRestaurant(invalidRestaurantMocked, reservationList, VALID_DATE);
         assertThat(availabilities).isEmpty();
     }
 
@@ -69,7 +69,7 @@ public class AvailabilitiesTest {
         setUp();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
-                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList);
+                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList, VALID_DATE);
         assertThat(availabilities).isNotEmpty();
     }
 
@@ -78,7 +78,7 @@ public class AvailabilitiesTest {
         setUp();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
-                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList);
+                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList, VALID_DATE);
         assertEquals(AVAILABILITIES, availabilities.size());
     }
 
@@ -87,7 +87,7 @@ public class AvailabilitiesTest {
         setUp();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
-                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList);
+                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList, VALID_DATE);
         assertEquals("2024-04-08T11:00:00", availabilities.get(0).getDate());
     }
 
@@ -96,7 +96,7 @@ public class AvailabilitiesTest {
         setUp();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
-                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList);
+                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList, VALID_DATE);
         assertEquals(validRestaurantMocked.getCapacity(), availabilities.get(0).getRemainingPlace());
     }
 
@@ -105,7 +105,7 @@ public class AvailabilitiesTest {
         setUpWithReservationInList();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
-                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList);
+                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList, VALID_DATE);
         assertNotEquals(VALID_RESTAURANTS_CAPACITY, availabilities.get(0).getRemainingPlace());
     }
 
@@ -114,7 +114,7 @@ public class AvailabilitiesTest {
         setUpWithReservationInList();
         Availabilities availabilitiesInstance = new Availabilities(VALID_DATE, BASE_AVAILABILITY);
         List<Availabilities> availabilities =
-                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList);
+                availabilitiesInstance.getAvailabilitiesForRestaurant(validRestaurantMocked, reservationList, VALID_DATE);
         assertEquals(restaurantCapacityWithActiveReservation, availabilities.get(0).getRemainingPlace());
     }
 }
