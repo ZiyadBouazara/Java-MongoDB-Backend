@@ -24,6 +24,7 @@ public class ReservationAssembler {
 
     public static Reservation fromReservationMongo(ReservationMongo reservationMongo) {
         return new Reservation(
+            reservationMongo.getId(),
             reservationMongo.getRestaurantId(),
             reservationMongo.getDate(),
             reservationMongo.getStartTime(),

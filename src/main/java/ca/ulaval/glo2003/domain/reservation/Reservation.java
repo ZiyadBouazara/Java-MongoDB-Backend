@@ -1,15 +1,11 @@
 package ca.ulaval.glo2003.domain.reservation;
 
 import ca.ulaval.glo2003.domain.customer.Customer;
-import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Id;
 
 import java.util.UUID;
 
-@Entity("reservations")
 public class Reservation {
     private String restaurantId;
-    @Id
     private String id;
     private String date;
     private String startTime;
@@ -19,6 +15,15 @@ public class Reservation {
     public Reservation(String restaurantId, String date, String startTime, int groupSize, Customer customer) {
         this.restaurantId = restaurantId;
         this.id = UUID.randomUUID().toString();
+        this.date = date;
+        this.startTime = startTime;
+        this.groupSize = groupSize;
+        this.customer = customer;
+    }
+
+    public Reservation(String id, String restaurantId, String date, String startTime, int groupSize, Customer customer) {
+        this.id = id;
+        this.restaurantId = restaurantId;
         this.date = date;
         this.startTime = startTime;
         this.groupSize = groupSize;

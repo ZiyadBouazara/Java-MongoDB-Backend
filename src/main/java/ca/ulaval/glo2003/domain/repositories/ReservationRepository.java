@@ -7,7 +7,13 @@ import java.util.List;
 
 public interface ReservationRepository {
     void saveReservation(Reservation reservation);
+
+    void deleteReservation(String reservationId) throws NotFoundException;
+
+    void deleteReservationsWithRestaurantId(String restaurantId);
+
     Reservation findReservationById(String reservationId) throws NotFoundException;
-    List<Reservation> findReservationsByRestaurantId(String restaurantId);
+
+    List<Reservation> getAllRestaurantReservations(String restaurantId);
 
 }

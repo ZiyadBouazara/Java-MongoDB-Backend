@@ -1,7 +1,6 @@
 package ca.ulaval.glo2003.domain.restaurant;
 
 import ca.ulaval.glo2003.domain.utils.Hours;
-
 import java.util.UUID;
 
 public class Restaurant {
@@ -19,6 +18,16 @@ public class Restaurant {
         this.capacity = capacity;
         this.hours = hours;
         this.reservationConfiguration = new ReservationConfiguration();
+    }
+
+    public Restaurant(String id, String ownerId, String name, Integer capacity, Hours hours,
+                      ReservationConfiguration reservationConfiguration) {
+        this.id = id;
+        this.ownerId = ownerId;
+        this.name = name;
+        this.capacity = capacity;
+        this.hours = hours;
+        this.reservationConfiguration = reservationConfiguration;
     }
 
     public Restaurant(String ownerId, String name, Integer capacity, Hours hours, ReservationConfiguration reservationConfiguration) {
@@ -59,5 +68,4 @@ public class Restaurant {
     public ReservationConfiguration getRestaurantConfiguration() {
         return reservationConfiguration;
     }
-
 }
