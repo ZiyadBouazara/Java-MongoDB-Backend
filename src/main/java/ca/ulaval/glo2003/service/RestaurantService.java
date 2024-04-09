@@ -47,7 +47,7 @@ public class RestaurantService {
     private final FuzzySearchResponseAssembler fuzzySearchResponseAssembler;
 
     @Inject
-    public RestaurantService(RestaurantRepository restaurantRepository, ReservationRepository reservationRepository,
+    public RestaurantService(RestaurantRepository restaurantRepository,
                              RestaurantFactory restaurantFactory,
                              HoursAssembler hoursAssembler, RestaurantResponseAssembler restaurantResponseAssembler,
                              FuzzySearchAssembler fuzzySearchAssembler, FuzzySearchResponseAssembler fuzzySearchResponseAssembler,
@@ -59,7 +59,6 @@ public class RestaurantService {
         this.restaurantResponseAssembler = restaurantResponseAssembler;
         this.fuzzySearchAssembler = fuzzySearchAssembler;
         this.fuzzySearchResponseAssembler = fuzzySearchResponseAssembler;
-        this.reservationRepository = reservationRepository;
         this.reservationValidator = reservationValidator;
     }
 
