@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
 
 public class ReservationFactoryTest {
-    private final static String RESTAURANT_ID = "restaurant1";
-    private final static String DATE = "2024-04-10";
-    private final static String START_TIME = "18:30";
-    private final static int GROUP_SIZE = 4;
+    private final String RESTAURANT_ID = "restaurant1";
+    private final String DATE = "2024-04-10";
+    private final String START_TIME = "18:30";
+    private final int GROUP_SIZE = 4;
     Customer customer;
     @Test
     public void whenCreateReservation_shouldCreateReservationWithCorrectValues() {
