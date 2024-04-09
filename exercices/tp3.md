@@ -329,15 +329,14 @@ le personnel et les fournitures en conséquence.
 l'ensemble des réservations effectuées dans mon restaurant et de s'assurer que rien n'a été manqué.
 
 
-# Story: Rechercher des restaurants
+### Story: Rechercher des restaurants
 
 En tant que client, je veux pouvoir rechercher des restaurants par leur nom en utilisant une correspondance partielle, 
 tout en ignorant la casse et les espaces. De plus, je veux être capable de filtrer les restaurants en fonction de 
 l'heure à laquelle je prévois d'y aller ou de repartir. Cela me permettra de trouver facilement un restaurant en 
 fonction de mes préférences de nom et d'heure.
 
-### Critères d'acceptation:
-
+***Critères d'acceptation:***
 1. En tant que client, je dois pouvoir rechercher un restaurant par son nom en utilisant une correspondance partielle. 
 La recherche doit être insensible à la casse et aux espaces, garantissant ainsi que la recherche retourne tous les 
 restaurants dont le nom contient les caractères saisis.
@@ -361,26 +360,57 @@ retourner tous les restaurants disponibles.
 
 8. Dans le cas où aucun restaurant n'est trouvé, le système doit renvoyer une liste vide.
 
-### Exemples d'utilisation:
+***Exemple d'utilisation:***
 
-**Exemple1**
+***Exemple1***
 Je suis un client qui a un restaurant préféré appelé "Le Petit Bistro". Je veux trouver ce restaurant en utilisant une
 correspondance partielle de son nom. De plus, je veux m'assurer qu'il est ouvert entre 18h00 et 21h00 pour pouvoir y
 aller dîner. Je saisis "bistro" dans la barre de recherche et spécifie les heures de 18h00 à 21h00. Le système me
 retourne "Le Petit Bistro" parmi les résultats de recherche, confirmant qu'il est ouvert à l'heure souhaitée.
 
-**Exemple2**
+***Exemple2***
 Je suis un client qui a beaucoup tardé au travail, et j'aimerais aller manger à un restaurant, mais je n'en connait
 aucun ouvert à 3h du matin. Je saisis, donc seulement l'heure à laquelle je compte manger, soit 03:00 à 04:00. 
 Le système me retourne alors une liste de restaurants qui seront ouverts à cette heure-là, me permettant de choisir un 
 endroit où dîner tardivement.
 
+### Story: Rechercher des disponibilité de réservation
 
+En tant que client, je doit avoir la possiblité de recherché les disponibilité des restaurants,
+ce qu'on veut dire ici par disponibilité ce sont les place reservable dans une plage horaire donnée. 
+En spécifiant la date voulue, je veux être capable de filtrer les disponibilité de la journée afin de
+verifier s'il y'a des places libre à l'heure à laquelle je prévois reserver et/ou repartir. Cela me 
+permettra de trouver facilement une place libre en fonction de mes préférences d'heure et de journée.
 
+***Critères d'acceptation:***
+1. Le paramètre de date est obligatoire, dans le cas ou l'utilisateur oublie de spécifier une date, une erreur sera déclenché.
 
+2. Même les disponibilités à 0 place doivent être affichées.
 
+3. Les disponibilités doivent toujours être affichées par intervalles de 15 minutes fixes.
 
+4. Les intervalles commencent à la prochaine heure fixe de 15 minutes de l'heure d'ouverture,
+indépendamment de la durée configurée des réservations.
 
+5. Les intervalles se terminent à la précédente heure fixe de 15 minutes de l'heure de fermeture du restaurant, 
+moins la durée des réservations configurée.
 
+6. Chaque disponibilité affichée doit garantir d'être réservable au moment de l'affichage 
+(disponible si le nombre de places restantes est supérieur à 0).
 
+7. Dans le cas où aucune disponibilité n'est trouvée (le nombre d'heures d'ouverture ne le permet pas), 
+le système doit renvoyer une liste vide.
+
+***Exemple d'utilisation:***
+En tant qu'utilisateur, je souhaite voir les disponibilités d'un restaurant pour planifier ma réservation. La demande de 
+disponibilité doit concerner une journée spécifique que l'utilisateur doit spécifier dans sa requête.
+
+#### 1. Recherche de disponibilité par date :
+
+- **Requête :** `GET /restaurants/availabilities?date=2024-04-09`
+- **Réponse :** La requête retourne toutes les disponibilité pour la date spécifiée, par exemple le 09 avril 2024.
+  Cela permet de voir toutes les disponibilités libres et occupées pour cette journée spécifique, ce qui est utile pour planifier
+  une visite et choisir une plage horaire convenable.
+
+  
 
