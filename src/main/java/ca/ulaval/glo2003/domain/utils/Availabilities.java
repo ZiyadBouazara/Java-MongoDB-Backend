@@ -20,6 +20,9 @@ public class Availabilities {
         this.remainingPlace = remainingPlace;
     }
 
+    public Availabilities() {
+    }
+
     public List<Availabilities> getAvailabilitiesForRestaurant(Restaurant restaurant, List<Reservation> reservationList) {
         LocalDateTime openingTime = getOpeningTime(restaurant);
         LocalDateTime closingTime = getClosingHour(restaurant);
@@ -30,10 +33,9 @@ public class Availabilities {
         while (currentTime.plusMinutes(reservationDuration).isBefore(closingTime)) {
             int remainingPlaces = calculateRemainingPlace(restaurant, currentTime, reservationList);
             availabilities.add(new Availabilities(currentTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                                                remainingPlaces));
+                    remainingPlaces));
             currentTime = currentTime.plusMinutes(15);
         }
-//        else throw hour validation exception
         return availabilities;
     }
 
@@ -51,7 +53,7 @@ public class Availabilities {
     }
 
     private boolean isReservationActive(LocalDateTime currentTime, String reservationStartTimeString, int reservationDuration) {
-        LocalDate currentDate = LocalDate.now();
+        LocalDate currentDate = LocalDate.from(currentTime);
         String fullStartTimeString = currentDate + "T" + reservationStartTimeString;
         LocalDateTime reservationStartTime = LocalDateTime.parse(fullStartTimeString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
