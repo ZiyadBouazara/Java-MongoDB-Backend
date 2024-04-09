@@ -13,6 +13,7 @@ import java.util.List;
 
 public abstract class ReservationRepositoryTest {
     private static final String RESTAURANT_ID = "restaurant1";
+    private static final String WRONG_RESTAURANT_ID = "restaurant1";
     private static final String RESERVATION_ID = "reservation1";
     private static final String CUSTOMER_NAME = "John Deer";
     private static final String CUSTOMER_EMAIL = "john.deer@gmail.com";
@@ -22,6 +23,7 @@ public abstract class ReservationRepositoryTest {
     private static final int CAPACITY = 5;
     private static final Hours HOURS = new Hours("11:00:00", "19:30:00");
     private static final String DATE = "2024-03-31";
+    private static final String WRONG_DATE = "2024-03-1";
     private static final String START_TIME = "20:46:00";
     private static final int GROUP_SIZE = 5;
     private ReservationRepository reservationRepository;
@@ -80,7 +82,7 @@ public abstract class ReservationRepositoryTest {
     }
 
     @Test
-    public void givenSavedReservation_whenGettingAllRestaurantReservations_shouldReturnSavedReservation() {
+    public void givenSavedReservations_whenGettingAllRestaurantReservations_shouldReturnSavedReservation() {
         Reservation reservation1 = createAndSaveReservation();
         Reservation reservation2 = createAndSaveReservation();
 
@@ -94,7 +96,41 @@ public abstract class ReservationRepositoryTest {
     @Test
     public void givenNoSavedReservationsForRestaurant_whenGettingAllRestaurantReservations_shouldReturnEmptyList() {
         List<Reservation> foundReservations = reservationRepository.getAllRestaurantReservations(restaurant.getId());
+        Assertions.assertThat(foundReservations).isEmpty();
+    }
 
+    @Test
+    public void givenSavedReservations_whenGettingReservationsByDate_shouldReturnReservationsForDate() {
+        Reservation reservation1 = createAndSaveReservation();
+        Reservation reservation2 = createAndSaveReservation();
+        List<Reservation> foundReservations = reservationRepository.getReservationsByDate(restaurant.getId(), DATE);
+
+        Assertions.assertThat(foundReservations)
+            .extracting(Reservation::getId)
+            .containsExactlyInAnyOrder(reservation1.getId(), reservation2.getId());
+    }
+
+    @Test
+    public void givenSavedReservations_whenGettingReservationsByDate_WithWrongDate_shouldReturnEmptyList() {
+        Reservation reservation1 = createAndSaveReservation();
+        Reservation reservation2 = createAndSaveReservation();
+        List<Reservation> foundReservations = reservationRepository.getReservationsByDate(restaurant.getId(), WRONG_DATE);
+
+        Assertions.assertThat(foundReservations).isEmpty();
+    }
+
+    @Test
+    public void givenSavedReservations_whenGettingReservationsByDate_WithWrongRestaurantId_shouldReturnEmptyList() {
+        Reservation reservation1 = createAndSaveReservation();
+        Reservation reservation2 = createAndSaveReservation();
+        List<Reservation> foundReservations = reservationRepository.getReservationsByDate(WRONG_RESTAURANT_ID, DATE);
+
+        Assertions.assertThat(foundReservations).isEmpty();
+    }
+
+    @Test
+    public void givenNoSavedReservationsForRestaurant_whenGettingReservationsByDate_shouldReturnEmptyList() {
+        List<Reservation> foundReservations = reservationRepository.getReservationsByDate(restaurant.getId(), DATE);
         Assertions.assertThat(foundReservations).isEmpty();
     }
 
