@@ -137,7 +137,8 @@ code est moins susceptible de causer des problèmes.
 - Améliorer la qualité des tests: Les tests doivent être bien écrits et faciles à comprendre. Ils doivent également être
   pertinents et tester les aspects importants de la fonctionnalité.
 - Ajouter des métriques de tests: ajouter des outils de calcul de coverage et ajouter une étape à notre CI pour vérifier
-  qu'un minimum de coverage (par exemple: 80%) est respecté pour qu'il réussise.il est également important de suivre les
+  qu'un minimum de coverage (par exemple: 80%) est respecté pour qu'il réussise. Il est également important de suivre
+  les
   métriques de test et de les analyser
   régulièrement. Cela permet d'identifier les points faibles de la couverture de test et de prendre les mesures
   nécessaires pour les
@@ -146,3 +147,96 @@ code est moins susceptible de causer des problèmes.
   performance ou une surcharge de tests. En effet, dans notre cas, l'ajout des tests d'intégration de la persistence
   avec des Testcontainer a considérablement augmenté le runtime de nos tests. Une solution serait de créer et utiliser
   le même container mais en rafraichissant la DB en droppant la table.
+
+## Architecture
+
+### Rôles des classes principales
+
+![Local Image](../images/tp2/architecture.png)
+
+- ReservationConfiguration : Permet de configurer une réservation pour un restaurant. Cela permet de définir le nombre
+  de places disponibles, le temps de réservation minimum et le temps de réservation maximum.
+- ReservationRequest : Permet de faire une requête pour la réservation d'un restaurant.
+- RestaurantRequest : Permet de faire une requête pour la création d'un restaurant.
+- RestaurantService/ReservationService : Fait le pont entre les Resources et le Domaine en utilisant les Factories,
+  Assemblers et Validators pour Sauvegarder et Rechercher.
+- Restaurant : Permet de créer un restaurant et d'avoir accès à ses attributs.
+- Reservation : Permet de créer une réservation et d'avoir accès à ses attributs.
+- RestaurantMongo : Objet desérializable de Restaurant qui est stocké dans la MongoDB.
+- ReservationMongo : Objet desérializable de Reservation qui est stocké dans la MongoDB
+- RestaurantResource/ReservationResource : Permet de gérer les requêtes pour les restaurants/reservations.
+- InvalidParamExceptionMapper : Permet de gérer les exceptions InvalidParamException.
+- MissingParamExceptionMapper : Permet de gérer les exceptions MissingParamException.
+- NotFoundExceptionMapper : Permet de gérer les exceptions NotFoundException.
+- Main : Permet de démarrer le serveur.
+- FuzzySearch : Permet d'avoir l'objet de recherche de Restaurant à travers lequel on peut rechercher un restaurant par
+  son nom, par l'heure à laquelle il est possible d'y aller et l'heure de départ.
+  Utiliser une classe comme ceci permet une recherche plus flexible.
+- Availabilities: Disponibilités d'un restaurant
+- VisitTime: Représente le temps auquel un client peut aller au restaurant et en repartir. C'est pour cette raison que
+  cette classe contient un from et un to.
+- ...Response : Copie d'un objet complexe qui est retourné à l'utilisateur (DTO)
+
+### Nos choix
+
+Notre architecture repose sur deux entités principales : Restaurant et Réservation. Ce choix est motivé par les raisons
+suivantes :
+
+Centralité des concepts: Les restaurants et les réservations sont les deux concepts centraux de notre application. La
+plupart des fonctionnalités de l'application tournent autour de ces deux concepts.
+Cohésion: Chaque entité regroupe des fonctionnalités et des données qui lui sont propres. Cela permet d'assurer une
+meilleure cohésion et une meilleure modularité du code.
+Simplicité: Cette architecture est simple et facile à comprendre. Cela facilite la maintenance et l'évolution de l'
+application.
+
+**Structure des packages:**
+
+L'architecture est divisée en quatre packages :
+
+- Controllers: Ce package contient les contrôleurs qui gèrent les interactions avec l'interface utilisateur.
+- Service: Ce package contient les services qui implémentent la logique métier.
+- Domain: Ce package contient les modèles de domaine qui représentent les données de l'application.
+- Infrastructure: Ce package contient les classes qui dépendent de l'environnement d'exécution, telles que les accès aux
+  bases de données.
+
+Avantages de cette architecture:
+
+- Modularité: L'architecture est modulaire et chaque package est indépendant des autres. Cela facilite la maintenance et
+  l'évolution de l'application.
+- Couplage faible: Le couplage entre les packages est faible. Cela permet de modifier un package sans affecter les
+  autres.
+- Testabilité: L'architecture est facile à tester car chaque package est indépendant des autres.
+- Extensibilité: L'architecture est extensible et il est facile d'ajouter de nouvelles fonctionnalités.
+
+### Relations  suspectes et des solutions potentielles
+
+Dans notre architecture actuelle, chaque service possède les deux repositories (Restaurant et Réservation) au lieu de
+posséder seulement celui de son entité. Cela peut sembler suspect et contrevenir aux principes de conception SOLID.
+
+**Justification:**
+
+Cette architecture est due à la forte relation entre les entités Restaurant et Réservation. Elles sont liées par des
+références mutuelles:
+
+Un restaurant peut avoir plusieurs réservations.
+Une réservation est liée à un seul restaurant.
+
+**Conséquences:**
+
+Certaines opérations sur une entité nécessitent l'accès à l'autre entité:
+
+- Suppression d'un restaurant: Lors de la suppression d'un restaurant, il est nécessaire de supprimer également ses
+  réservations associées. Cela implique l'accès au repository Réservation depuis le service Restaurant.
+
+**Solutions potentielles:**
+
+**1. Refactoring du code:**
+
+- Déplacer les repositories dans un module séparé partagé par les services Restaurant et Réservation.
+- Adapter les services pour utiliser le module de repositories.
+
+**2. Implémentation d'un pattern Domain Events:**
+
+- Définir des événements de domaine pour les modifications des entités Restaurant et Réservation.
+- Enregistrer les événements de domaine dans un journal d'événements.
+- Les services écoutent les événements de domaine et effectuent les mises à jour nécessaires.
