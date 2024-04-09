@@ -2,17 +2,13 @@ package ca.ulaval.glo2003.controllers;
 
 import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.responses.RestaurantResponse;
-import ca.ulaval.glo2003.service.validators.CreateRestaurantValidator;
-import ca.ulaval.glo2003.service.validators.GetRestaurantValidator;
 import ca.ulaval.glo2003.service.validators.HeaderValidator;
-import ca.ulaval.glo2003.service.validators.SearchRestaurantValidator;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.domain.utils.Hours;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.controllers.api.JerseyTestApi;
 import ca.ulaval.glo2003.service.RestaurantService;
-import ca.ulaval.glo2003.service.assembler.FuzzySearchAssembler;
 import ca.ulaval.glo2003.service.assembler.HoursAssembler;
 import ca.ulaval.glo2003.service.dtos.HoursDTO;
 import ca.ulaval.glo2003.service.dtos.ReservationConfigurationDTO;

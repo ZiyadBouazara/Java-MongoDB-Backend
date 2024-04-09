@@ -24,7 +24,9 @@ public class Availabilities {
     public Availabilities() {
     }
 
-    public List<Availabilities> getAvailabilitiesForRestaurant(Restaurant restaurant, List<Reservation> reservationList, String providedDate) {
+    public List<Availabilities> getAvailabilitiesForRestaurant(Restaurant restaurant,
+                                                               List<Reservation> reservationList,
+                                                               String providedDate) {
         LocalDateTime openingTime = getOpeningTime(restaurant, providedDate);
         LocalDateTime closingTime = getClosingHour(restaurant, providedDate);
         int reservationDuration = restaurant.getRestaurantConfiguration().getDuration();
@@ -33,7 +35,6 @@ public class Availabilities {
 
         while (currentTime.plusMinutes(reservationDuration).isBefore(closingTime)) {
             int remainingPlaces = calculateRemainingPlace(restaurant, currentTime, reservationList, providedDate);
-            // Check if there are remaining places before creating Availabilities object
             if (remainingPlaces >= 0) {
                 availabilities.add(new Availabilities(currentTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
                         remainingPlaces));
@@ -43,9 +44,12 @@ public class Availabilities {
         return availabilities;
     }
 
-    private int calculateRemainingPlace(Restaurant restaurant, LocalDateTime currentTime, List<Reservation> reservationList, String providedDate) {
+    private int calculateRemainingPlace(Restaurant restaurant, LocalDateTime currentTime,
+                                        List<Reservation> reservationList,
+                                        String providedDate) {
         return getExistingReservation(restaurant, currentTime, reservationList, providedDate)
-                ? calculateRemainingPlacesWithReservation(restaurant, currentTime, reservationList, providedDate)
+                ? calculateRemainingPlacesWithReservation(restaurant, currentTime,
+                                                            reservationList, providedDate)
                 : restaurant.getCapacity();
     }
 
