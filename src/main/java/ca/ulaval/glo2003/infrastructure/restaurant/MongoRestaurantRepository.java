@@ -3,12 +3,14 @@ package ca.ulaval.glo2003.infrastructure.restaurant;
 import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.restaurant.RestaurantMongo;
+import ca.ulaval.glo2003.infrastructure.DatastoreProvider;
 import ca.ulaval.glo2003.infrastructure.assemblers.RestaurantAssembler;
 import com.mongodb.client.result.DeleteResult;
 import dev.morphia.Datastore;
 import dev.morphia.DeleteOptions;
 import dev.morphia.query.Query;
 import dev.morphia.query.filters.Filters;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
@@ -16,8 +18,9 @@ import java.util.List;
 public class MongoRestaurantRepository implements RestaurantRepository {
     private final Datastore datastore;
 
-    public MongoRestaurantRepository(Datastore datastore) {
-        this.datastore = datastore;
+    @Inject
+    public MongoRestaurantRepository(DatastoreProvider datastoreProvider) {
+        this.datastore = datastoreProvider.provide();
     }
 
     @Override
