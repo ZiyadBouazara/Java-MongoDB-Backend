@@ -52,12 +52,12 @@ public class ApplicationBinder extends AbstractBinder {
         bind(RestaurantResponseAssembler.class).to(RestaurantResponseAssembler.class);
         bind(ReservationResponseAssembler.class).to(ReservationResponseAssembler.class);
         bind(ReservationGeneralResponseAssembler.class).to(ReservationGeneralResponseAssembler.class);
-        bind(SystemEnvReader.class).to(EnvironmentReader.class);
     }
 
     private void choosePersistenceType() {
         String persistence = System.getProperty("persistence");
         if (persistence != null && persistence.equals("mongo")) {
+            bind(SystemEnvReader.class).to(EnvironmentReader.class);
             bind(DatastoreProvider.class).to(DatastoreProvider.class);
             bind(MongoRestaurantRepository.class).to(RestaurantRepository.class).in(Singleton.class);
             bind(MongoReservationRepository.class).to(ReservationRepository.class).in(Singleton.class);
