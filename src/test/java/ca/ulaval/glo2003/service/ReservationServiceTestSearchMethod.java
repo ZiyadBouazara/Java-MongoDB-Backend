@@ -1,9 +1,7 @@
 package ca.ulaval.glo2003.service;
 
-import ca.ulaval.glo2003.controllers.api.fixture.ReservationRequestFixture;
 import ca.ulaval.glo2003.controllers.assemblers.ReservationGeneralResponseAssembler;
 import ca.ulaval.glo2003.controllers.assemblers.ReservationResponseAssembler;
-import ca.ulaval.glo2003.controllers.requests.ReservationRequest;
 import ca.ulaval.glo2003.controllers.responses.ReservationGeneralResponse;
 import ca.ulaval.glo2003.domain.customer.Customer;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
@@ -150,34 +148,48 @@ public class ReservationServiceTestSearchMethod {
             reservationService.searchReservations(null, restaurant.getId(), DATE, VALID_CUSTOMER_NAME);
             Assertions.fail("Expected InvalidParameterException to be thrown");
         } catch (InvalidParameterException | MissingParameterException e) {
-            Assertions.assertTrue(e.getMessage().contains("Missing 'Owner' header"), "Expected exception message to contain 'missing header'");
+            Assertions.assertTrue(e.getMessage().contains("Missing 'Owner' header"),
+                    "Expected exception message to contain 'missing header'");
         }
     }
 
     @Test
-    public void givenNoMatchingReservations_whenSearchReservations_shouldReturnEmptyList() throws InvalidParameterException, MissingParameterException {
-        searchedReservations = reservationService.searchReservations(OWNER_ID, restaurant.getId(), DATE, "NonExistingCustomer");
-        Assertions.assertTrue(searchedReservations.isEmpty(), "Expected empty list when no matching reservations found");
+    public void givenNoMatchingReservations_whenSearchReservations_shouldReturnEmptyList()
+            throws InvalidParameterException, MissingParameterException {
+        searchedReservations = reservationService.searchReservations(OWNER_ID, restaurant.getId(),
+                DATE, "NonExistingCustomer");
+        Assertions.assertTrue(searchedReservations.isEmpty(),
+                "Expected empty list when no matching reservations found");
     }
 
     @Test
-    public void givenValidParamsWithMultipleMatchingReservations_whenSearchReservations_shouldReturnListOfMatchingReservations() throws InvalidParameterException, MissingParameterException {
-        reservationList.add(new Reservation(restaurant.getId(), DATE, START_TIME, GROUP_SIZE, new Customer("John Doenetsk", "johnmax@em.com","999-999-9999")));
-        searchedReservations = reservationService.searchReservations(OWNER_ID, restaurant.getId(), DATE, VALID_CUSTOMER_NAME);
-        Assertions.assertEquals(2, searchedReservations.size(), "Expected two reservations in the list");
+    public void givenValidParamsWithMultipleMatchingReservations_whenSearchReservations_shouldReturnListOfMatchingReservations()
+            throws InvalidParameterException, MissingParameterException {
+        reservationList.add(new Reservation(restaurant.getId(), DATE, START_TIME, GROUP_SIZE,
+                new Customer("John Doenetsk", "johnmax@em.com", "999-999-9999")));
+        searchedReservations = reservationService.searchReservations(OWNER_ID, restaurant.getId(),
+                DATE, VALID_CUSTOMER_NAME);
+        Assertions.assertEquals(2, searchedReservations.size(),
+                "Expected two reservations in the list");
     }
 
     @Test
-    public void givenValidParamsWithNoMatchingReservations_whenSearchReservations_shouldReturnEmptyList() throws InvalidParameterException, MissingParameterException {
-        searchedReservations = reservationService.searchReservations(OWNER_ID, restaurant.getId(), DATE, "NonExistingCustomer");
-        Assertions.assertTrue(searchedReservations.isEmpty(), "Expected empty list when no matching reservations found");
+    public void givenValidParamsWithNoMatchingReservations_whenSearchReservations_shouldReturnEmptyList()
+            throws InvalidParameterException, MissingParameterException {
+        searchedReservations = reservationService.searchReservations(OWNER_ID, restaurant.getId(),
+                DATE, "NonExistingCustomer");
+        Assertions.assertTrue(searchedReservations.isEmpty(),
+                "Expected empty list when no matching reservations found");
     }
 
     @Test
-    public void givenValidParamsWithNoReservations_whenSearchReservations_shouldReturnEmptyList() throws InvalidParameterException, MissingParameterException {
+    public void givenValidParamsWithNoReservations_whenSearchReservations_shouldReturnEmptyList()
+            throws InvalidParameterException, MissingParameterException {
         when(reservationRepository.getAllRestaurantReservations(restaurant.getId())).thenReturn(new ArrayList<>());
-        searchedReservations = reservationService.searchReservations(OWNER_ID, restaurant.getId(), DATE, VALID_CUSTOMER_NAME);
-        Assertions.assertTrue(searchedReservations.isEmpty(), "Expected empty list when no reservations found");
+        searchedReservations = reservationService.searchReservations(OWNER_ID, restaurant.getId(),
+                DATE, VALID_CUSTOMER_NAME);
+        Assertions.assertTrue(searchedReservations.isEmpty(),
+                "Expected empty list when no reservations found");
     }
 
 
