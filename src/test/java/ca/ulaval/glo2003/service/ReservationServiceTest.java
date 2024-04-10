@@ -69,7 +69,6 @@ public class ReservationServiceTest {
                 reservationGeneralResponseAssembler);
     }
 
-
     @Test
     public void givenValidReservationRequest_createReservation_shouldCreateAndSaveReservation() throws Exception {
         String restaurantId = "restaurant1";
