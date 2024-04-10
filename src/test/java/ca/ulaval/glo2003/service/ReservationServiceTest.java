@@ -4,6 +4,7 @@ import ca.ulaval.glo2003.controllers.api.fixture.ReservationRequestFixture;
 import ca.ulaval.glo2003.controllers.assemblers.ReservationGeneralResponseAssembler;
 import ca.ulaval.glo2003.controllers.assemblers.ReservationResponseAssembler;
 import ca.ulaval.glo2003.controllers.requests.ReservationRequest;
+import ca.ulaval.glo2003.controllers.responses.ReservationResponse;
 import ca.ulaval.glo2003.domain.customer.Customer;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
@@ -21,9 +22,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 public class ReservationServiceTest {
+    private static final String CUSTOMER_NAME = "John Deer";
+    private static final String CUSTOMER_EMAIL = "john.deer@gmail.com";
+    private static final String CUSTOMER_PHONE_NUMBER = "1234567890";
+    private static final String DATE = "2024-03-31";
+    private static final String START_TIME = "20:46:00";
+    private static final int GROUP_SIZE = 3;
     private static final String OWNER_ID = "1";
     private static final String RESTO_NAME = "1";
     private static final Integer RESTO_CAPACITY = 10;
@@ -98,11 +107,38 @@ public class ReservationServiceTest {
     }
 
     @Test
-    public void givenReservationId_deleteReservation_shouldDeleteReservation() {
+    public void givenReservationId_whenDeleteReservation_shouldCallDatabaseDeleteMethod() {
         String reservationId = "1";
 
         reservationService.deleteReservation(reservationId);
 
         verify(reservationRepository, times(1)).deleteReservation(reservationId);
+    }
+
+    @Test
+    public void givenReservationId_whenGetReservation_shouldReturnNonNullResponse() {
+        String reservationId = "1";
+        Restaurant expectedRestaurant = new Restaurant(OWNER_ID, RESTO_NAME, RESTO_CAPACITY, RESTO_HOURS);
+        Customer customer = new Customer(CUSTOMER_NAME, CUSTOMER_EMAIL, CUSTOMER_PHONE_NUMBER);
+        Reservation expectedReservation = new Reservation(reservationId, expectedRestaurant.getId(), DATE, START_TIME, GROUP_SIZE, customer);
+        when(reservationRepository.findReservationById(reservationId)).thenReturn(expectedReservation);
+        when(restaurantRepository.findRestaurantById(expectedReservation.getRestaurantId())).thenReturn(expectedRestaurant);
+
+        ReservationResponse response = reservationService.getReservation(reservationId);
+
+        assertNotNull(response, "Reservation response should not be null");
+    }
+    @Test
+    public void givenReservationId_whenGetReservation_shouldReturnExpectedId() {
+        String reservationId = "1";
+        Restaurant expectedRestaurant = new Restaurant(OWNER_ID, RESTO_NAME, RESTO_CAPACITY, RESTO_HOURS);
+        Customer customer = new Customer(CUSTOMER_NAME, CUSTOMER_EMAIL, CUSTOMER_PHONE_NUMBER);
+        Reservation expectedReservation = new Reservation(reservationId, expectedRestaurant.getId(), DATE, START_TIME, GROUP_SIZE, customer);
+        when(reservationRepository.findReservationById(reservationId)).thenReturn(expectedReservation);
+        when(restaurantRepository.findRestaurantById(expectedReservation.getRestaurantId())).thenReturn(expectedRestaurant);
+
+        ReservationResponse response = reservationService.getReservation(reservationId);
+
+        assertEquals(expectedReservation.getId(), response.id());
     }
 }
