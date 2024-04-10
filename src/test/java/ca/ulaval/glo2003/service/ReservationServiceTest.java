@@ -24,16 +24,10 @@ import org.mockito.MockitoAnnotations;
 import static org.mockito.Mockito.*;
 
 public class ReservationServiceTest {
-//    private static final String CUSTOMER_NAME = "John Deer";
-//    private static final String CUSTOMER_EMAIL = "john.deer@gmail.com";
-//    private static final String CUSTOMER_PHONE_NUMBER = "1234567890";
     private static final String OWNER_ID = "1";
     private static final String RESTO_NAME = "1";
     private static final Integer RESTO_CAPACITY = 10;
     private static final Hours RESTO_HOURS = new Hours("10:00:00", "21:00:00");
-    private static final String DATE = "2024-03-31";
-    private static final String START_TIME = "20:46:00";
-    private static final int GROUP_SIZE = 3;
 
     @Mock
     private RestaurantRepository restaurantRepository;
@@ -101,5 +95,14 @@ public class ReservationServiceTest {
 
         Assertions.assertThrows(InvalidParameterException.class, () ->
                 reservationService.createReservation(restaurantId, requestWithoutDate));
+    }
+
+    @Test
+    public void givenReservationId_deleteReservation_shouldDeleteReservation() {
+        String reservationId = "1";
+
+        reservationService.deleteReservation(reservationId);
+
+        verify(reservationRepository, times(1)).deleteReservation(reservationId);
     }
 }
