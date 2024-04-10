@@ -11,7 +11,7 @@ public class JerseyTestApi {
 
     public JerseyTestApi(Application application) {
         System.setProperty("jersey.test.host", "0.0.0.0");
-        System.setProperty("jersey.config.test.container.port", "8080"); // Set the port here
+        System.setProperty("jersey.config.test.container.port", "8080");
         this.application = application;
     }
 

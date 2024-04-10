@@ -34,13 +34,6 @@ public class ReservationRequestFixture {
         return new ReservationRequest(date, startTime, groupSize, null);
     }
 
-    private CustomerDTO createValidCustomerDTO() {
-        String phoneNumber = "1234567890";
-        String email = "john.doe@example.com";
-        String name = "John Doe";
-        return new CustomerDTO(name, email, phoneNumber);
-    }
-
     public ReservationRequestFixture withDate(String date) {
         this.date = date;
         return this;
@@ -53,11 +46,6 @@ public class ReservationRequestFixture {
 
     public ReservationRequestFixture withGroupSize(Integer groupSize) {
         this.groupSize = groupSize;
-        return this;
-    }
-
-    public ReservationRequestFixture withCustomer(CustomerDTO customer) {
-        this.customer = customer;
         return this;
     }
 

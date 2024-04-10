@@ -44,7 +44,6 @@ public class FuzzySearch {
     }
 
     public static boolean isFromTimeMatching(String visitTimeFrom, String restaurantOpeningHour) {
-        //TODO: WTF logic here should be working but isn't
         if (visitTimeFrom != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             LocalTime searchFrom = LocalTime.parse(visitTimeFrom, formatter);

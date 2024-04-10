@@ -39,7 +39,6 @@ public class ReservationServiceTestSearchMethod {
     private static final Integer RESTO_CAPACITY = 10;
     private static final Hours RESTO_HOURS = new Hours("10:00:00", "21:00:00");
     private static final String DATE = "2024-03-31";
-    private static final String INVALID_DATEE = "03-31-2024";
     private static final String START_TIME = "20:46:00";
     private static final int GROUP_SIZE = 3;
     private static final String CUSTOMER_EMAIL = "z@y.z";
@@ -63,7 +62,6 @@ public class ReservationServiceTestSearchMethod {
     private Reservation reservation;
     private Customer customer;
     private ReservationGeneralResponse reservationGeneralResponse;
-    private TimeDTO timeDTO;
     private final List<Reservation> reservationList = new ArrayList<>();
     List<ReservationGeneralResponse> searchedReservations = new ArrayList<>();
 
