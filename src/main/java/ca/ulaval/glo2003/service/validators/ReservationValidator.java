@@ -126,6 +126,13 @@ public class ReservationValidator {
             if (!DATE_PATTERN.matcher(date).matches()) {
                 throw new InvalidParameterException("Invalid parameter 'date', it must be a valid date in the format YYYY-MM-DD");
             }
+
+            String[] parts = date.split("-");
+            int month = Integer.parseInt(parts[1]);
+
+            if (month < 1 || month > 12) {
+                throw new InvalidParameterException("Invalid parameter 'date', month must be between 1 and 12");
+            }
         }
     }
 }
