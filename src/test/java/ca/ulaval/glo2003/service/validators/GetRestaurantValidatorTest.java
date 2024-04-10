@@ -7,8 +7,8 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class GetRestaurantValidatorTest {
-    private final static String EXPECTED_OWNER_ID = "owner123";
-    private final static String UNEXPECTED_OWNER_ID = "owner321";
+    private static final String EXPECTED_OWNER_ID = "owner123";
+    private static final String UNEXPECTED_OWNER_ID = "owner321";
 
     @Test
     public void givenMatchingOwnerIds_whenValidateRestaurantOwnership_NoExceptionThrown() {
