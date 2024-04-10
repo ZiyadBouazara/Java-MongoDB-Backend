@@ -16,6 +16,6 @@ public class HeaderValidatorTest {
 
     @Test
     public void givenNullOwnerId_verifyMissingHeader_shouldThrowException() {
-        assertThrows(MissingParameterException.class, ()-> headerValidator.verifyMissingHeader(null));
+        assertThrows(MissingParameterException.class, () -> headerValidator.verifyMissingHeader(null));
     }
 }
