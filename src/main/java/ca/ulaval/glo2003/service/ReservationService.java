@@ -53,16 +53,12 @@ public class ReservationService {
             throws InvalidParameterException, MissingParameterException {
 
         reservationValidator.validateReservationRequest(reservationRequest);
-
         Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
-        if (restaurant.getCapacity() < reservationRequest.groupSize()) {
-            throw new InvalidParameterException("The reservation groupSize cannot exceed the restaurant's capacity");
-        }
+        reservationValidator.validateGroupSizeWithinRestaurantLimit(reservationRequest, restaurant);
 
         Customer customer = customerAssembler.fromDTO(reservationRequest.customer());
-        Reservation reservation =
-                reservationFactory.createReservation(restaurantId, reservationRequest.date(), reservationRequest.startTime(),
-                        reservationRequest.groupSize(), customer);
+        Reservation reservation = reservationFactory.createReservation(restaurantId, reservationRequest.date(),
+                reservationRequest.startTime(), reservationRequest.groupSize(), customer);
         reservationRepository.saveReservation(reservation);
         return reservation.getId();
     }
@@ -84,21 +80,30 @@ public class ReservationService {
             throws InvalidParameterException, MissingParameterException {
         headerValidator.verifyMissingHeader(ownerId);
         reservationValidator.validateSearchReservationRequest(restaurantId, date);
+
         List<Reservation> reservations = reservationRepository.getAllRestaurantReservations(restaurantId);
         List<ReservationGeneralResponse> searchedReservations = new ArrayList<>();
+
         for (Reservation reservation : reservations) {
-            Restaurant restaurant = restaurantRepository.findRestaurantById(reservation.getRestaurantId());
-            if (restaurant != null) {
-                if (ReservationHelper.isMatchingCustomerName(reservation.getCustomer().getName(), customerName)
-                        && ReservationHelper.isMatchingDate(reservation.getDate(), date)) {
-                    getRestaurantValidator.validateRestaurantOwnership(ownerId, restaurant.getOwnerId());
-                    searchedReservations.add(reservationGeneralResponseAssembler
-                            .toDTO(reservation, restaurant));
-                }
-            } else {
-                throw new NotFoundException("Restaurant not found for reservation with ID: " + reservation.getId());
+            Restaurant restaurant = findAndValidateRestaurant(reservation);
+            if (matchesSearchCriteria(reservation, customerName, date)) {
+                searchedReservations.add(reservationGeneralResponseAssembler
+                        .toDTO(reservation, restaurant));
             }
         }
         return searchedReservations;
+    }
+
+    private Restaurant findAndValidateRestaurant(Reservation reservation) throws NotFoundException {
+        Restaurant restaurant = restaurantRepository.findRestaurantById(reservation.getRestaurantId());
+        if (restaurant == null) {
+            throw new NotFoundException("Restaurant not found for reservation with ID: " + reservation.getId());
+        }
+        return restaurant;
+    }
+
+    private boolean matchesSearchCriteria(Reservation reservation, String customerName, String date) {
+        return ReservationHelper.isMatchingCustomerName(reservation.getCustomer().getName(), customerName)
+                && ReservationHelper.isMatchingDate(reservation.getDate(), date);
     }
 }

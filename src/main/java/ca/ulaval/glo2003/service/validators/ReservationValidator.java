@@ -1,5 +1,6 @@
 package ca.ulaval.glo2003.service.validators;
 
+import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.service.dtos.CustomerDTO;
 import ca.ulaval.glo2003.controllers.requests.ReservationRequest;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
@@ -25,10 +26,16 @@ public class ReservationValidator {
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
             EMAIL_LOCAL_PART_PATTERN + "@" + EMAIL_DOMAIN_PATTERN);
 
-    private static final Pattern TIME_PATTERN = Pattern.compile("^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$");
+    private static final Pattern TIME_PATTERN = Pattern.compile("^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])?$");
 
     private static final Pattern DATE_PATTERN = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
 
+    public void validateGroupSizeWithinRestaurantLimit(ReservationRequest reservationRequest, Restaurant restaurant)
+            throws InvalidParameterException {
+        if (restaurant.getCapacity() < reservationRequest.groupSize()) {
+            throw new InvalidParameterException("The reservation groupSize cannot exceed the restaurant's capacity");
+        }
+    }
     public void validateReservationRequest(ReservationRequest reservationRequest)
             throws InvalidParameterException, MissingParameterException {
         verifyMissingParameters(reservationRequest);
@@ -118,6 +125,13 @@ public class ReservationValidator {
         if (date != null) {
             if (!DATE_PATTERN.matcher(date).matches()) {
                 throw new InvalidParameterException("Invalid parameter 'date', it must be a valid date in the format YYYY-MM-DD");
+            }
+
+            String[] parts = date.split("-");
+            int month = Integer.parseInt(parts[1]);
+
+            if (month < 1 || month > 12) {
+                throw new InvalidParameterException("Invalid parameter 'date', month must be between 1 and 12");
             }
         }
     }

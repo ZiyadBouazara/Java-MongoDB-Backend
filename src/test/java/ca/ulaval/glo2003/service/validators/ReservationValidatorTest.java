@@ -4,12 +4,18 @@ import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.controllers.api.fixture.ReservationRequestFixture;
 import ca.ulaval.glo2003.controllers.requests.ReservationRequest;
+import ca.ulaval.glo2003.domain.restaurant.Restaurant;
+import ca.ulaval.glo2003.domain.utils.Hours;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ReservationValidationTest {
+public class ReservationValidatorTest {
+    private static final String OWNER_ID = "1";
+    private static final String RESTO_NAME = "1";
+    private static final Integer RESTO_CAPACITY = 10;
+    private static final Hours RESTO_HOURS = new Hours("10:00:00", "21:00:00");
     private static final String VALID_DATE = "2024-03-05";
     private static final String INVALID_DATE = "2024/03/05";
     private static final String VALID_START_TIME = "12:00:00";
@@ -24,6 +30,15 @@ public class ReservationValidationTest {
     @BeforeEach
     void setup() {
         reservationValidator = new ReservationValidator();
+    }
+
+    @Test
+    void givenExceedingGroupSize_whenCreating_shouldThrowInvalidParameterException() {
+        ReservationRequest reservationRequest = new ReservationRequestFixture().withGroupSize(15).create();
+        Restaurant restaurant = new Restaurant(OWNER_ID, RESTO_NAME, RESTO_CAPACITY, RESTO_HOURS);
+
+        assertThrows(InvalidParameterException.class, () -> reservationValidator.validateGroupSizeWithinRestaurantLimit(
+                reservationRequest, restaurant));
     }
 
     @Test
