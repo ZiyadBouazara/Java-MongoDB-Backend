@@ -119,9 +119,11 @@ public class ReservationServiceTest {
         String reservationId = "1";
         Restaurant expectedRestaurant = new Restaurant(OWNER_ID, RESTO_NAME, RESTO_CAPACITY, RESTO_HOURS);
         Customer customer = new Customer(CUSTOMER_NAME, CUSTOMER_EMAIL, CUSTOMER_PHONE_NUMBER);
-        Reservation expectedReservation = new Reservation(reservationId, expectedRestaurant.getId(), DATE, START_TIME, GROUP_SIZE, customer);
+        Reservation expectedReservation = new Reservation(reservationId, expectedRestaurant.getId(),
+                DATE, START_TIME, GROUP_SIZE, customer);
         when(reservationRepository.findReservationById(reservationId)).thenReturn(expectedReservation);
-        when(restaurantRepository.findRestaurantById(expectedReservation.getRestaurantId())).thenReturn(expectedRestaurant);
+        when(restaurantRepository.findRestaurantById(
+                expectedReservation.getRestaurantId())).thenReturn(expectedRestaurant);
 
         ReservationResponse response = reservationService.getReservation(reservationId);
 
@@ -132,9 +134,11 @@ public class ReservationServiceTest {
         String reservationId = "1";
         Restaurant expectedRestaurant = new Restaurant(OWNER_ID, RESTO_NAME, RESTO_CAPACITY, RESTO_HOURS);
         Customer customer = new Customer(CUSTOMER_NAME, CUSTOMER_EMAIL, CUSTOMER_PHONE_NUMBER);
-        Reservation expectedReservation = new Reservation(reservationId, expectedRestaurant.getId(), DATE, START_TIME, GROUP_SIZE, customer);
+        Reservation expectedReservation = new Reservation(reservationId, expectedRestaurant.getId(),
+                DATE, START_TIME, GROUP_SIZE, customer);
         when(reservationRepository.findReservationById(reservationId)).thenReturn(expectedReservation);
-        when(restaurantRepository.findRestaurantById(expectedReservation.getRestaurantId())).thenReturn(expectedRestaurant);
+        when(restaurantRepository.
+                findRestaurantById(expectedReservation.getRestaurantId())).thenReturn(expectedRestaurant);
 
         ReservationResponse response = reservationService.getReservation(reservationId);
 
