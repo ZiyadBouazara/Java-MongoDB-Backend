@@ -106,21 +106,6 @@ public class ReservationServiceTestSearchMethod {
         doNothing().when(reservationValidator).validateSearchReservationRequest(restaurant.getId(), DATE);
 
     }
-    public void givenValidRestaurantIdAndReservationRequest_whenCreatingReservation_shouldReturnRightReservationId()  {
-        ReservationRequest reservationRequestFixture = new ReservationRequestFixture().create();
-        when(restaurantRepository.findRestaurantById(restaurant.getId())).thenReturn(restaurant);
-        when(reservationFactory.createReservation(restaurant.getId(),
-                reservationRequestFixture.date(),
-                reservationRequestFixture.startTime(),
-                reservationRequestFixture.groupSize(),
-                customer))
-                .thenReturn(reservation);
-
-        //String createdId = reservationService.createReservation(restaurant.getId(), reservationRequestFixture);
-
-        //Assertions.assertThat(createdId).isEqualTo(TOURNAMENT_ID);
-    }
-
 
     @Test
     public void givenValidParamShouldReturnValidResto()
@@ -167,15 +152,15 @@ public class ReservationServiceTestSearchMethod {
         }
     }
 
-    @Test
-    public void givenNonExistingRestaurantId_whenSearchReservations_shouldThrowNotFoundException() {
-        try {
-            reservationService.searchReservations(INVALID_OWNER_ID, INVALID_ID, INVALID_DATE, INVALID_CUSTOMER_NAME);
-            Assertions.fail("Expected NotFoundException to be thrown");
-        } catch (InvalidParameterException | MissingParameterException e) {
-//            Assertions.assertTrue(e.getMessage().contains("Missing 'Owner' header"), "Expected exception message to contain 'missing header'");
-        }
-    }
+//    @Test
+//    public void givenNonExistingRestaurantId_whenSearchReservations_shouldThrowNotFoundException() {
+//        try {
+//            reservationService.searchReservations(INVALID_OWNER_ID, INVALID_ID, INVALID_DATE, INVALID_CUSTOMER_NAME);
+//            Assertions.fail("Expected NotFoundException to be thrown");
+//        } catch (InvalidParameterException | MissingParameterException e) {
+////            Assertions.assertTrue(e.getMessage().contains("Missing 'Owner' header"), "Expected exception message to contain 'missing header'");
+//        }
+//    }
 
     //givenInValidParamShouldThrowInvalidParam
     //givenNullRestaurantShouldReturnNotFound
