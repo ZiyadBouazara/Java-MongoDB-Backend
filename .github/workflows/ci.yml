@@ -52,7 +52,9 @@ jobs:
         os: [ ubuntu-latest ]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
+      - name: List Files
+        run: ls -la
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven-3-jdk-20@master
         continue-on-error: true
