@@ -53,8 +53,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: List Files
-        run: ls -la
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven-3-jdk-20@master
         continue-on-error: true
@@ -62,6 +60,8 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: --sarif-file-output=snyk.sarif
+      - name: List Files
+        run: ls -la
       - name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
         with:
