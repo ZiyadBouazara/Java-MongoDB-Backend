@@ -2,7 +2,7 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, develop, security-tools ]
   pull_request:
     branches: [ main, develop ]
 
@@ -41,3 +41,26 @@ jobs:
 
       - name: Verify
         run: mvn verify
+
+  security:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    continue-on-error: true
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/java@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --sarif-file-output=snyk.sarif
+      - name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: snyk.sarif
