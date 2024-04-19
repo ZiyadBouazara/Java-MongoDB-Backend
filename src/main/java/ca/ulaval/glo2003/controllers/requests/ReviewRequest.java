@@ -1,12 +1,10 @@
 package ca.ulaval.glo2003.controllers.requests;
 
-import ca.ulaval.glo2003.domain.customer.Customer;
+import ca.ulaval.glo2003.service.dtos.CustomerDTO;
 
 public record ReviewRequest(
-        String restaurantId,
-        String id,
         String date,
-        Customer customer,
+        CustomerDTO customer,
         Integer rating,
         String comment) {
 

@@ -2,6 +2,8 @@ package ca.ulaval.glo2003.domain.review;
 
 import ca.ulaval.glo2003.domain.customer.Customer;
 
+import java.util.UUID;
+
 public class Review {
 
     private String restaurantId;
@@ -14,6 +16,15 @@ public class Review {
     public Review(String restaurantId, String id, String date, Customer customer, Integer rating, String comment) {
         this.restaurantId = restaurantId;
         this.id = id;
+        this.date = date;
+        this.customer = customer;
+        this.rating = rating;
+        this.comment = comment;
+    }
+
+    public Review(String restaurantId, String date, Customer customer, Integer rating, String comment) {
+        this.restaurantId = restaurantId;
+        this.id = UUID.randomUUID().toString();
         this.date = date;
         this.customer = customer;
         this.rating = rating;
