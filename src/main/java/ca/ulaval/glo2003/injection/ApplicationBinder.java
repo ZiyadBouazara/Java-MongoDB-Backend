@@ -13,6 +13,7 @@ import ca.ulaval.glo2003.infrastructure.reservation.InMemoryReservationRepositor
 import ca.ulaval.glo2003.infrastructure.restaurant.InMemoryRestaurantRepository;
 import ca.ulaval.glo2003.infrastructure.reservation.MongoReservationRepository;
 import ca.ulaval.glo2003.infrastructure.restaurant.MongoRestaurantRepository;
+import ca.ulaval.glo2003.service.ReviewService;
 import ca.ulaval.glo2003.service.validators.CreateRestaurantValidator;
 import ca.ulaval.glo2003.service.validators.ReservationValidator;
 import ca.ulaval.glo2003.service.validators.GetRestaurantValidator;
@@ -36,6 +37,7 @@ public class ApplicationBinder extends AbstractBinder {
         choosePersistenceType();
         bind(RestaurantService.class).to(RestaurantService.class);
         bind(ReservationService.class).to(ReservationService.class);
+        bind(ReviewService.class).to(ReviewService.class);
 
         bind(HeaderValidator.class).to(HeaderValidator.class);
         bind(CreateRestaurantValidator.class).to(CreateRestaurantValidator.class);

@@ -1,5 +1,7 @@
 package ca.ulaval.glo2003.domain.restaurant;
 
+import ca.ulaval.glo2003.domain.reservation.Reservation;
+import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 
