@@ -3,6 +3,7 @@ package ca.ulaval.glo2003;
 import ca.ulaval.glo2003.controllers.HealthResource;
 import ca.ulaval.glo2003.controllers.ReservationResource;
 import ca.ulaval.glo2003.controllers.RestaurantResource;
+import ca.ulaval.glo2003.controllers.ReviewResource;
 import ca.ulaval.glo2003.domain.exceptions.mapper.InvalidParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.MissingParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.NotFoundExceptionMapper;
@@ -25,6 +26,7 @@ public class Main {
             .register(HealthResource.class)
             .register(RestaurantResource.class)
             .register(ReservationResource.class)
+            .register(ReviewResource.class)
             .register(InvalidParamExceptionMapper.class)
             .register(MissingParamExceptionMapper.class)
             .register(NotFoundExceptionMapper.class);

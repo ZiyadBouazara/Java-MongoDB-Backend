@@ -9,7 +9,7 @@ public class ReviewMongo {
     private String id;
     private String restaurantId;
     private String date;
-    private Integer rating;
+    private double rating;
     private String comment;
     private String customerName;
     private String customerEmail;
@@ -18,7 +18,7 @@ public class ReviewMongo {
     public ReviewMongo() {
     }
 
-    public ReviewMongo(String id, String restaurantId, String date, Integer rating, String comment, String customerName,
+    public ReviewMongo(String id, String restaurantId, String date, double rating, String comment, String customerName,
                             String customerEmail, String customerPhone) {
         this.id = id;
         this.restaurantId = restaurantId;

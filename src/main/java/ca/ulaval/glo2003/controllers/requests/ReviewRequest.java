@@ -5,7 +5,7 @@ import ca.ulaval.glo2003.service.dtos.CustomerDTO;
 public record ReviewRequest(
         String date,
         CustomerDTO customer,
-        Integer rating,
+        double rating,
         String comment) {
 
 }
