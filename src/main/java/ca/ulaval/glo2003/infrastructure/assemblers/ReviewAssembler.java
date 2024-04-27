@@ -9,6 +9,7 @@ public class ReviewAssembler {
                 review.getId(),
                 review.getRestaurantId(),
                 review.getDate(),
+                review.getPostedDate(),
                 review.getRating(),
                 review.getComment(),
                 review.getCustomer().getName(),

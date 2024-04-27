@@ -2,10 +2,13 @@ package ca.ulaval.glo2003.domain.review;
 
 import ca.ulaval.glo2003.domain.customer.Customer;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Review {
 
+    private final LocalDateTime postedDate;
     private String restaurantId;
     private String id;
     private String date;
@@ -17,6 +20,7 @@ public class Review {
         this.restaurantId = restaurantId;
         this.id = id;
         this.date = date;
+        this.postedDate = LocalDateTime.now();
         this.customer = customer;
         this.rating = rating;
         this.comment = comment;
@@ -26,6 +30,7 @@ public class Review {
         this.restaurantId = restaurantId;
         this.id = UUID.randomUUID().toString();
         this.date = date;
+        this.postedDate = LocalDateTime.now();
         this.customer = customer;
         this.rating = rating;
         this.comment = comment;
@@ -41,6 +46,7 @@ public class Review {
     public String getDate() {
         return date;
     }
+    public LocalDateTime getPostedDate() { return postedDate; }
 
     public Customer getCustomer() {
         return customer;

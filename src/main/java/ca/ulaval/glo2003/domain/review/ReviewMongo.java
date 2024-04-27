@@ -3,12 +3,15 @@ package ca.ulaval.glo2003.domain.review;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 
+import java.time.LocalDateTime;
+
 @Entity("reviews")
 public class ReviewMongo {
     @Id
     private String id;
     private String restaurantId;
     private String date;
+    private LocalDateTime postedDate;
     private double rating;
     private String comment;
     private String customerName;
@@ -18,11 +21,12 @@ public class ReviewMongo {
     public ReviewMongo() {
     }
 
-    public ReviewMongo(String id, String restaurantId, String date, double rating, String comment, String customerName,
-                            String customerEmail, String customerPhone) {
+    public ReviewMongo(String id, String restaurantId, String date, LocalDateTime postedDate, double rating, String comment, String customerName,
+                       String customerEmail, String customerPhone) {
         this.id = id;
         this.restaurantId = restaurantId;
         this.date = date;
+        this.postedDate = postedDate;
         this.rating = rating;
         this.comment = comment;
         this.customerName = customerName;
