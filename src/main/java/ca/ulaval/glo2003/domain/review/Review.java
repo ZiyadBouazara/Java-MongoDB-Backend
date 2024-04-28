@@ -2,7 +2,6 @@ package ca.ulaval.glo2003.domain.review;
 
 import ca.ulaval.glo2003.domain.customer.Customer;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -46,7 +45,10 @@ public class Review {
     public String getDate() {
         return date;
     }
-    public LocalDateTime getPostedDate() { return postedDate; }
+
+    public LocalDateTime getPostedDate() {
+        return postedDate;
+    }
 
     public Customer getCustomer() {
         return customer;

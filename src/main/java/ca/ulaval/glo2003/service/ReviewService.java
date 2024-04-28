@@ -42,12 +42,13 @@ public class ReviewService {
         validateRestaurantId(restaurantId);
 
         Customer customer = customerAssembler.fromDTO(reviewRequest.customer());
-        Review review = reviewFactory.createReview(restaurantId, reviewRequest.date(), reviewRequest.rating(), reviewRequest.comment(), customer);
+        Review review = reviewFactory.createReview(
+                restaurantId, reviewRequest.date(), reviewRequest.rating(), reviewRequest.comment(), customer);
         reviewRepository.save(review);
         return review.getId();
     }
 
-    private void validateRestaurantId(String restaurantId) throws NotFoundException{
+    private void validateRestaurantId(String restaurantId) throws NotFoundException {
         Restaurant optionalRestaurant = restaurantRepository.findRestaurantById(restaurantId);
     }
 

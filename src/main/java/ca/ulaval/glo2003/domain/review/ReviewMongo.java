@@ -21,8 +21,9 @@ public class ReviewMongo {
     public ReviewMongo() {
     }
 
-    public ReviewMongo(String id, String restaurantId, String date, LocalDateTime postedDate, double rating, String comment, String customerName,
-                       String customerEmail, String customerPhone) {
+    public ReviewMongo(
+            String id, String restaurantId, String date, LocalDateTime postedDate, double rating,
+            String comment, String customerName, String customerEmail, String customerPhone) {
         this.id = id;
         this.restaurantId = restaurantId;
         this.date = date;
