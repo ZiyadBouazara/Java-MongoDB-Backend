@@ -14,6 +14,9 @@ jobs:
       pull-requests: write
       checks: write
     steps:
+      - uses: actions/setup-node@v2
+          with:
+            node-version: '20'
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
