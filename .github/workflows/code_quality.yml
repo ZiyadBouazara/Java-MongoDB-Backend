@@ -23,7 +23,10 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
+      - name: Generate Coverage Reports
+        run: mvn clean verify
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2024.1
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+          JACOCO_REPORT_PATH: target/site/jacoco/index.html
