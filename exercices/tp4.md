@@ -157,7 +157,11 @@ Intégrer des mesures de sécurité telles que l'authentification, l'autorisatio
 Identifier et évaluer les dépendances externes utilisées dans le projet pour s'assurer qu'elles proviennent de sources fiables et sécurisées.
 Mettre en œuvre des mécanismes de vérification et de validation des composants tiers pour détecter les vulnérabilités connues et les risques de compromission de la chaîne logicielle.
 Mettre à jour régulièrement les dépendances et surveiller les avis de sécurité pour réagir rapidement aux nouvelles vulnérabilités identifiées.
+
+
 Intégrer ces pratiques dans un processus de développement logiciel contribue à réduire les risques de vulnérabilités et à renforcer la sécurité des applications tout au long de leur cycle de vie.
+
+
 
 
 
