@@ -90,6 +90,9 @@ public class ReservationValidator {
     }
 
     private void verifyValidCustomer(CustomerDTO customer) throws InvalidParameterException {
+        if (customer.name().isEmpty()) {
+            throw new InvalidParameterException("Invalid parameter 'customer': name, it must not be empty");
+        }
         if (!isValidEmail(customer.email())) {
             throw new InvalidParameterException("Invalid parameter 'customer: email', it must follow the following format: x@y.z");
         }
