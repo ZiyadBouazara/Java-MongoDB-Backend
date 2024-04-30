@@ -26,7 +26,6 @@ jobs:
           java-version: '21'
           distribution: 'adopt'
 
-
       - name: Checkout code
         uses: actions/checkout@v2
         with:
