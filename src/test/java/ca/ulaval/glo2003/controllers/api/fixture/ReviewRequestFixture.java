@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.service.validators;
+package ca.ulaval.glo2003.controllers.api.fixture;
 
 import ca.ulaval.glo2003.controllers.requests.ReviewRequest;
 import ca.ulaval.glo2003.service.dtos.CustomerDTO;

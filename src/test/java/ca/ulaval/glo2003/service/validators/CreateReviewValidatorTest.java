@@ -1,5 +1,6 @@
 package ca.ulaval.glo2003.service.validators;
 
+import ca.ulaval.glo2003.controllers.api.fixture.ReviewRequestFixture;
 import ca.ulaval.glo2003.controllers.requests.ReviewRequest;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;

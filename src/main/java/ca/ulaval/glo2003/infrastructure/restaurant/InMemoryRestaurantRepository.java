@@ -2,6 +2,7 @@ package ca.ulaval.glo2003.infrastructure.restaurant;
 
 import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
+import ca.ulaval.glo2003.domain.review.Review;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.ArrayList;
@@ -57,8 +58,23 @@ public class InMemoryRestaurantRepository implements RestaurantRepository {
     }
 
     @Override
-    public void updateReviews(Restaurant updatedRestaurant) {
-        Restaurant foundRestaurant = findRestaurantById(updatedRestaurant.getId());
-        foundRestaurant = updatedRestaurant;
+    public void updateReviews(Review review) {
+        Restaurant restaurant = findRestaurantById(review.getRestaurantId());
+
+        int totalReviews = restaurant.getReviewCount() + 1;
+        double currentRating = restaurant.getRating();
+
+        double updatedRating = getUpdatedRating(review, restaurant, totalReviews, currentRating);
+        updatedRating = roundToTwoDecimals(updatedRating);
+        restaurant.setRating(updatedRating);
+        restaurant.incrementReviewCount();
+    }
+
+    private double getUpdatedRating(Review review, Restaurant restaurant, int totalReviews, double currentRating) {
+        return ((currentRating * restaurant.getReviewCount()) + review.getRating()) / totalReviews;
+    }
+
+    private double roundToTwoDecimals(double rating) {
+        return Math.round(rating * 100.0) / 100.0;
     }
 }
