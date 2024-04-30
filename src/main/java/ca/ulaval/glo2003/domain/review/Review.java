@@ -15,16 +15,6 @@ public class Review {
     private double rating;
     private String comment;
 
-    public Review(String restaurantId, String id, String date, Customer customer, double rating, String comment) {
-        this.restaurantId = restaurantId;
-        this.id = id;
-        this.date = date;
-        this.postedDate = LocalDateTime.now();
-        this.customer = customer;
-        this.rating = rating;
-        this.comment = comment;
-    }
-
     public Review(String restaurantId, String date, Customer customer, double rating, String comment) {
         this.restaurantId = restaurantId;
         this.id = UUID.randomUUID().toString();
