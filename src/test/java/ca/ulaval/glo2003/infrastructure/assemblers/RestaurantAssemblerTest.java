@@ -21,7 +21,7 @@ class RestaurantAssemblerTest {
     private static final String OPEN_HOUR = "10:00";
     private static final String CLOSE_HOUR = "20:00";
     private static final int DURATION = 60;
-    private static final double RATING = 4.5;
+    private static final Double RATING = 4.5;
     private static final int REVIEW_COUNTER = 3;
 
     @Test

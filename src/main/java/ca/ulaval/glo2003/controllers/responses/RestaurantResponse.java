@@ -9,6 +9,6 @@ public record RestaurantResponse(String id,
                                   Integer capacity,
                                   HoursDTO hours,
                                   ReservationConfigurationDTO reservations,
-                                  double rating,
+                                  Double rating,
                                   int reviewCount) {
 }

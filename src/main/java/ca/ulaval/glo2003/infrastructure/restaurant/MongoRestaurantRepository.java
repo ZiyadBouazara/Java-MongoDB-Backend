@@ -71,20 +71,20 @@ public class MongoRestaurantRepository implements RestaurantRepository {
         Restaurant updatedRestaurant = findRestaurantById(review.getRestaurantId());
 
         int totalReviews = updatedRestaurant.getReviewCount() + 1;
-        double currentRating = updatedRestaurant.getRating();
+        Double currentRating = updatedRestaurant.getRating();
 
-        double updatedRating = getUpdatedRating(review, updatedRestaurant, totalReviews, currentRating);
+        Double updatedRating = getUpdatedRating(review, updatedRestaurant, totalReviews, currentRating);
         updatedRating = roundToTwoDecimals(updatedRating);
         updatedRestaurant.setRating(updatedRating);
         updatedRestaurant.incrementReviewCount();
         saveRestaurant(updatedRestaurant);
     }
 
-    private double getUpdatedRating(Review review, Restaurant restaurant, int totalReviews, double currentRating) {
+    private Double getUpdatedRating(Review review, Restaurant restaurant, int totalReviews, Double currentRating) {
         return ((currentRating * restaurant.getReviewCount()) + review.getRating()) / totalReviews;
     }
 
-    private double roundToTwoDecimals(double rating) {
+    private Double roundToTwoDecimals(Double rating) {
         return Math.round(rating * 100.0) / 100.0;
     }
 }

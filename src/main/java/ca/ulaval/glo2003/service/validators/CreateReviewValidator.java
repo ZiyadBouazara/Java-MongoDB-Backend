@@ -65,7 +65,7 @@ public class CreateReviewValidator {
         }
     }
 
-    public void verifyValidRating(double rating) throws InvalidParameterException {
+    public void verifyValidRating(Double rating) throws InvalidParameterException {
         if (rating < 1 || rating > 5) {
             throw new InvalidParameterException("Invalid parameter 'rating', it must be a between 1 and 5 included");
         }

@@ -17,9 +17,9 @@ public abstract class RestaurantRepositoryTest {
     private static final int CAPACITY = 5;
     private static final Hours HOURS = new Hours("11:00:00", "19:30:00");
     private static final String NON_EXISTENT_RESTAURANT_ID = "id";
-    private static final double RATING1 = 4.0;
-    private static final double RATING2 = 5.0;
-    private static final double EXPECTED_RATING = 4.5;
+    private static final Double RATING1 = 4.0;
+    private static final Double RATING2 = 5.0;
+    private static final Double EXPECTED_RATING = 4.5;
     private static final String COMMENT = "Great";
     private static final String DATE = "2024-01-01";
     private static final String CUSTOMER_NAME = "John Deer";
@@ -153,7 +153,7 @@ public abstract class RestaurantRepositoryTest {
         return restaurant;
     }
 
-    private Restaurant createAndSaveRestaurantWithRating(double rating) {
+    private Restaurant createAndSaveRestaurantWithRating(Double rating) {
         Restaurant restaurant = new Restaurant(OWNER_ID, NAME, CAPACITY, HOURS);
         restaurant.setRating(rating);
         restaurant.incrementReviewCount();

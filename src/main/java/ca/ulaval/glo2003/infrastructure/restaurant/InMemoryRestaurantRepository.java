@@ -62,19 +62,19 @@ public class InMemoryRestaurantRepository implements RestaurantRepository {
         Restaurant restaurant = findRestaurantById(review.getRestaurantId());
 
         int totalReviews = restaurant.getReviewCount() + 1;
-        double currentRating = restaurant.getRating();
+        Double currentRating = restaurant.getRating();
 
-        double updatedRating = getUpdatedRating(review, restaurant, totalReviews, currentRating);
+        Double updatedRating = getUpdatedRating(review, restaurant, totalReviews, currentRating);
         updatedRating = roundToTwoDecimals(updatedRating);
         restaurant.setRating(updatedRating);
         restaurant.incrementReviewCount();
     }
 
-    private double getUpdatedRating(Review review, Restaurant restaurant, int totalReviews, double currentRating) {
+    private Double getUpdatedRating(Review review, Restaurant restaurant, int totalReviews, Double currentRating) {
         return ((currentRating * restaurant.getReviewCount()) + review.getRating()) / totalReviews;
     }
 
-    private double roundToTwoDecimals(double rating) {
+    private Double roundToTwoDecimals(Double rating) {
         return Math.round(rating * 100.0) / 100.0;
     }
 }

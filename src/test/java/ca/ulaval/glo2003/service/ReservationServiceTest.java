@@ -16,6 +16,7 @@ import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.utils.Hours;
 import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
 import ca.ulaval.glo2003.service.validators.ReservationValidator;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
@@ -71,19 +72,15 @@ public class ReservationServiceTest {
 
     @Test
     public void givenValidReservationRequest_createReservation_shouldCreateAndSaveReservation() throws Exception {
-        String restaurantId = "restaurant1";
-        restaurant = new Restaurant(OWNER_ID, RESTO_NAME, RESTO_CAPACITY, RESTO_HOURS);
-        ReservationRequest reservationRequest = new ReservationRequestFixture().create();
-        when(restaurantRepository.findRestaurantById(restaurantId)).thenReturn(restaurant);
-        Customer mockCustomer = mock(Customer.class);
-        when(customerAssembler.fromDTO(reservationRequest.customer())).thenReturn(mockCustomer);
-        Reservation mockReservation = mock(Reservation.class);
-        when(reservationFactory.createReservation(any(), any(), any(), any(), any())).thenReturn(mockReservation);
+        PrepareCreateMethod preparedCreateTest = getPreparedCreateTestMethod();
 
-        String reservationId = reservationService.createReservation(restaurantId, reservationRequest);
+        String reservationId = reservationService.createReservation(
+                preparedCreateTest.restaurantId(), preparedCreateTest.reservationRequest());
 
-        verify(reservationRepository).saveReservation(mockReservation);
+        Assertions.assertEquals(reservationId, preparedCreateTest.mockReservation().getId());
+        verify(reservationRepository).saveReservation(preparedCreateTest.mockReservation());
     }
+
 
     @Test
     public void givenMissingGroupSize_createReservation_shouldThrowMissingParameterException() {
@@ -116,21 +113,40 @@ public class ReservationServiceTest {
 
     @Test
     public void givenReservationId_whenGetReservation_shouldReturnNonNullResponse() {
-        String reservationId = "1";
-        Restaurant expectedRestaurant = new Restaurant(OWNER_ID, RESTO_NAME, RESTO_CAPACITY, RESTO_HOURS);
-        Customer customer = new Customer(CUSTOMER_NAME, CUSTOMER_EMAIL, CUSTOMER_PHONE_NUMBER);
-        Reservation expectedReservation = new Reservation(reservationId, expectedRestaurant.getId(),
-                DATE, START_TIME, GROUP_SIZE, customer);
-        when(reservationRepository.findReservationById(reservationId)).thenReturn(expectedReservation);
-        when(restaurantRepository.findRestaurantById(
-                expectedReservation.getRestaurantId())).thenReturn(expectedRestaurant);
+        prepareGetMethod preparedGetTest = getPreparedGetTestMethod();
 
-        ReservationResponse response = reservationService.getReservation(reservationId);
+        ReservationResponse response = reservationService.getReservation(preparedGetTest.reservationId());
 
         assertNotNull(response, "Reservation response should not be null");
     }
     @Test
     public void givenReservationId_whenGetReservation_shouldReturnExpectedId() {
+        prepareGetMethod preparedGetTest = getPreparedGetTestMethod();
+
+        ReservationResponse response = reservationService.getReservation(preparedGetTest.reservationId());
+
+        assertEquals(preparedGetTest.expectedReservation().getId(), response.id());
+    }
+
+    @NotNull
+    private PrepareCreateMethod getPreparedCreateTestMethod() {
+        String restaurantId = "restaurant1";
+        restaurant = new Restaurant(OWNER_ID, RESTO_NAME, RESTO_CAPACITY, RESTO_HOURS);
+        ReservationRequest reservationRequest = new ReservationRequestFixture().create();
+        when(restaurantRepository.findRestaurantById(restaurantId)).thenReturn(restaurant);
+        Customer mockCustomer = mock(Customer.class);
+        when(customerAssembler.fromDTO(reservationRequest.customer())).thenReturn(mockCustomer);
+        Reservation mockReservation = mock(Reservation.class);
+        when(reservationFactory.createReservation(any(), any(), any(), any(), any())).thenReturn(mockReservation);
+        PrepareCreateMethod preparedCreateTest = new PrepareCreateMethod(restaurantId, reservationRequest, mockReservation);
+        return preparedCreateTest;
+    }
+
+    private record PrepareCreateMethod(String restaurantId, ReservationRequest reservationRequest, Reservation mockReservation) {
+    }
+
+    @NotNull
+    private prepareGetMethod getPreparedGetTestMethod() {
         String reservationId = "1";
         Restaurant expectedRestaurant = new Restaurant(OWNER_ID, RESTO_NAME, RESTO_CAPACITY, RESTO_HOURS);
         Customer customer = new Customer(CUSTOMER_NAME, CUSTOMER_EMAIL, CUSTOMER_PHONE_NUMBER);
@@ -139,9 +155,10 @@ public class ReservationServiceTest {
         when(reservationRepository.findReservationById(reservationId)).thenReturn(expectedReservation);
         when(restaurantRepository.
                 findRestaurantById(expectedReservation.getRestaurantId())).thenReturn(expectedRestaurant);
+        prepareGetMethod preparedGetTest = new prepareGetMethod(reservationId, expectedReservation);
+        return preparedGetTest;
+    }
 
-        ReservationResponse response = reservationService.getReservation(reservationId);
-
-        assertEquals(expectedReservation.getId(), response.id());
+    private record prepareGetMethod(String reservationId, Reservation expectedReservation) {
     }
 }

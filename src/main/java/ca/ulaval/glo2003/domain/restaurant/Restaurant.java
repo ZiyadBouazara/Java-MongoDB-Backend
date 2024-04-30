@@ -10,7 +10,7 @@ public class Restaurant {
     private Integer capacity;
     private Hours hours;
     private ReservationConfiguration reservationConfiguration;
-    private double rating;
+    private Double rating;
     private int reviewCount;
 
     public Restaurant(String ownerId, String name, Integer capacity, Hours hours) {
@@ -20,12 +20,12 @@ public class Restaurant {
         this.capacity = capacity;
         this.hours = hours;
         this.reservationConfiguration = new ReservationConfiguration();
-        this.rating = 1;
+        this.rating = 1.0;
         this.reviewCount = 0;
     }
 
     public Restaurant(String id, String ownerId, String name, Integer capacity, Hours hours,
-                      ReservationConfiguration reservationConfiguration, double rating, int reviewCount) {
+                      ReservationConfiguration reservationConfiguration, Double rating, int reviewCount) {
         this.id = id;
         this.ownerId = ownerId;
         this.name = name;
@@ -43,7 +43,7 @@ public class Restaurant {
         this.capacity = capacity;
         this.hours = hours;
         this.reservationConfiguration = reservationConfiguration;
-        this.rating = 1;
+        this.rating = 1.0;
         this.reviewCount = 0;
     }
 
@@ -77,7 +77,7 @@ public class Restaurant {
         return reservationConfiguration;
     }
 
-    public double getRating() {
+    public Double getRating() {
         return this.rating;
     }
 
@@ -85,7 +85,7 @@ public class Restaurant {
         return this.reviewCount;
     }
 
-    public void setRating(double newRating) {
+    public void setRating(Double newRating) {
         this.rating = newRating;
     }
 

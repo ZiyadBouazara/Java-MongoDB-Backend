@@ -12,10 +12,10 @@ public class Review {
     private String id;
     private String date;
     private Customer customer;
-    private double rating;
+    private Double rating;
     private String comment;
 
-    public Review(String restaurantId, String id, String date, Customer customer, double rating, String comment) {
+    public Review(String restaurantId, String id, String date, Customer customer, Double rating, String comment) {
         this.restaurantId = restaurantId;
         this.id = id;
         this.date = date;
@@ -25,7 +25,7 @@ public class Review {
         this.comment = comment;
     }
 
-    public Review(String restaurantId, String date, Customer customer, double rating, String comment) {
+    public Review(String restaurantId, String date, Customer customer, Double rating, String comment) {
         this.restaurantId = restaurantId;
         this.id = UUID.randomUUID().toString();
         this.date = date;
@@ -54,7 +54,7 @@ public class Review {
         return customer;
     }
 
-    public double getRating() {
+    public Double getRating() {
         return rating;
     }
 

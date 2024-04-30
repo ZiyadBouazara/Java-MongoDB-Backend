@@ -14,11 +14,11 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 
 public class ReviewService {
-    CreateReviewValidator createReviewValidator;
-    ReviewFactory reviewFactory;
-    CustomerAssembler customerAssembler;
-    ReviewRepository reviewRepository;
-    RestaurantRepository restaurantRepository;
+    private final CreateReviewValidator createReviewValidator;
+    private final ReviewFactory reviewFactory;
+    private final CustomerAssembler customerAssembler;
+    private final ReviewRepository reviewRepository;
+    private final RestaurantRepository restaurantRepository;
 
     @Inject
     public ReviewService(CreateReviewValidator createReviewValidator,
@@ -40,7 +40,7 @@ public class ReviewService {
         createReviewValidator.validateReviewRequest(reviewRequest);
 
         Customer customer = customerAssembler.fromDTO(reviewRequest.customer());
-        double roundedRating = roundToTwoDecimals(reviewRequest.rating());
+        Double roundedRating = roundToTwoDecimals(reviewRequest.rating());
         Review review = reviewFactory.createReview(
                 restaurantId, reviewRequest.date(), roundedRating, reviewRequest.comment(), customer);
 
@@ -49,7 +49,7 @@ public class ReviewService {
         return review.getId();
     }
 
-    private double roundToTwoDecimals(double rating) {
+    private Double roundToTwoDecimals(Double rating) {
         return Math.round(rating * 100.0) / 100.0;
     }
 }

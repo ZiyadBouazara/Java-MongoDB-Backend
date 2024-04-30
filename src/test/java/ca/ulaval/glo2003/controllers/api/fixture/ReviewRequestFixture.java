@@ -22,7 +22,7 @@ public class ReviewRequestFixture {
     }
 
     public ReviewRequest createWithMissingRating() {
-        return new ReviewRequest(date, customer, Double.NaN, comment);
+        return new ReviewRequest(date, customer, null, comment);
     }
 
     public ReviewRequestFixture withDate(String date) {
@@ -35,7 +35,7 @@ public class ReviewRequestFixture {
         return this;
     }
 
-    public ReviewRequestFixture withRating(double rating) {
+    public ReviewRequestFixture withRating(Double rating) {
         this.rating = rating;
         return this;
     }

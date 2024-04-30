@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 public class ReviewFactoryTest {
     private static final String RESTAURANT_ID = "restaurant123";
     private static final String REVIEW_DATE = "2024-04-30";
-    private static final double REVIEW_RATING = 4.5;
+    private static final Double REVIEW_RATING = 4.5;
     private static final String REVIEW_COMMENT = "Excellent service!";
     private static final String CUSTOMER_NAME = "John Doe";
     private static final String CUSTOMER_EMAIL = "john.deer@gmail.com";

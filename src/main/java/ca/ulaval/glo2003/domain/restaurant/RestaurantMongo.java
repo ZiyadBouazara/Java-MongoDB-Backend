@@ -14,14 +14,14 @@ public class RestaurantMongo {
     private String openHour;
     private String closeHour;
     private Integer duration;
-    private double rating;
+    private Double rating;
     private int reviewCount;
 
     public RestaurantMongo() {
     }
 
     public RestaurantMongo(String id, String ownerId, String name, Integer capacity, String openHour, String closeHour,
-                           Integer duration, double rating, int reviewCount) {
+                           Integer duration, Double rating, int reviewCount) {
         this.id = id;
         this.ownerId = ownerId;
         this.name = name;
@@ -61,7 +61,7 @@ public class RestaurantMongo {
         return duration;
     }
 
-    public double getRating() {
+    public Double getRating() {
         return rating;
     }
 
