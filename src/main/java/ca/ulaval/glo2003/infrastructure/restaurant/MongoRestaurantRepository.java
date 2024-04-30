@@ -3,6 +3,7 @@ package ca.ulaval.glo2003.infrastructure.restaurant;
 import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.restaurant.RestaurantMongo;
+import ca.ulaval.glo2003.domain.review.Review;
 import ca.ulaval.glo2003.infrastructure.DatastoreProvider;
 import ca.ulaval.glo2003.infrastructure.assemblers.RestaurantAssembler;
 import com.mongodb.client.result.DeleteResult;
@@ -63,5 +64,27 @@ public class MongoRestaurantRepository implements RestaurantRepository {
     public List<Restaurant> getAllRestaurants() {
         List<RestaurantMongo> restaurantsMongo = datastore.find(RestaurantMongo.class).iterator().toList();
         return RestaurantAssembler.fromRestaurantMongoList(restaurantsMongo);
+    }
+
+    @Override
+    public void updateReviews(Review review) {
+        Restaurant updatedRestaurant = findRestaurantById(review.getRestaurantId());
+
+        int totalReviews = updatedRestaurant.getReviewCount() + 1;
+        Double currentRating = updatedRestaurant.getRating();
+
+        Double updatedRating = getUpdatedRating(review, updatedRestaurant, totalReviews, currentRating);
+        updatedRating = roundToTwoDecimals(updatedRating);
+        updatedRestaurant.setRating(updatedRating);
+        updatedRestaurant.incrementReviewCount();
+        saveRestaurant(updatedRestaurant);
+    }
+
+    private Double getUpdatedRating(Review review, Restaurant restaurant, int totalReviews, Double currentRating) {
+        return ((currentRating * restaurant.getReviewCount()) + review.getRating()) / totalReviews;
+    }
+
+    private Double roundToTwoDecimals(Double rating) {
+        return Math.round(rating * 100.0) / 100.0;
     }
 }
