@@ -7,7 +7,9 @@ import ca.ulaval.glo2003.controllers.ReviewResource;
 import ca.ulaval.glo2003.domain.exceptions.mapper.InvalidParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.MissingParamExceptionMapper;
 import ca.ulaval.glo2003.domain.exceptions.mapper.NotFoundExceptionMapper;
+import ca.ulaval.glo2003.domain.exceptions.mapper.SentryExceptionMapper;
 import ca.ulaval.glo2003.injection.ApplicationBinder;
+import io.sentry.Sentry;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -29,7 +31,8 @@ public class Main {
             .register(ReviewResource.class)
             .register(InvalidParamExceptionMapper.class)
             .register(MissingParamExceptionMapper.class)
-            .register(NotFoundExceptionMapper.class);
+            .register(NotFoundExceptionMapper.class)
+            .register(SentryExceptionMapper.class);
 
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
@@ -50,6 +53,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        Sentry.init("https://d69c2df512ce6cd8b13e04393cdb3a65@o4507176762212352.ingest.us.sentry.io/4507176818835456");
         startServer();
         System.out.printf("Jersey app started with endpoints available at %s%n", BASE_URI);
     }
