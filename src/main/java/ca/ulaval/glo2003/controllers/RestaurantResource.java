@@ -83,11 +83,10 @@ public class RestaurantResource {
     @GET
     @Path("restaurants/{id}/availabilities")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<AvailabilitiesResponse> getAvailabilities(@HeaderParam("Owner") String ownerId,
-                                                          @PathParam("id") String restaurantId,
+    public List<AvailabilitiesResponse> getAvailabilities(@PathParam("id") String restaurantId,
                                                           @QueryParam("date") String date)
             throws NotFoundException, MissingParameterException, InvalidParameterException {
-        return restaurantService.getAvailabilitiesForRestaurant(ownerId, restaurantId, date);
+        return restaurantService.getAvailabilitiesForRestaurant(restaurantId, date);
     }
 }
 
