@@ -66,10 +66,11 @@ public class CreateReviewValidator {
     }
 
     public void verifyValidRating(double rating) throws InvalidParameterException {
-        if (rating < 0.0 || rating > 5.0) {
-            throw new InvalidParameterException("Invalid parameter 'rating', it must be between 0 and 5");
+        if (rating < 1 || rating > 5) {
+            throw new InvalidParameterException("Invalid parameter 'rating', it must be a between 1 and 5 included");
         }
     }
+
     public void verifyValidCustomer(CustomerDTO customer) throws InvalidParameterException {
         if (!isValidEmail(customer.email())) {
             throw new InvalidParameterException("Invalid parameter 'customer: email', it must follow the following format: x@y.z");

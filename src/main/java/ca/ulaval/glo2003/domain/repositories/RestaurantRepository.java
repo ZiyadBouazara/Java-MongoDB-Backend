@@ -15,4 +15,6 @@ public interface RestaurantRepository {
     Restaurant findRestaurantById(String restaurantId) throws NotFoundException;
 
     List<Restaurant> getAllRestaurants();
+
+    void updateReviews(Restaurant restaurant);
 }

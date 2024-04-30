@@ -55,4 +55,10 @@ public class InMemoryRestaurantRepository implements RestaurantRepository {
     public List<Restaurant> getAllRestaurants() {
         return restaurants;
     }
+
+    @Override
+    public void updateReviews(Restaurant updatedRestaurant) {
+        Restaurant foundRestaurant = findRestaurantById(updatedRestaurant.getId());
+        foundRestaurant = updatedRestaurant;
+    }
 }

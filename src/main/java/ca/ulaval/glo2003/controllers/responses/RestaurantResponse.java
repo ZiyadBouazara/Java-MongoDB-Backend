@@ -8,5 +8,7 @@ public record RestaurantResponse(String id,
                                   String name,
                                   Integer capacity,
                                   HoursDTO hours,
-                                  ReservationConfigurationDTO reservations) {
+                                  ReservationConfigurationDTO reservations,
+                                  double rating,
+                                  int reviewCount) {
 }

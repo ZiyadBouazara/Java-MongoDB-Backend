@@ -16,7 +16,9 @@ public class RestaurantResponseAssembler {
             restaurant.getName(),
             restaurant.getCapacity(),
             createHoursDTO(restaurant),
-            createReservationConfigurationDTO(restaurant));
+            createReservationConfigurationDTO(restaurant),
+                restaurant.getRating(),
+                restaurant.getReviewCount());
     }
 
     private ReservationConfigurationDTO createReservationConfigurationDTO(Restaurant restaurant) {

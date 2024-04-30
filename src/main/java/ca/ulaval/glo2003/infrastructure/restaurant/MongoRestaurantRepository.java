@@ -64,4 +64,9 @@ public class MongoRestaurantRepository implements RestaurantRepository {
         List<RestaurantMongo> restaurantsMongo = datastore.find(RestaurantMongo.class).iterator().toList();
         return RestaurantAssembler.fromRestaurantMongoList(restaurantsMongo);
     }
+
+    @Override
+    public void updateReviews(Restaurant updatedRestaurant) {
+        saveRestaurant(updatedRestaurant);
+    }
 }

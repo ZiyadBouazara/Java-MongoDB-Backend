@@ -39,17 +39,37 @@ public class ReviewService {
             throws InvalidParameterException, MissingParameterException {
 
         createReviewValidator.validateReviewRequest(reviewRequest);
-        validateRestaurantId(restaurantId);
 
         Customer customer = customerAssembler.fromDTO(reviewRequest.customer());
+        double roundedRating = roundToTwoDecimals(reviewRequest.rating());
         Review review = reviewFactory.createReview(
-                restaurantId, reviewRequest.date(), reviewRequest.rating(), reviewRequest.comment(), customer);
+                restaurantId, reviewRequest.date(), roundedRating, reviewRequest.comment(), customer);
+
+        updateRestaurantReviews(review);
         reviewRepository.save(review);
         return review.getId();
     }
 
-    private void validateRestaurantId(String restaurantId) throws NotFoundException {
-        Restaurant optionalRestaurant = restaurantRepository.findRestaurantById(restaurantId);
+    private void updateRestaurantReviews(Review review) throws NotFoundException {
+        Restaurant restaurant = restaurantRepository.findRestaurantById(review.getRestaurantId());
+
+        int totalReviews = restaurant.getReviewCount() + 1;
+        double currentRating = restaurant.getRating();
+
+        double updatedRating = getUpdatedRating(review, restaurant, totalReviews, currentRating);
+        updatedRating = roundToTwoDecimals(updatedRating);
+        restaurant.setRating(updatedRating);
+        restaurant.incrementReviewCount();
+
+        restaurantRepository.updateReviews(restaurant);
+    }
+
+    private double getUpdatedRating(Review review, Restaurant restaurant, int totalReviews, double currentRating) {
+        return ((currentRating * restaurant.getReviewCount()) + review.getRating()) / totalReviews;
+    }
+
+    private double roundToTwoDecimals(double rating) {
+        return Math.round(rating * 100.0) / 100.0;
     }
 
 }

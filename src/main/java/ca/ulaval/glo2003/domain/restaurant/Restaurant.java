@@ -10,6 +10,8 @@ public class Restaurant {
     private Integer capacity;
     private Hours hours;
     private ReservationConfiguration reservationConfiguration;
+    private double rating;
+    private int reviewCount;
 
     public Restaurant(String ownerId, String name, Integer capacity, Hours hours) {
         this.id = UUID.randomUUID().toString();
@@ -18,16 +20,20 @@ public class Restaurant {
         this.capacity = capacity;
         this.hours = hours;
         this.reservationConfiguration = new ReservationConfiguration();
+        this.rating = 1;
+        this.reviewCount = 0;
     }
 
     public Restaurant(String id, String ownerId, String name, Integer capacity, Hours hours,
-                      ReservationConfiguration reservationConfiguration) {
+                      ReservationConfiguration reservationConfiguration, double rating, int reviewCount) {
         this.id = id;
         this.ownerId = ownerId;
         this.name = name;
         this.capacity = capacity;
         this.hours = hours;
         this.reservationConfiguration = reservationConfiguration;
+        this.rating = rating;
+        this.reviewCount = reviewCount;
     }
 
     public Restaurant(String ownerId, String name, Integer capacity, Hours hours, ReservationConfiguration reservationConfiguration) {
@@ -37,6 +43,8 @@ public class Restaurant {
         this.capacity = capacity;
         this.hours = hours;
         this.reservationConfiguration = reservationConfiguration;
+        this.rating = 1;
+        this.reviewCount = 0;
     }
 
     public Restaurant(String name, Hours hours, Integer capacity) {
@@ -67,5 +75,21 @@ public class Restaurant {
 
     public ReservationConfiguration getRestaurantConfiguration() {
         return reservationConfiguration;
+    }
+
+    public double getRating() {
+        return this.rating;
+    }
+
+    public int getReviewCount() {
+        return this.reviewCount;
+    }
+
+    public void setRating(double newRating) {
+        this.rating = newRating;
+    }
+
+    public void incrementReviewCount() {
+        this.reviewCount++;
     }
 }
