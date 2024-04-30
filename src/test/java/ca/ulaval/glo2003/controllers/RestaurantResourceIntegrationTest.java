@@ -38,7 +38,6 @@ import static org.mockito.Mockito.when;
 public class RestaurantResourceIntegrationTest {
     public static final String RESTAURANT_ID = "";
     public static final String OWNER_ID = "1";
-    public static final String EMPTY_OWNER_ID = "";
     public static final String INVALID_OWNER_ID = "invalid";
     public static final String RESTAURANT_NAME = "Restaurant Name";
     private static final int VALID_RESTAURANTS_CAPACITY = 5;
