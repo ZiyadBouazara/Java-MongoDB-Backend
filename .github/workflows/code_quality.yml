@@ -20,6 +20,11 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '1.21'
+
       - name: Checkout code
         uses: actions/checkout@v2
         with:
@@ -38,4 +43,4 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: target/site/jacoco/jacoco.xml  # Path to your JaCoCo XML report
+          file: target/site/jacoco/jacoco.xml  # Chemin vers votre rapport XML JaCoCo
