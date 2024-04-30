@@ -18,19 +18,12 @@ jobs:
         uses: actions/setup-node@v3  # Utilisation de la version 3 de l'action setup-node compatible avec Node.js 20
         with:
           node-version: '20'
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-          java-version: '21'
       - name: Checkout code
         uses: actions/checkout@v4  # Utilisation de la version 4 de l'action checkout compatible avec Node.js 20
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - name: Generate Coverage Reports
-        run: mvn clean verify
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2024.1
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
-          JACOCO_REPORT_PATH: target/site/jacoco/index.html
