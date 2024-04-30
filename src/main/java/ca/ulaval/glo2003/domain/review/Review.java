@@ -34,6 +34,13 @@ public class Review {
         this.rating = rating;
         this.comment = comment;
     }
+
+    public Review(String restaurantId, double rating){
+        this.restaurantId = restaurantId;
+        this.id = UUID.randomUUID().toString();
+        this.postedDate = LocalDateTime.now();
+        this.rating = rating;
+    }
     public String getRestaurantId() {
         return restaurantId;
     }

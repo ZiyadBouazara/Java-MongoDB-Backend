@@ -1,6 +1,8 @@
 package ca.ulaval.glo2003.infrastructure.review;
 
+import ca.ulaval.glo2003.controllers.responses.ReviewResponse;
 import ca.ulaval.glo2003.domain.repositories.ReviewRepository;
+import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.review.Review;
 
 import java.util.ArrayList;
@@ -16,5 +18,16 @@ public class InMemoryReviewRepository implements ReviewRepository {
     @Override
     public void save(Review review) {
         reviews.add(review);
+    }
+
+    @Override
+    public List<Review> getAllReviews(String restaurantId) {
+        List<Review> matchingReviews = new ArrayList<>();
+            for (Review review : reviews) {
+                if (review.getRestaurantId().equals(restaurantId)) {
+                    matchingReviews.add(review);
+                }
+        }
+        return matchingReviews;
     }
 }

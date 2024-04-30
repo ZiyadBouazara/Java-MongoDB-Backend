@@ -1,6 +1,7 @@
 package ca.ulaval.glo2003.service;
 
 import ca.ulaval.glo2003.controllers.requests.ReviewRequest;
+import ca.ulaval.glo2003.controllers.responses.ReviewResponse;
 import ca.ulaval.glo2003.domain.customer.Customer;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
@@ -13,6 +14,9 @@ import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
 import ca.ulaval.glo2003.service.validators.CreateReviewValidator;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReviewService {
     CreateReviewValidator createReviewValidator;
@@ -50,6 +54,18 @@ public class ReviewService {
 
     private void validateRestaurantId(String restaurantId) throws NotFoundException {
         Restaurant optionalRestaurant = restaurantRepository.findRestaurantById(restaurantId);
+    }
+
+    public List<ReviewResponse> searchReviews(String restaurantId, double rating, String date){
+        List<Review> reviews = reviewRepository.getAllReviews(restaurantId);
+        List<ReviewResponse> searchedReviews = new ArrayList<>();
+
+
+        for (Review review : reviews){
+            if(correspondingRating(review.getRating(), rating) && correspondingDate(review.getDate(), date) && correspondingRestaurant(review.getRestaurantId(), restaurantId)){
+                searchedReviews.add(reviewAssembler.toDTO(review));
+            }
+        }
     }
 
 }
