@@ -44,7 +44,7 @@ public class CreateReviewValidator {
     }
 
     private void verifyMissing(String parameterName, Object parameterValue) throws MissingParameterException {
-        if (parameterValue == null || (parameterValue instanceof Double && Double.isNaN((Double) parameterValue))) {
+        if (parameterValue == null || parameterValue instanceof Double && Double.isNaN((Double) parameterValue)) {
             throw new MissingParameterException("Missing parameter '" + parameterName + "'");
         }
     }
