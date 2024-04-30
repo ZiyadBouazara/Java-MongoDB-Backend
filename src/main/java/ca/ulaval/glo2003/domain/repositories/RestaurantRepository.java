@@ -1,6 +1,7 @@
 package ca.ulaval.glo2003.domain.repositories;
 
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
+import ca.ulaval.glo2003.domain.review.Review;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
@@ -16,5 +17,5 @@ public interface RestaurantRepository {
 
     List<Restaurant> getAllRestaurants();
 
-    void updateReviews(Restaurant restaurant);
+    void updateReviews(Review review);
 }

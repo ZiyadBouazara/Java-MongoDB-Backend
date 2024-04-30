@@ -3,6 +3,7 @@ package ca.ulaval.glo2003.infrastructure.restaurant;
 import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.restaurant.RestaurantMongo;
+import ca.ulaval.glo2003.domain.review.Review;
 import ca.ulaval.glo2003.infrastructure.DatastoreProvider;
 import ca.ulaval.glo2003.infrastructure.assemblers.RestaurantAssembler;
 import com.mongodb.client.result.DeleteResult;
@@ -66,7 +67,24 @@ public class MongoRestaurantRepository implements RestaurantRepository {
     }
 
     @Override
-    public void updateReviews(Restaurant updatedRestaurant) {
+    public void updateReviews(Review review) {
+        Restaurant updatedRestaurant = findRestaurantById(review.getRestaurantId());
+
+        int totalReviews = updatedRestaurant.getReviewCount() + 1;
+        double currentRating = updatedRestaurant.getRating();
+
+        double updatedRating = getUpdatedRating(review, updatedRestaurant, totalReviews, currentRating);
+        updatedRating = roundToTwoDecimals(updatedRating);
+        updatedRestaurant.setRating(updatedRating);
+        updatedRestaurant.incrementReviewCount();
         saveRestaurant(updatedRestaurant);
+    }
+
+    private double getUpdatedRating(Review review, Restaurant restaurant, int totalReviews, double currentRating) {
+        return ((currentRating * restaurant.getReviewCount()) + review.getRating()) / totalReviews;
+    }
+
+    private double roundToTwoDecimals(double rating) {
+        return Math.round(rating * 100.0) / 100.0;
     }
 }
