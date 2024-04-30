@@ -18,6 +18,10 @@ jobs:
         uses: actions/setup-node@v3  # Utilisation de la version 3 de l'action setup-node compatible avec Node.js 20
         with:
           node-version: '20'
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '21'
       - name: Checkout code
         uses: actions/checkout@v4  # Utilisation de la version 4 de l'action checkout compatible avec Node.js 20
         with:
