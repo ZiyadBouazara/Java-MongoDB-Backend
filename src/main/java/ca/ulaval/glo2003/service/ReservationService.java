@@ -20,6 +20,9 @@ import ca.ulaval.glo2003.service.validators.HeaderValidator;
 import ca.ulaval.glo2003.service.validators.ReservationValidator;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,12 +56,14 @@ public class ReservationService {
             throws InvalidParameterException, MissingParameterException {
 
         reservationValidator.validateReservationRequest(reservationRequest);
+        String adjustedStartTime = adjustReservation(reservationRequest.startTime());
         Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
         reservationValidator.validateGroupSizeWithinRestaurantLimit(reservationRequest, restaurant);
+        reservationValidator.validateStartTimeInRestaurantBounds(adjustedStartTime, restaurant);
 
         Customer customer = customerAssembler.fromDTO(reservationRequest.customer());
         Reservation reservation = reservationFactory.createReservation(restaurantId, reservationRequest.date(),
-                reservationRequest.startTime(), reservationRequest.groupSize(), customer);
+                adjustedStartTime, reservationRequest.groupSize(), customer);
         reservationRepository.saveReservation(reservation);
         return reservation.getId();
     }
@@ -105,5 +110,16 @@ public class ReservationService {
     private boolean matchesSearchCriteria(Reservation reservation, String customerName, String date) {
         return ReservationHelper.isMatchingCustomerName(reservation.getCustomer().getName(), customerName)
                 && ReservationHelper.isMatchingDate(reservation.getDate(), date);
+    }
+
+    private String adjustReservation(String startTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalTime time = LocalTime.parse(startTime, formatter);
+
+        int minutes = time.getMinute();
+        int roundTo = minutes % 15 == 0 ? minutes : ((minutes / 15) + 1) * 15;
+        LocalTime roundedTime = time.withMinute(roundTo);
+
+        return roundedTime.format(formatter);
     }
 }
