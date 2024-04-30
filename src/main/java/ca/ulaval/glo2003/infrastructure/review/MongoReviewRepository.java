@@ -1,19 +1,14 @@
 package ca.ulaval.glo2003.infrastructure.review;
 
-import ca.ulaval.glo2003.controllers.responses.ReviewResponse;
 import ca.ulaval.glo2003.domain.repositories.ReviewRepository;
-import ca.ulaval.glo2003.domain.reservation.Reservation;
-import ca.ulaval.glo2003.domain.reservation.ReservationMongo;
 import ca.ulaval.glo2003.domain.review.Review;
 import ca.ulaval.glo2003.domain.review.ReviewMongo;
 import ca.ulaval.glo2003.infrastructure.DatastoreProvider;
-import ca.ulaval.glo2003.infrastructure.assemblers.ReservationAssembler;
 import ca.ulaval.glo2003.infrastructure.assemblers.ReviewAssembler;
 import dev.morphia.Datastore;
 import dev.morphia.query.Query;
 import dev.morphia.query.filters.Filters;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
 

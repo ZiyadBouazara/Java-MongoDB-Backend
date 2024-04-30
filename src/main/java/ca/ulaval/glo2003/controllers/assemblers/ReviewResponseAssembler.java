@@ -4,20 +4,19 @@ import ca.ulaval.glo2003.controllers.responses.ReviewResponse;
 import ca.ulaval.glo2003.domain.review.Review;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ReviewResponseAssembler {
 
     public ReviewResponse toDTO(Review review){
-        return new ReviewResponse(review.getRestaurantId(),
-                LocalDateTime.now().toString(),
-                review.getRating());
+        return new ReviewResponse(
+            review.getRestaurantId(),
+            formatDate(review.getPostedDate()),
+            review.getRating());
     }
 
-    public Review fromDTO(ReviewResponse reviewResponse){
-        return new Review(
-                reviewResponse.getRestaurantId(),
-                reviewResponse.getRating(),
-                LocalDateTime.now()
-        );
+    private String formatDate(LocalDateTime date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return date.format(formatter);
     }
 }

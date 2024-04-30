@@ -4,6 +4,7 @@ import ca.ulaval.glo2003.controllers.assemblers.FuzzySearchResponseAssembler;
 import ca.ulaval.glo2003.controllers.assemblers.ReservationGeneralResponseAssembler;
 import ca.ulaval.glo2003.controllers.assemblers.ReservationResponseAssembler;
 import ca.ulaval.glo2003.controllers.assemblers.RestaurantResponseAssembler;
+import ca.ulaval.glo2003.controllers.assemblers.ReviewResponseAssembler;
 import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
 import ca.ulaval.glo2003.domain.repositories.ReviewRepository;
@@ -32,6 +33,7 @@ import ca.ulaval.glo2003.service.validators.GetRestaurantValidator;
 import ca.ulaval.glo2003.service.validators.HeaderValidator;
 import ca.ulaval.glo2003.service.validators.ReservationValidator;
 import ca.ulaval.glo2003.service.validators.SearchRestaurantValidator;
+import ca.ulaval.glo2003.service.validators.SearchReviewValidator;
 import jakarta.inject.Singleton;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 
@@ -50,6 +52,7 @@ public class ApplicationBinder extends AbstractBinder {
         bind(GetRestaurantValidator.class).to(GetRestaurantValidator.class);
         bind(SearchRestaurantValidator.class).to(SearchRestaurantValidator.class);
         bind(CreateReviewValidator.class).to(CreateReviewValidator.class);
+        bind(SearchReviewValidator.class).to(SearchReviewValidator.class);
         bind(RestaurantFactory.class).to(RestaurantFactory.class);
         bind(ReservationFactory.class).to(ReservationFactory.class);
         bind(ReviewFactory.class).to(ReviewFactory.class);
@@ -61,6 +64,7 @@ public class ApplicationBinder extends AbstractBinder {
         bind(RestaurantResponseAssembler.class).to(RestaurantResponseAssembler.class);
         bind(ReservationResponseAssembler.class).to(ReservationResponseAssembler.class);
         bind(ReservationGeneralResponseAssembler.class).to(ReservationGeneralResponseAssembler.class);
+        bind(ReviewResponseAssembler.class).to(ReviewResponseAssembler.class);
     }
 
     private void choosePersistenceType() {

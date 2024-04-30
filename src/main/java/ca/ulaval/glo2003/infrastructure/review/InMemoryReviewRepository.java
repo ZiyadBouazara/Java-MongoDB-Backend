@@ -1,8 +1,6 @@
 package ca.ulaval.glo2003.infrastructure.review;
 
-import ca.ulaval.glo2003.controllers.responses.ReviewResponse;
 import ca.ulaval.glo2003.domain.repositories.ReviewRepository;
-import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.review.Review;
 
 import java.util.ArrayList;

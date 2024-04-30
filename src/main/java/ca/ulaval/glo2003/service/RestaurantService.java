@@ -40,24 +40,21 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final ReservationRepository reservationRepository;
     private final RestaurantFactory restaurantFactory;
-    private final HoursAssembler hoursAssembler;
     private final RestaurantResponseAssembler restaurantResponseAssembler;
-    private final FuzzySearchAssembler fuzzySearchAssembler;
     private final AvailabilitiesResponseAssembler availabilitiesResponseAssembler = new AvailabilitiesResponseAssembler();
     private final FuzzySearchResponseAssembler fuzzySearchResponseAssembler;
 
     @Inject
     public RestaurantService(RestaurantRepository restaurantRepository,
                              RestaurantFactory restaurantFactory,
-                             HoursAssembler hoursAssembler, RestaurantResponseAssembler restaurantResponseAssembler,
-                             FuzzySearchAssembler fuzzySearchAssembler, FuzzySearchResponseAssembler fuzzySearchResponseAssembler,
-                             ReservationRepository reservationRepository, ReservationValidator reservationValidator) {
+                             RestaurantResponseAssembler restaurantResponseAssembler,
+                             FuzzySearchResponseAssembler fuzzySearchResponseAssembler,
+                             ReservationRepository reservationRepository,
+                             ReservationValidator reservationValidator) {
         this.restaurantRepository = restaurantRepository;
         this.reservationRepository = reservationRepository;
         this.restaurantFactory = restaurantFactory;
-        this.hoursAssembler = hoursAssembler;
         this.restaurantResponseAssembler = restaurantResponseAssembler;
-        this.fuzzySearchAssembler = fuzzySearchAssembler;
         this.fuzzySearchResponseAssembler = fuzzySearchResponseAssembler;
         this.reservationValidator = reservationValidator;
     }

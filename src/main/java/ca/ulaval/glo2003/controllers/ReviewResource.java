@@ -43,10 +43,9 @@ public class ReviewResource {
     @GET
     @Path("restaurants/{id}/reviews")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ReviewResponse> searchReviews(@PathParam("id") String restaurantId,
-                                              @QueryParam("rating") Double rating,
-                                              @QueryParam("date") String date) {
+    public List<ReviewResponse> searchReview(@PathParam("id") String restaurantId, @QueryParam("rating") Double rating, @QueryParam("date") String date)
+        throws InvalidParameterException {
 
-        return reviewService.getReviews(restaurantId, rating, date);
+        return reviewService.getSearchReviews(restaurantId, rating, date);
     }
 }
