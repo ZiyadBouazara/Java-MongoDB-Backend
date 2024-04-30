@@ -6,7 +6,6 @@ import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
 import ca.ulaval.glo2003.domain.repositories.ReviewRepository;
-import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.review.Review;
 import ca.ulaval.glo2003.domain.review.ReviewFactory;
 import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
