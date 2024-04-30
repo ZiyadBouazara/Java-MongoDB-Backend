@@ -32,7 +32,7 @@ public class CreateReviewValidator {
 
     public void verifyMissingParameters(ReviewRequest reviewRequest) throws MissingParameterException {
         verifyMissing("date", reviewRequest.date());
-        verifyMissing("startTime", reviewRequest.rating());
+        verifyMissing("rating", reviewRequest.rating());
         verifyMissingCustomer(reviewRequest);
     }
 
@@ -44,7 +44,7 @@ public class CreateReviewValidator {
     }
 
     private void verifyMissing(String parameterName, Object parameterValue) throws MissingParameterException {
-        if (parameterValue == null) {
+        if (parameterValue == null || (parameterValue instanceof Double && Double.isNaN((Double) parameterValue))) {
             throw new MissingParameterException("Missing parameter '" + parameterName + "'");
         }
     }
