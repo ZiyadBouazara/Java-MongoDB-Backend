@@ -3,10 +3,8 @@ package ca.ulaval.glo2003.infrastructure.assemblers;
 import ca.ulaval.glo2003.domain.review.Review;
 import ca.ulaval.glo2003.domain.review.ReviewMongo;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class ReviewAssembler {
     public static ReviewMongo toReviewMongo(Review review) {

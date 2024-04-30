@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 
 public class ReviewResponseAssembler {
 
-    public ReviewResponse toDTO(Review review){
+    public ReviewResponse toDTO(Review review) {
         return new ReviewResponse(
             review.getRestaurantId(),
             formatDate(review.getPostedDate()),

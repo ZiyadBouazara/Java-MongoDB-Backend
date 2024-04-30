@@ -21,10 +21,10 @@ public class InMemoryReviewRepository implements ReviewRepository {
     @Override
     public List<Review> getAllReviews(String restaurantId) {
         List<Review> matchingReviews = new ArrayList<>();
-            for (Review review : reviews) {
-                if (review.getRestaurantId().equals(restaurantId)) {
-                    matchingReviews.add(review);
-                }
+        for (Review review : reviews) {
+            if (review.getRestaurantId().equals(restaurantId)) {
+                matchingReviews.add(review);
+            }
         }
         return matchingReviews;
     }

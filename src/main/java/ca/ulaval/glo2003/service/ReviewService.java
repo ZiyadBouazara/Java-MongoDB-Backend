@@ -69,7 +69,7 @@ public class ReviewService {
     public List<ReviewResponse> getSearchReviews(String restaurantId, Double rating, String date) throws InvalidParameterException {
         searchValidator.validate(rating, date);
 
-        restaurantRepository.findRestaurantById(restaurantId);
+        validateRestaurantId(restaurantId);
 
         List<Review> reviews = reviewRepository.getAllReviews(restaurantId);
         List<ReviewResponse> searchedReviews = new ArrayList<>();
