@@ -21,6 +21,8 @@ class RestaurantAssemblerTest {
     private static final String OPEN_HOUR = "10:00";
     private static final String CLOSE_HOUR = "20:00";
     private static final int DURATION = 60;
+    private static final double RATING = 4.5;
+    private static final int REVIEW_COUNTER = 3;
 
     @Test
     public void givenRestaurant_whenToRestaurantMongo_shouldMapAllFields() {
@@ -63,10 +65,10 @@ class RestaurantAssemblerTest {
 
     private Restaurant createRestaurant() {
         return new Restaurant(RESTAURANT_ID, OWNER_ID, NAME, CAPACITY, new Hours(OPEN_HOUR, CLOSE_HOUR),
-            new ReservationConfiguration(DURATION));
+            new ReservationConfiguration(DURATION), RATING, REVIEW_COUNTER);
     }
 
     private RestaurantMongo createRestaurantMongo() {
-        return new RestaurantMongo(RESTAURANT_ID, OWNER_ID, NAME, CAPACITY, OPEN_HOUR, CLOSE_HOUR, DURATION);
+        return new RestaurantMongo(RESTAURANT_ID, OWNER_ID, NAME, CAPACITY, OPEN_HOUR, CLOSE_HOUR, DURATION, RATING, REVIEW_COUNTER);
     }
 }

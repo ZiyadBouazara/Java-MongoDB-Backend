@@ -63,7 +63,9 @@ public class RestaurantResourceIntegrationTest {
             validRestaurant.getName(),
             validRestaurant.getCapacity(),
             hoursAssembler.toDTO(validRestaurant.getHours()),
-            new ReservationConfigurationDTO(60));
+            new ReservationConfigurationDTO(60),
+                validRestaurant.getRating(),
+                validRestaurant.getReviewCount());
 
         restaurantRequest = new RestaurantRequest(
             validRestaurant.getName(),
