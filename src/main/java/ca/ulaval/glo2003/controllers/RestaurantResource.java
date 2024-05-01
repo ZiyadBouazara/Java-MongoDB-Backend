@@ -3,6 +3,7 @@ package ca.ulaval.glo2003.controllers;
 import ca.ulaval.glo2003.controllers.requests.FuzzySearchRequest;
 import ca.ulaval.glo2003.controllers.responses.AvailabilitiesResponse;
 import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
+import ca.ulaval.glo2003.controllers.responses.RestaurantResponseWithReviews;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
@@ -43,6 +44,13 @@ public class RestaurantResource {
         return restaurantService.getRestaurantsForOwnerId(ownerId);
     }
 
+    @GET
+    @Path("v2/restaurants")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<RestaurantResponseWithReviews> getRestaurantsWithReviews(@HeaderParam("Owner") String ownerId) throws MissingParameterException {
+        return restaurantService.getRestaurantsWithReviewsForOwnerId(ownerId);
+    }
+
     @POST
     @Path("restaurants")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -62,6 +70,14 @@ public class RestaurantResource {
     public RestaurantResponse getRestaurant(@HeaderParam("Owner") String ownerId, @PathParam("id") String restaurantId)
         throws MissingParameterException, NotFoundException {
         return restaurantService.getRestaurant(ownerId, restaurantId);
+    }
+
+    @GET
+    @Path("v2/restaurants/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestaurantResponseWithReviews getRestaurantWithReviews(@HeaderParam("Owner") String ownerId, @PathParam("id") String restaurantId)
+            throws MissingParameterException, NotFoundException {
+        return restaurantService.getRestaurantWithReviews(ownerId, restaurantId);
     }
 
     @POST
