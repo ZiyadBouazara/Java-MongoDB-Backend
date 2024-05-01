@@ -47,7 +47,8 @@ public class RestaurantResource {
     @GET
     @Path("v2/restaurants")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<RestaurantResponseWithReviews> getRestaurantsWithReviews(@HeaderParam("Owner") String ownerId) throws MissingParameterException {
+    public List<RestaurantResponseWithReviews> getRestaurantsWithReviews(@HeaderParam("Owner") String ownerId)
+            throws MissingParameterException {
         return restaurantService.getRestaurantsWithReviewsForOwnerId(ownerId);
     }
 
@@ -75,7 +76,8 @@ public class RestaurantResource {
     @GET
     @Path("v2/restaurants/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public RestaurantResponseWithReviews getRestaurantWithReviews(@HeaderParam("Owner") String ownerId, @PathParam("id") String restaurantId)
+    public RestaurantResponseWithReviews getRestaurantWithReviews(
+            @HeaderParam("Owner") String ownerId, @PathParam("id") String restaurantId)
             throws MissingParameterException, NotFoundException {
         return restaurantService.getRestaurantWithReviews(ownerId, restaurantId);
     }

@@ -104,14 +104,16 @@ public class RestaurantService {
         return restaurantResponseAssembler.toDTO(restaurant);
     }
 
-    public RestaurantResponseWithReviews getRestaurantWithReviews(String ownerId, String restaurantId) throws MissingParameterException {
+    public RestaurantResponseWithReviews getRestaurantWithReviews(String ownerId, String restaurantId)
+            throws MissingParameterException {
         headerValidator.verifyMissingHeader(ownerId);
         Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
         getRestaurantValidator.validateRestaurantOwnership(ownerId, restaurant.getOwnerId());
         return restaurantResponseAssembler.toDTOv2(restaurant);
     }
 
-    public List<FuzzySearchResponse> getAllRestaurantsForSearch(FuzzySearchRequest search) throws InvalidParameterException {
+    public List<FuzzySearchResponse> getAllRestaurantsForSearch(FuzzySearchRequest search)
+            throws InvalidParameterException {
         restaurantSearchValidator.verifyFuzzySearchValidParameters(search);
 
         List<FuzzySearchResponse> searchedRestaurants = new ArrayList<>();
