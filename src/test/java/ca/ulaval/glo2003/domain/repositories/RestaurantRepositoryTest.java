@@ -1,6 +1,8 @@
 package ca.ulaval.glo2003.domain.repositories;
 
+import ca.ulaval.glo2003.domain.customer.Customer;
 import ca.ulaval.glo2003.domain.restaurant.Restaurant;
+import ca.ulaval.glo2003.domain.review.Review;
 import ca.ulaval.glo2003.domain.utils.Hours;
 import jakarta.ws.rs.NotFoundException;
 import org.assertj.core.api.Assertions;
@@ -15,6 +17,15 @@ public abstract class RestaurantRepositoryTest {
     private static final int CAPACITY = 5;
     private static final Hours HOURS = new Hours("11:00:00", "19:30:00");
     private static final String NON_EXISTENT_RESTAURANT_ID = "id";
+    private static final Double RATING1 = 4.0;
+    private static final Double RATING2 = 5.0;
+    private static final Double EXPECTED_RATING = 4.5;
+    private static final String COMMENT = "Great";
+    private static final String DATE = "2024-01-01";
+    private static final String CUSTOMER_NAME = "John Deer";
+    private static final String CUSTOMER_EMAIL = "john.deer@gmail.com";
+    private static final String CUSTOMER_PHONE_NUMBER = "1234567890";
+    private static final Customer VALID_CUSTOMER = new Customer(CUSTOMER_NAME, CUSTOMER_EMAIL, CUSTOMER_PHONE_NUMBER);
 
     protected abstract RestaurantRepository createRepository();
 
@@ -95,9 +106,59 @@ public abstract class RestaurantRepositoryTest {
             .isInstanceOf(NotFoundException.class);
     }
 
+    @Test
+    public void givenRestaurant_whenAddingReview_shouldUpdateRating() {
+        Restaurant restaurant = createAndSaveRestaurant();
+        Review review = new Review(restaurant.getId(), DATE, VALID_CUSTOMER, RATING1, COMMENT);
+
+        restaurantRepository.updateReviews(review);
+
+        Restaurant updatedRestaurant = restaurantRepository.findRestaurantById(restaurant.getId());
+        Assertions.assertThat(updatedRestaurant.getRating()).isEqualTo(RATING1);
+    }
+
+    @Test
+    public void givenRestaurant_whenAddingReview_shouldIncrementReviewCount() {
+        Restaurant restaurant = createAndSaveRestaurant();
+        Review review = new Review(restaurant.getId(), DATE, VALID_CUSTOMER, RATING1, COMMENT);
+
+        restaurantRepository.updateReviews(review);
+
+        Restaurant updatedRestaurant = restaurantRepository.findRestaurantById(restaurant.getId());
+        Assertions.assertThat(updatedRestaurant.getReviewCount()).isEqualTo(1);
+    }
+
+    @Test
+    public void givenRestaurantWithExistingReviews_whenAddingReview_shouldUpdateRating() {
+        Restaurant restaurant = createAndSaveRestaurantWithRating(RATING1);
+        Review newReview = new Review(restaurant.getId(), DATE, VALID_CUSTOMER, RATING2, COMMENT);
+
+        restaurantRepository.updateReviews(newReview);
+
+        Restaurant updatedRestaurant = restaurantRepository.findRestaurantById(restaurant.getId());
+        Assertions.assertThat(updatedRestaurant.getRating()).isEqualTo(EXPECTED_RATING);
+    }
+
+    @Test
+    public void givenNonExistentRestaurant_whenUpdatingReviews_shouldThrowNotFoundException() {
+        Review review = new Review(NON_EXISTENT_RESTAURANT_ID, DATE, VALID_CUSTOMER, RATING2, COMMENT);
+
+        Assertions.assertThatThrownBy(() -> restaurantRepository.updateReviews(review))
+            .isInstanceOf(NotFoundException.class);
+    }
+
     private Restaurant createAndSaveRestaurant() {
         Restaurant restaurant = new Restaurant(OWNER_ID, NAME, CAPACITY, HOURS);
         restaurantRepository.saveRestaurant(restaurant);
+        return restaurant;
+    }
+
+    private Restaurant createAndSaveRestaurantWithRating(Double rating) {
+        Restaurant restaurant = new Restaurant(OWNER_ID, NAME, CAPACITY, HOURS);
+        restaurant.setRating(rating);
+        restaurant.incrementReviewCount();
+        restaurantRepository.saveRestaurant(restaurant);
+
         return restaurant;
     }
 }

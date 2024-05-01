@@ -128,9 +128,8 @@ public class RestaurantService {
         return fuzzySearchResponseAssembler.toDTO(restaurant);
     }
 
-    public List<AvailabilitiesResponse> getAvailabilitiesForRestaurant(String ownerId, String restaurantId, String date)
+    public List<AvailabilitiesResponse> getAvailabilitiesForRestaurant(String restaurantId, String date)
             throws MissingParameterException, InvalidParameterException {
-        headerValidator.verifyMissingHeader(ownerId);
         reservationValidator.verifySearchAvailabilities(date);
 
         Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);

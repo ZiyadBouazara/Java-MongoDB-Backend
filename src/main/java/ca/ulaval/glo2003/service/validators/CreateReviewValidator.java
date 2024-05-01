@@ -32,7 +32,7 @@ public class CreateReviewValidator {
 
     public void verifyMissingParameters(ReviewRequest reviewRequest) throws MissingParameterException {
         verifyMissing("date", reviewRequest.date());
-        verifyMissing("startTime", reviewRequest.rating());
+        verifyMissing("rating", reviewRequest.rating());
         verifyMissingCustomer(reviewRequest);
     }
 
@@ -44,7 +44,7 @@ public class CreateReviewValidator {
     }
 
     private void verifyMissing(String parameterName, Object parameterValue) throws MissingParameterException {
-        if (parameterValue == null) {
+        if (parameterValue == null || parameterValue instanceof Double && Double.isNaN((Double) parameterValue)) {
             throw new MissingParameterException("Missing parameter '" + parameterName + "'");
         }
     }
@@ -65,11 +65,12 @@ public class CreateReviewValidator {
         }
     }
 
-    public void verifyValidRating(double rating) throws InvalidParameterException {
-        if (rating < 0.0 || rating > 5.0) {
-            throw new InvalidParameterException("Invalid parameter 'rating', it must be between 0 and 5");
+    public void verifyValidRating(Double rating) throws InvalidParameterException {
+        if (rating < 1 || rating > 5) {
+            throw new InvalidParameterException("Invalid parameter 'rating', it must be a between 1 and 5 included");
         }
     }
+
     public void verifyValidCustomer(CustomerDTO customer) throws InvalidParameterException {
         if (!isValidEmail(customer.email())) {
             throw new InvalidParameterException("Invalid parameter 'customer: email', it must follow the following format: x@y.z");

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class Review {
 
-    private final LocalDateTime postedDate;
+    private LocalDateTime postedDate;
     private String restaurantId;
     private String id;
     private String date;
@@ -15,7 +15,7 @@ public class Review {
     private double rating;
     private String comment;
 
-    public Review(String restaurantId, String date, Customer customer, double rating, String comment) {
+    public Review(String restaurantId, String date, Customer customer, Double rating, String comment) {
         this.restaurantId = restaurantId;
         this.id = UUID.randomUUID().toString();
         this.date = date;
@@ -51,7 +51,7 @@ public class Review {
         return customer;
     }
 
-    public double getRating() {
+    public Double getRating() {
         return rating;
     }
 

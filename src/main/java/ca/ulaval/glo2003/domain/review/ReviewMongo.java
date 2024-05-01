@@ -12,7 +12,7 @@ public class ReviewMongo {
     private String restaurantId;
     private String date;
     private LocalDateTime postedDate;
-    private double rating;
+    private Double rating;
     private String comment;
     private String customerName;
     private String customerEmail;
@@ -22,7 +22,7 @@ public class ReviewMongo {
     }
 
     public ReviewMongo(
-            String id, String restaurantId, String date, LocalDateTime postedDate, double rating,
+            String id, String restaurantId, String date, LocalDateTime postedDate, Double rating,
             String comment, String customerName, String customerEmail, String customerPhone) {
         this.id = id;
         this.restaurantId = restaurantId;

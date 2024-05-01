@@ -1,4 +1,5 @@
-name: Qodana
+name: Qodana with JaCoCo Coverage
+
 on:
   workflow_dispatch:
   pull_request:
@@ -15,18 +16,32 @@ jobs:
       checks: write
     steps:
       - name: Set up Node.js
-        uses: actions/setup-node@v3  # Utilisation de la version 3 de l'action setup-node compatible avec Node.js 20
+        uses: actions/setup-node@v3
         with:
           node-version: '20'
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '21'
+          distribution: 'adopt'
+
       - name: Checkout code
-        uses: actions/checkout@v4  # Utilisation de la version 4 de l'action checkout compatible avec Node.js 20
+        uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - name: Generate Coverage Reports
-        run: mvn clean verify
-      - name: 'Qodana Scan'
+
+      - name: Qodana Scan
         uses: JetBrains/qodana-action@v2024.1
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
-          JACOCO_REPORT_PATH: target/site/jacoco/index.html
+
+      - name: Generate JaCoCo Coverage Report
+        run: mvn clean test jacoco:report
+
+      - name: Upload JaCoCo Coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: target/site/jacoco/jacoco.xml  # Chemin vers votre rapport XML JaCoCo

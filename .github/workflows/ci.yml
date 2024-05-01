@@ -41,3 +41,20 @@ jobs:
 
       - name: Verify
         run: mvn verify
+
+  security:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    continue-on-error: true
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/maven@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

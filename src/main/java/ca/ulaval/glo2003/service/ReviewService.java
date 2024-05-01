@@ -8,7 +8,6 @@ import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
 import ca.ulaval.glo2003.domain.repositories.ReviewRepository;
-import ca.ulaval.glo2003.domain.restaurant.Restaurant;
 import ca.ulaval.glo2003.domain.review.Review;
 import ca.ulaval.glo2003.domain.review.ReviewFactory;
 import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
@@ -31,7 +30,6 @@ public class ReviewService {
     private final RestaurantRepository restaurantRepository;
     private final SearchReviewValidator searchValidator;
 
-
     @Inject
     public ReviewService(ReviewResponseAssembler reviewResponseAssembler,
                          CreateReviewValidator createReviewValidator,
@@ -50,26 +48,28 @@ public class ReviewService {
     }
 
     public String createReview(String restaurantId, ReviewRequest reviewRequest)
-            throws InvalidParameterException, MissingParameterException {
+            throws InvalidParameterException, MissingParameterException, NotFoundException {
 
         createReviewValidator.validateReviewRequest(reviewRequest);
-        validateRestaurantId(restaurantId);
 
         Customer customer = customerAssembler.fromDTO(reviewRequest.customer());
+        Double roundedRating = roundToTwoDecimals(reviewRequest.rating());
         Review review = reviewFactory.createReview(
-                restaurantId, reviewRequest.date(), reviewRequest.rating(), reviewRequest.comment(), customer);
+                restaurantId, reviewRequest.date(), roundedRating, reviewRequest.comment(), customer);
+
+        restaurantRepository.updateReviews(review);
         reviewRepository.save(review);
         return review.getId();
     }
 
-    private void validateRestaurantId(String restaurantId) throws NotFoundException {
-        Restaurant optionalRestaurant = restaurantRepository.findRestaurantById(restaurantId);
+    private Double roundToTwoDecimals(Double rating) {
+        return Math.round(rating * 100.0) / 100.0;
     }
 
     public List<ReviewResponse> getSearchReviews(String restaurantId, Double rating, String date) throws InvalidParameterException {
         searchValidator.validate(rating, date);
 
-        validateRestaurantId(restaurantId);
+        restaurantRepository.findRestaurantById(restaurantId);
 
         List<Review> reviews = reviewRepository.getAllReviews(restaurantId);
         List<ReviewResponse> searchedReviews = new ArrayList<>();
