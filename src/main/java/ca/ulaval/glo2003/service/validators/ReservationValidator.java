@@ -7,6 +7,7 @@ import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
 import ca.ulaval.glo2003.domain.exceptions.MissingParameterException;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,6 +37,21 @@ public class ReservationValidator {
             throw new InvalidParameterException("The reservation groupSize cannot exceed the restaurant's capacity");
         }
     }
+
+    public void validateStartTimeInRestaurantBounds(String adjustedStartTime, Restaurant restaurant)
+            throws InvalidParameterException {
+        LocalTime openTime = LocalTime.parse(restaurant.getHours().getOpen());
+        LocalTime closeTime = LocalTime.parse(restaurant.getHours().getClose());
+        LocalTime startTime = LocalTime.parse(adjustedStartTime);
+        LocalTime endTime = startTime.plusMinutes(restaurant.getRestaurantConfiguration().getDuration());
+        if (startTime.isBefore(openTime)) {
+            throw new InvalidParameterException("The reservation startTime cannot be before the restaurant's openTime");
+        }
+        if (endTime.isAfter(closeTime)) {
+            throw new InvalidParameterException("The reservation endTime cannot be after the restaurant's endTime");
+        }
+    }
+
     public void validateReservationRequest(ReservationRequest reservationRequest)
             throws InvalidParameterException, MissingParameterException {
         verifyMissingParameters(reservationRequest);
@@ -90,6 +106,9 @@ public class ReservationValidator {
     }
 
     private void verifyValidCustomer(CustomerDTO customer) throws InvalidParameterException {
+        if (customer.name().isEmpty()) {
+            throw new InvalidParameterException("Invalid parameter 'customer': name, it must not be empty");
+        }
         if (!isValidEmail(customer.email())) {
             throw new InvalidParameterException("Invalid parameter 'customer: email', it must follow the following format: x@y.z");
         }
