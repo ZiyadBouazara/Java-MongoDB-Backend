@@ -35,7 +35,7 @@
 
 ## Arbre de Commits
 
-![Local Image](../images/tp3/commit-tree.png)
+![Local Image](../images/tp4/arbre.png)
 
 # 1.Outils d'analyses de code (SCA)
 
