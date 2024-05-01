@@ -15,6 +15,7 @@ import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.reservation.ReservationFactory;
 import ca.ulaval.glo2003.service.helpers.ReservationHelper;
+import ca.ulaval.glo2003.service.validators.GetRestaurantValidator;
 import ca.ulaval.glo2003.service.validators.HeaderValidator;
 import ca.ulaval.glo2003.service.validators.ReservationValidator;
 import jakarta.inject.Inject;
@@ -34,6 +35,7 @@ public class ReservationService {
     private final ReservationGeneralResponseAssembler reservationGeneralResponseAssembler;
     private final ReservationValidator reservationValidator;
     private final HeaderValidator headerValidator = new HeaderValidator();
+    private final GetRestaurantValidator getRestaurantValidator = new GetRestaurantValidator();
 
     @Inject
     public ReservationService(RestaurantRepository restaurantRepository,
