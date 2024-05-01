@@ -1,50 +1,76 @@
-# Projet - Restalo
+# Restalo
 
-Le meilleur logiciel de réservation en restauration!
+Restalo is an API for managing restaurant reservations. It provides functionalities for creating and managing
+reservations, searching for restaurants and reservations, and reviewing restaurants.
 
-## Requis
+[![Java](https://img.shields.io/badge/java-21-blue)](https://www.oracle.com/java/technologies/javase-jdk21-downloads.html)
+[![junit](https://img.shields.io/badge/junit-4.13.2-blue)](https://junit.org/junit4/)
+[![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven/apache-maven.svg)](https://maven.apache.org)
+[![Known Vulnerabilities](https://snyk.io/test/github/samiusss/restalo/badge.svg)](https://snyk.io/test/github/samiusss/restalo)
+[![GitHub Actions](https://github.com/samiusss/restalo/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/samiusss/restalo/actions)
+[![Checkstyle](https://img.shields.io/badge/checkstyle-8.45-blue)](https://checkstyle.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing
+purposes.
+
+### Prerequisites
 
 - Java 21
 - Maven 3.x
 
-## Commandes
+### Installation
 
-### Compilation
+Clone the repository:
 
-```
-mvn compile
-```
-
-### Exécution
-
-```
-mvn exec:java
+```bash
+git clone https://github.com/username/restalo.git
+cd restalo
 ```
 
-### Run Docker Image
+Build the project:
 
+```bash
+mvn clean install
 ```
+
+Run the project:
+
+```bash
+mvn spring-boot:run
+```
+
+Docker build image
+
+```bash
+docker build -t restalo .
+```
+
+Docker run image
+
+```bash
 docker compose up -d
 ```
 
-### Stop Docker Image
+Docker stop image
 
-```
+```bash
 docker compose down -v
 ```
 
-### Choose persistence
-    
-```
-In SystemProperty, choose the persistence with -Dpersistence=... (mongo or inmemory)
-```
+## Open Source files
 
-### For conecting to the database
+For more information about the project and how to contribute, please refer to the following files:
 
-```
-Create a mongo username and password though the Edit Configuration window, 
-and connect with the URL structure provided.
-```
+- [CONTRIBUTING](CONTRIBUTING.md)
+- [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md)
+- [LICENSE](LICENSE)
 
+## License
 
+This project is lisenced under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## Acknowledgments
+
+Thanks to all contributors who participated in this project and helped make it better.
