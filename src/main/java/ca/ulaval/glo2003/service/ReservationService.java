@@ -117,8 +117,18 @@ public class ReservationService {
         LocalTime time = LocalTime.parse(startTime, formatter);
 
         int minutes = time.getMinute();
-        int roundTo = minutes % 15 == 0 ? minutes : ((minutes / 15) + 1) * 15;
-        LocalTime roundedTime = time.withMinute(roundTo);
+        int roundTo = minutes > 0 ? ((minutes / 15) + 1) * 15 : 0;  // Handle 0 minutes
+
+        // Adjust the hour and reset minutes if rounded minutes equals 60
+        int adjustedHour = time.getHour();
+        int adjustedMinutes = roundTo;
+        if (adjustedMinutes == 60) {
+            adjustedHour += 1;  // Increment hour
+            adjustedMinutes = 0;  // Reset minutes to 0
+        }
+
+        // Create a LocalTime object with the adjusted hour and minutes
+        LocalTime roundedTime = LocalTime.of(adjustedHour, adjustedMinutes);
 
         return roundedTime.format(formatter);
     }
