@@ -91,6 +91,7 @@ public class ReservationService {
 
         for (Reservation reservation : reservations) {
             Restaurant restaurant = findAndValidateRestaurant(reservation);
+            getRestaurantValidator.validateRestaurantOwnership(ownerId, restaurant.getOwnerId());
             if (matchesSearchCriteria(reservation, customerName, date)) {
                 searchedReservations.add(reservationGeneralResponseAssembler
                         .toDTO(reservation, restaurant));
