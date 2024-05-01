@@ -110,35 +110,32 @@ Avec Snyk, chaque commit est examiné, chaque branche est protégée. Nous pouvo
 
 ## Snyk's web application interface. 
 
-<img width="1440" alt="Screenshot 2024-04-20 at 9 34 46 PM" src="https://github.com/glo2003-h24-eq28/restalo-h24-eq28/assets/96509783/0326fb82-8e4f-4d54-b676-9dc5aad01c5f">
+![Local Image](../images/tp4/img1.png)
 
 ## Snyk est en mesure de vérifier nos dépendances à travers :
 ### - Le pom.xml:
 
-<img width="1440" alt="Screenshot 2024-04-20 at 9 37 37 PM" src="https://github.com/glo2003-h24-eq28/restalo-h24-eq28/assets/96509783/0a3d498b-b443-46a2-ad94-14f3bc828350">
-<img width="1440" alt="Screenshot 2024-04-20 at 9 37 52 PM" src="https://github.com/glo2003-h24-eq28/restalo-h24-eq28/assets/96509783/55091d66-b9bc-42b9-acf7-5b501918211c">
+![Local Image](../images/tp4/img2.png)
+![Local Image](../images/tp4/img3.png)
 
 ### - Notre image Docker par le biais du DockerFile :
 
-<img width="1440" alt="Screenshot 2024-04-20 at 9 35 00 PM" src="https://github.com/glo2003-h24-eq28/restalo-h24-eq28/assets/96509783/b48bec45-b712-431d-ab55-16eb030b1abb">
-<img width="1440" alt="Screenshot 2024-04-20 at 9 36 25 PM" src="https://github.com/glo2003-h24-eq28/restalo-h24-eq28/assets/96509783/644302ca-367f-476e-9ca0-eeebf5ba543c">
-<img width="1440" alt="Screenshot 2024-04-20 at 9 36 39 PM" src="https://github.com/glo2003-h24-eq28/restalo-h24-eq28/assets/96509783/0a50f3aa-c071-4ca7-b8f8-9308ef463009">
+![Local Image](../images/tp4/img4.png)
+![Local Image](../images/tp4/img5.png)
+![Local Image](../images/tp4/img6.png)
 
 ### - Une analyse de code :
-<img width="1440" alt="Screenshot 2024-04-20 at 9 39 40 PM" src="https://github.com/glo2003-h24-eq28/restalo-h24-eq28/assets/96509783/9a08bf3f-1007-4240-b700-f83843898446">
+![Local Image](../images/tp4/img7.png)
 
 ## Additionnellement, Snyk génère de manière autonome des Merges Requests suggérant des modifications aux dépendances. 
-<img width="1440" alt="Screenshot 2024-04-20 at 9 40 25 PM" src="https://github.com/glo2003-h24-eq28/restalo-h24-eq28/assets/96509783/42340736-07bc-4185-880c-14b558c1667d">
+![Local Image](../images/tp4/img8.png)
 
 ## CLI integration
 ### Nous avons aussi intégré Snyk dans nos pipelines, avec Snyk CLI, afin qu'il soit en mesure de retourner du feedback concernant les vulnérabilités lors du CI.
-[
-<img width="1920" alt="Screenshot 2024-04-30 at 1 55 07 PM" src="https://github.com/glo2003-h24-eq28/restalo-h24-eq28/assets/96509783/a4042dff-107f-492d-aedb-2e79608a9a8c">
-](url)
+![Local Image](../images/tp4/img9.png)
 
 ### Voici le lien vers lequel le CLI nous redirige afin de voir plus de détails concernant les vulnerabilités avec son usage dans le pipeline.
-
-<img width="1920" alt="Screenshot 2024-04-30 at 1 54 42 PM" src="https://github.com/glo2003-h24-eq28/restalo-h24-eq28/assets/96509783/bb3dedf3-2495-4423-a0ae-9df90961b68a">
+![Local Image](../images/tp4/img10.png)
 
 # Vers des pratiques plus sécures
 
