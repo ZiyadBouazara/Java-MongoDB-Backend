@@ -1,6 +1,7 @@
 package ca.ulaval.glo2003.service;
 
 import ca.ulaval.glo2003.controllers.api.fixture.ReviewRequestFixture;
+import ca.ulaval.glo2003.controllers.assemblers.ReviewResponseAssembler;
 import ca.ulaval.glo2003.controllers.requests.ReviewRequest;
 import ca.ulaval.glo2003.domain.customer.Customer;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
@@ -13,6 +14,7 @@ import ca.ulaval.glo2003.domain.review.ReviewFactory;
 import ca.ulaval.glo2003.domain.utils.Hours;
 import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
 import ca.ulaval.glo2003.service.validators.CreateReviewValidator;
+import ca.ulaval.glo2003.service.validators.SearchReviewValidator;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,17 +55,22 @@ class ReviewServiceTest {
     private Restaurant restaurant;
     @InjectMocks
     private ReviewService reviewService;
+    private ReviewResponseAssembler reviewResponseAssembler;
+    private SearchReviewValidator searchValidator;
 
     @BeforeEach
     public void setUp() {
         createReviewValidator = new CreateReviewValidator();
         MockitoAnnotations.openMocks(this);
         reviewService = new ReviewService(
-                createReviewValidator,
-                reviewFactory,
-                customerAssembler,
-                reviewRepository,
-                restaurantRepository);
+            reviewResponseAssembler,
+            createReviewValidator,
+            reviewFactory,
+            customerAssembler,
+            reviewRepository,
+            restaurantRepository,
+            searchValidator
+);
     }
 
     @Test
