@@ -7,6 +7,7 @@ import ca.ulaval.glo2003.controllers.requests.FuzzySearchRequest;
 import ca.ulaval.glo2003.controllers.requests.RestaurantRequest;
 import ca.ulaval.glo2003.controllers.responses.AvailabilitiesResponse;
 import ca.ulaval.glo2003.controllers.responses.FuzzySearchResponse;
+import ca.ulaval.glo2003.controllers.responses.RestaurantResponseWithReviews;
 import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 import ca.ulaval.glo2003.domain.reservation.Reservation;
 import ca.ulaval.glo2003.domain.utils.Availabilities;
@@ -89,6 +90,13 @@ public class RestaurantService {
         return ownerRestaurants.stream().map(restaurantResponseAssembler::toDTO).collect(Collectors.toList());
     }
 
+    public List<RestaurantResponseWithReviews> getRestaurantsWithReviewsForOwnerId(String ownerId) throws MissingParameterException {
+        headerValidator.verifyMissingHeader(ownerId);
+
+        List<Restaurant> ownerRestaurants = restaurantRepository.findRestaurantsByOwnerId(ownerId);
+        return ownerRestaurants.stream().map(restaurantResponseAssembler::toDTOv2).collect(Collectors.toList());
+    }
+
     public RestaurantResponse getRestaurant(String ownerId, String restaurantId) throws MissingParameterException {
         headerValidator.verifyMissingHeader(ownerId);
         Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
@@ -96,7 +104,16 @@ public class RestaurantService {
         return restaurantResponseAssembler.toDTO(restaurant);
     }
 
-    public List<FuzzySearchResponse> getAllRestaurantsForSearch(FuzzySearchRequest search) throws InvalidParameterException {
+    public RestaurantResponseWithReviews getRestaurantWithReviews(String ownerId, String restaurantId)
+            throws MissingParameterException {
+        headerValidator.verifyMissingHeader(ownerId);
+        Restaurant restaurant = restaurantRepository.findRestaurantById(restaurantId);
+        getRestaurantValidator.validateRestaurantOwnership(ownerId, restaurant.getOwnerId());
+        return restaurantResponseAssembler.toDTOv2(restaurant);
+    }
+
+    public List<FuzzySearchResponse> getAllRestaurantsForSearch(FuzzySearchRequest search)
+            throws InvalidParameterException {
         restaurantSearchValidator.verifyFuzzySearchValidParameters(search);
 
         List<FuzzySearchResponse> searchedRestaurants = new ArrayList<>();
