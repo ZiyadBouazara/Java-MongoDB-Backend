@@ -12,7 +12,6 @@ import ca.ulaval.glo2003.domain.review.Review;
 import ca.ulaval.glo2003.domain.review.ReviewFactory;
 import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
 import ca.ulaval.glo2003.service.validators.CreateReviewValidator;
-import ca.ulaval.glo2003.service.validators.SearchReviewValidator;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 
@@ -28,7 +27,6 @@ public class ReviewService {
     private final CustomerAssembler customerAssembler;
     private final ReviewRepository reviewRepository;
     private final RestaurantRepository restaurantRepository;
-    private final SearchReviewValidator searchValidator;
 
     @Inject
     public ReviewService(ReviewResponseAssembler reviewResponseAssembler,
@@ -36,15 +34,13 @@ public class ReviewService {
                          ReviewFactory reviewFactory,
                          CustomerAssembler customerAssembler,
                          ReviewRepository reviewRepository,
-                         RestaurantRepository restaurantRepository,
-                         SearchReviewValidator searchValidator) {
+                         RestaurantRepository restaurantRepository) {
         this.reviewResponseAssembler = reviewResponseAssembler;
         this.reviewFactory = reviewFactory;
         this.createReviewValidator = createReviewValidator;
         this.customerAssembler = customerAssembler;
         this.reviewRepository = reviewRepository;
         this.restaurantRepository = restaurantRepository;
-        this.searchValidator = searchValidator;
     }
 
     public String createReview(String restaurantId, ReviewRequest reviewRequest)
@@ -67,7 +63,8 @@ public class ReviewService {
     }
 
     public List<ReviewResponse> getSearchReviews(String restaurantId, Double rating, String date) throws InvalidParameterException {
-        searchValidator.validate(rating, date);
+        createReviewValidator.verifyValidDate(date);
+        createReviewValidator.verifyValidRating(rating);
 
         restaurantRepository.findRestaurantById(restaurantId);
 

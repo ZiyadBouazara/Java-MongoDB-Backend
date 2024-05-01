@@ -33,7 +33,6 @@ import ca.ulaval.glo2003.service.validators.GetRestaurantValidator;
 import ca.ulaval.glo2003.service.validators.HeaderValidator;
 import ca.ulaval.glo2003.service.validators.ReservationValidator;
 import ca.ulaval.glo2003.service.validators.SearchRestaurantValidator;
-import ca.ulaval.glo2003.service.validators.SearchReviewValidator;
 import jakarta.inject.Singleton;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 
@@ -52,7 +51,6 @@ public class ApplicationBinder extends AbstractBinder {
         bind(GetRestaurantValidator.class).to(GetRestaurantValidator.class);
         bind(SearchRestaurantValidator.class).to(SearchRestaurantValidator.class);
         bind(CreateReviewValidator.class).to(CreateReviewValidator.class);
-        bind(SearchReviewValidator.class).to(SearchReviewValidator.class);
         bind(RestaurantFactory.class).to(RestaurantFactory.class);
         bind(ReservationFactory.class).to(ReservationFactory.class);
         bind(ReviewFactory.class).to(ReviewFactory.class);

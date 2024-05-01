@@ -14,7 +14,6 @@ import ca.ulaval.glo2003.domain.review.ReviewFactory;
 import ca.ulaval.glo2003.domain.utils.Hours;
 import ca.ulaval.glo2003.service.assembler.CustomerAssembler;
 import ca.ulaval.glo2003.service.validators.CreateReviewValidator;
-import ca.ulaval.glo2003.service.validators.SearchReviewValidator;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,11 +51,11 @@ class ReviewServiceTest {
     @Mock
     private CustomerAssembler customerAssembler;
     private CreateReviewValidator createReviewValidator;
+    @Mock
+    private ReviewResponseAssembler reviewResponseAssembler;
     private Restaurant restaurant;
     @InjectMocks
     private ReviewService reviewService;
-    private ReviewResponseAssembler reviewResponseAssembler;
-    private SearchReviewValidator searchValidator;
 
     @BeforeEach
     public void setUp() {
@@ -68,9 +67,7 @@ class ReviewServiceTest {
             reviewFactory,
             customerAssembler,
             reviewRepository,
-            restaurantRepository,
-            searchValidator
-);
+            restaurantRepository);
     }
 
     @Test
