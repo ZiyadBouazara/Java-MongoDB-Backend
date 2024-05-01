@@ -248,7 +248,93 @@ utilisateurs et les contributeurs.
 
 [The Legal Side Of Open Source](https://opensource.guide/legal/#which-open-source-license-is-appropriate-for-my-project)
 
-# 4. Sécurité Logiciel
+## **Rétrospective finale**
+
+**1. Décrivez 2 problématiques que possèdent votre processus et développez 2 plans
+distincts afin de les résoudre. Soyez constructifs dans vos critiques et évitez de
+mettre la faute sur une ou un groupe de personnes en particulier.**
+
+Parmi les problématiques de notre processus actuel, la lenteur de notre pipeline
+CI est notable. Vers la phase finale de notre projet, le temps pris par le CI à
+s'exécuter est parfois excessif, dépassant même la limite maximale de 5 minutes.
+Pour remédier à cela, nous pourrions optimiser en créant un seul Test Container
+pour exécuter tous les tests au lieu d'en créer un pour chaque test.
+
+Notre deuxième problématique est le manque de temps pour effectuer une revue
+de sprint approfondie à la fin de nos sprints, ce qui conduit parfois à des erreurs
+simples qui auraient pu être évitées. Pour résoudre ce problème, nous pourrions
+planifier nos sprints de manière à avoir du temps supplémentaire pour une revue
+détaillée juste avant la remise, ainsi que mettre en place une rétrospective de
+sprint pour détecter et corriger les problèmes de processus plus tôt.
+
+**2. Décrivez la démarche que vous avez entreprise afin d'intégrer de nouveaux outils
+technologiques. Quelles étaient les étapes du processus? Comment avez-vous réagi
+aux différents bogues? Avez-vous utilisé des tests unitaires ou manuels? Qu'avez-vous
+appris de cette expérience?**
+Notre démarche pour intégrer de nouveaux outils technologiques a débuté par une
+recherche d'informations en ligne, suivie de la vérification de la compatibilité avec
+nos versions actuelles. Ensuite, nous avons suivi des tutoriels pour intégrer l'outil
+dans notre projet, en utilisant des branches distinctes pour le développement. Nous
+avons effectué des tests manuels pour vérifier la fonctionnalité de l'outil et
+surveillé l'état du CI pour les commits post-intégration. Cette expérience nous a
+appris l'importance de la recherche préalable, de la compatibilité et de la phase de
+test dans l'intégration d'outils technologiques.
+
+**3. Quels sont les points forts de votre équipe? De quoi êtes-vous fiers? Nommez-en 3.**
+
+En tant qu'équipe, nous sommes fiers de notre engagement, de la répartition
+équitable du travail et de notre bonne ambiance. Nous sommes également fiers de
+notre architecture propre et claire, développée en groupe malgré un niveau similaire
+de compétences. Enfin, nous sommes fiers de notre interaction active sur le forum
+Discord, participant ainsi pleinement au cours.
+
+**4. Quels conseils donneriez-vous aux futurs étudiants pour ce projet?**
+
+Nous conseillons aux futurs étudiants de suivre attentivement les cours
+théoriques pour rester à jour sur les technologies à utiliser. De plus, nous
+recommandons de développer l'architecture en équipe pour une meilleure compréhension
+et flexibilité du code.
+
+**5. Quels apprentissages, astuces ou techniques tirés de ce projet pensez-vous pouvoir
+appliquer dans le futur? Décrivez-en au moins 2, qu'ils concernent des aspects
+techniques, pratiques, de travail d'équipe ou de processus.**
+
+Les pratiques de CI nous ont permis d'identifier rapidement les problèmes et
+de maintenir un code propre. De plus, l'utilisation du pair-programming, des tests
+et des principes d'architecture nous ont donné des bases solides pour notre future
+carrière.
+
+## **Outils d'intelligence artificielle**
+
+Avec les avancées récentes en matière d'intelligence artificielle, de nombreux
+services facilitent désormais le développement logiciel. L'IA est devenue un outil
+quotidien pour les programmeurs.
+
+**1. Avez-vous utilisé un outil d'intelligence artificielle (comme ChatGPT) pour
+programmer?**
+
+Oui, nous avons utilisé ChatGPT dans ce projet pour des conseils et la
+résolution de bugs. Cependant, son utilité diminuait à mesure que le projet
+progressait en raison du manque de contexte spécifique.
+
+**2. Quel est le principal avantage de cette technologie?**
+
+ChatGPT offre des réponses rapides et peut guider vers des solutions efficaces,
+augmentant ainsi la productivité des programmeurs.
+
+**3. Quels sont les désavantages potentiels de cette technologie?**
+
+L'utilisation sans discernement de cette technologie peut conduire à la
+dépendance et à une baisse de la qualité du travail, en raison du manque de contexte
+et de compréhension.
+
+**4. Pensez-vous que nous aurons toujours besoin de spécialistes en développement
+logiciel malgré cette technologie?**
+
+Oui, car les spécialistes humains apportent une compréhension contextuelle et
+une capacité d'innovation que l'IA ne peut pas reproduire.
+
+# Sécurité Logiciel
 
 # Analyse de sécurité
 
