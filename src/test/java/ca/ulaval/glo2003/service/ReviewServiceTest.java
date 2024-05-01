@@ -1,6 +1,7 @@
 package ca.ulaval.glo2003.service;
 
 import ca.ulaval.glo2003.controllers.api.fixture.ReviewRequestFixture;
+import ca.ulaval.glo2003.controllers.assemblers.ReviewResponseAssembler;
 import ca.ulaval.glo2003.controllers.requests.ReviewRequest;
 import ca.ulaval.glo2003.domain.customer.Customer;
 import ca.ulaval.glo2003.domain.exceptions.InvalidParameterException;
@@ -50,6 +51,8 @@ class ReviewServiceTest {
     @Mock
     private CustomerAssembler customerAssembler;
     private CreateReviewValidator createReviewValidator;
+    @Mock
+    private ReviewResponseAssembler reviewResponseAssembler;
     private Restaurant restaurant;
     @InjectMocks
     private ReviewService reviewService;
@@ -59,11 +62,12 @@ class ReviewServiceTest {
         createReviewValidator = new CreateReviewValidator();
         MockitoAnnotations.openMocks(this);
         reviewService = new ReviewService(
-                createReviewValidator,
-                reviewFactory,
-                customerAssembler,
-                reviewRepository,
-                restaurantRepository);
+            reviewResponseAssembler,
+            createReviewValidator,
+            reviewFactory,
+            customerAssembler,
+            reviewRepository,
+            restaurantRepository);
     }
 
     @Test

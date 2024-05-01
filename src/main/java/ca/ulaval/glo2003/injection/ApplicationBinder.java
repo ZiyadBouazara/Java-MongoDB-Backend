@@ -4,6 +4,7 @@ import ca.ulaval.glo2003.controllers.assemblers.FuzzySearchResponseAssembler;
 import ca.ulaval.glo2003.controllers.assemblers.ReservationGeneralResponseAssembler;
 import ca.ulaval.glo2003.controllers.assemblers.ReservationResponseAssembler;
 import ca.ulaval.glo2003.controllers.assemblers.RestaurantResponseAssembler;
+import ca.ulaval.glo2003.controllers.assemblers.ReviewResponseAssembler;
 import ca.ulaval.glo2003.domain.repositories.ReservationRepository;
 import ca.ulaval.glo2003.domain.repositories.RestaurantRepository;
 import ca.ulaval.glo2003.domain.repositories.ReviewRepository;
@@ -61,6 +62,7 @@ public class ApplicationBinder extends AbstractBinder {
         bind(RestaurantResponseAssembler.class).to(RestaurantResponseAssembler.class);
         bind(ReservationResponseAssembler.class).to(ReservationResponseAssembler.class);
         bind(ReservationGeneralResponseAssembler.class).to(ReservationGeneralResponseAssembler.class);
+        bind(ReviewResponseAssembler.class).to(ReviewResponseAssembler.class);
     }
 
     private void choosePersistenceType() {

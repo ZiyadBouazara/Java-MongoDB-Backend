@@ -58,4 +58,8 @@ public class ReviewMongo {
     public String getCustomerPhone() {
         return customerPhone;
     }
+
+    public double getRating() {
+        return rating;
+    }
 }

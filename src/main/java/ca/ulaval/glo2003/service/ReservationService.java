@@ -37,11 +37,13 @@ public class ReservationService {
     private final HeaderValidator headerValidator = new HeaderValidator();
     private final GetRestaurantValidator getRestaurantValidator = new GetRestaurantValidator();
 
-
     @Inject
-    public ReservationService(RestaurantRepository restaurantRepository, ReservationRepository reservationRepository,
-                              ReservationFactory reservationFactory, CustomerAssembler customerAssembler,
-                              ReservationResponseAssembler reservationResponseAssembler, ReservationValidator reservationValidator,
+    public ReservationService(RestaurantRepository restaurantRepository,
+                              ReservationRepository reservationRepository,
+                              ReservationFactory reservationFactory,
+                              CustomerAssembler customerAssembler,
+                              ReservationResponseAssembler reservationResponseAssembler,
+                              ReservationValidator reservationValidator,
                               ReservationGeneralResponseAssembler reservationGeneralResponseAssembler) {
         this.restaurantRepository = restaurantRepository;
         this.reservationRepository = reservationRepository;
